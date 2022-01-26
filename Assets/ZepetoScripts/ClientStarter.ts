@@ -4,7 +4,7 @@ import {Room, RoomData} from 'ZEPETO.Multiplay'
 import {Player, State, Vector} from 'ZEPETO.Multiplay.Schema'
 import {CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer} from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
-import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion} from 'UnityEngine'
+import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody} from 'UnityEngine'
 
 
 export default class Starter extends ZepetoScriptBehaviour {
@@ -14,9 +14,12 @@ export default class Starter extends ZepetoScriptBehaviour {
     private room: Room;
     private currentPlayers: Map<string, Player> = new Map<string, Player>();
     public tailPrefab: GameObject;
-    private tail: GameObject;
-    private tailTransform: Transform;
+    private tail1: GameObject;
+    private tailTransform1: Transform;
     private tail2: GameObject;
+    private tailTransform2: Transform;
+    private tail3: GameObject;
+    private tailTransform3: Transform;
 
     private Start() {
 
@@ -28,12 +31,14 @@ export default class Starter extends ZepetoScriptBehaviour {
             room.OnStateChange += this.OnStateChange;
         };
 
-        this.tail = GameObject.Instantiate<GameObject>(this.tailPrefab);
+        this.tail1 = GameObject.Instantiate<GameObject>(this.tailPrefab);
+        this.tail2 = GameObject.Instantiate<GameObject>(this.tailPrefab);
+        this.tail3 = GameObject.Instantiate<GameObject>(this.tailPrefab);
 
-        this.tailTransform = this.tail.GetComponent<Transform>();
+        this.tailTransform1 = this.tail1.GetComponent<Transform>();
+        this.tailTransform2 = this.tail2.GetComponent<Transform>();
+        this.tailTransform3 = this.tail3.GetComponent<Transform>();
         
-
-
         this.StartCoroutine(this.SendMessageLoop(0.1));
         this.StartCoroutine(this.UpdateLoop(0.01));
     }
@@ -61,13 +66,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             yield new UnityEngine.WaitForSeconds(tick);
 
             if (this.room != null && this.room.IsConnected) {
-                const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId);
-                if (hasPlayer) {
-                    const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
-
-                    this.tailTransform.position = UnityVector3.Lerp(this.tailTransform.position, myPlayer.character.transform.position, myPlayer.character.RunSpeed * Time.deltaTime);
-                    this.tailTransform.rotation = Quaternion.Lerp(this.tailTransform.rotation, myPlayer.character.transform.rotation, myPlayer.character.RunSpeed * Time.deltaTime);
-                }
+                
             }
         }
     }
@@ -145,6 +144,22 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         if (player.state === CharacterState.JumpIdle || player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
+
+            const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId);
+                if (hasPlayer) {
+                    const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
+                    let direction = new UnityVector3(myPlayer.character.transform.forward.x * -1, myPlayer.character.transform.forward.y * -1, myPlayer.character.transform.forward.z * -1);
+                    //let direction = new UnityVector3(myPlayer.character.transform.rotation.eulerAngles.normalized.x * -1, myPlayer.character.transform.rotation.eulerAngles.normalized.y * -1, myPlayer.character.transform.rotation.eulerAngles.normalized.z * -1);
+                    let trainPos1 = new UnityVector3(myPlayer.character.transform.position.x + (direction.x), myPlayer.character.transform.position.y + (direction.y), myPlayer.character.transform.position.z + (direction.z ));
+                    let trainPos2 = new UnityVector3(myPlayer.character.transform.position.x + (direction.x * 1.5), myPlayer.character.transform.position.y + (direction.y * 1.5), myPlayer.character.transform.position.z + (direction.z * 1.5));
+                    let trainPos3 = new UnityVector3(myPlayer.character.transform.position.x + (direction.x * 2), myPlayer.character.transform.position.y + (direction.y * 2), myPlayer.character.transform.position.z + (direction.z * 2));
+                    this.tailTransform1.position = UnityVector3.Lerp(this.tailTransform1.position, trainPos1, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform1.rotation = Quaternion.Lerp(this.tailTransform1.rotation, myPlayer.character.transform.rotation, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform2.position = UnityVector3.Lerp(this.tailTransform2.position, trainPos2, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform2.rotation = Quaternion.Lerp(this.tailTransform2.rotation, myPlayer.character.transform.rotation, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform3.position = UnityVector3.Lerp(this.tailTransform3.position, trainPos3, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform3.rotation = Quaternion.Lerp(this.tailTransform3.rotation, myPlayer.character.transform.rotation, myPlayer.character.RunSpeed * Time.deltaTime);
+                }
     }
 
     private SendTransform(transform: UnityEngine.Transform) {
