@@ -1,9 +1,10 @@
 import {ZepetoScriptBehaviour} from 'ZEPETO.Script'
 import {ZepetoWorldMultiplay} from 'ZEPETO.World'
 import {Room, RoomData} from 'ZEPETO.Multiplay'
-import {Player, State, Vector3} from 'ZEPETO.Multiplay.Schema'
+import {Player, State, Vector} from 'ZEPETO.Multiplay.Schema'
 import {CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer} from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
+import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion} from 'UnityEngine'
 
 
 export default class Starter extends ZepetoScriptBehaviour {
@@ -12,6 +13,10 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private room: Room;
     private currentPlayers: Map<string, Player> = new Map<string, Player>();
+    public tailPrefab: GameObject;
+    private tail: GameObject;
+    private tailTransform: Transform;
+    private tail2: GameObject;
 
     private Start() {
 
@@ -23,7 +28,14 @@ export default class Starter extends ZepetoScriptBehaviour {
             room.OnStateChange += this.OnStateChange;
         };
 
+        this.tail = GameObject.Instantiate<GameObject>(this.tailPrefab);
+
+        this.tailTransform = this.tail.GetComponent<Transform>();
+        
+
+
         this.StartCoroutine(this.SendMessageLoop(0.1));
+        this.StartCoroutine(this.UpdateLoop(0.01));
     }
 
     // 일정 Interval Time으로 내(local)캐릭터 transform을 server로 전송합니다.
@@ -37,6 +49,24 @@ export default class Starter extends ZepetoScriptBehaviour {
                     const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
                     if (myPlayer.character.CurrentState != CharacterState.Idle)
                         this.SendTransform(myPlayer.character.transform);
+
+                    
+                }
+            }
+        }
+    }
+
+    private* UpdateLoop(tick: number) {
+        while (true) {
+            yield new UnityEngine.WaitForSeconds(tick);
+
+            if (this.room != null && this.room.IsConnected) {
+                const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId);
+                if (hasPlayer) {
+                    const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
+
+                    this.tailTransform.position = UnityVector3.Lerp(this.tailTransform.position, myPlayer.character.transform.position, myPlayer.character.RunSpeed * Time.deltaTime);
+                    this.tailTransform.rotation = Quaternion.Lerp(this.tailTransform.rotation, myPlayer.character.transform.rotation, myPlayer.character.RunSpeed * Time.deltaTime);
                 }
             }
         }
@@ -140,7 +170,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.room.Send("onChangedState", data.GetObject());
     }
 
-    private ParseVector3(vector3: Vector3): UnityEngine.Vector3 {
+    private ParseVector3(vector3: Vector): UnityEngine.Vector3 {
         return new UnityEngine.Vector3
         (
             vector3.x,
