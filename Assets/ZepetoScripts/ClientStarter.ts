@@ -6,18 +6,19 @@ import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer } from 'ZEPETO.C
 import * as UnityEngine from "UnityEngine";
 import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody } from 'UnityEngine'
 
+// 스네이크 위치 히스토리
 export interface Mark {
     position: UnityVector3;
     rotation: Quaternion;
 }
 
+//히스토리 기록 객체
 export class MarkManager {
     public markList: Array<Mark>;
 
     constructor() {
         this.markList = new Array<Mark>();
     }
-
 
     public UpdateMarkList(pos: UnityVector3, rot: Quaternion): void {
         this.markList.push({ position: pos, rotation: rot });
@@ -29,6 +30,7 @@ export class MarkManager {
     }
 }
 
+//유저별 스네이크 객체
 export class PlayerTails{
     public tails: Array<GameObject>;
     public markManagers: Array<MarkManager>;
@@ -47,17 +49,18 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private room: Room;
     private currentPlayers: Map<string, Player> = new Map<string, Player>();
-    private playerTailsMap: Map<string, PlayerTails> = new Map<string, PlayerTails>();
+    //유저별 스네이크 객체 맵
+    private playerTailsDatas: Map<string, PlayerTails> = new Map<string, PlayerTails>();
+    //기차 프리팹
     public tailPrefab: GameObject;
 
-    private tails: Array<GameObject> = new Array<GameObject>();
-    private tailTransforms: Array<Transform> = new Array<Transform>();
-
-    private markManagers: Array<MarkManager> = new Array<MarkManager>();
-
-    private tailLength: int = 3;
+    //꼬리 최대개수(기본값: 5)
+    private tailLength: int = 5;
+    //꼬리간 거리
     private distanceBetween: float = 0.7;
-    private moveCheck: float = 0.001;
+    //움직임 체크
+    private moveCheck: float = 0.0001;
+    //기존 위치 기록
     private checkPosition: UnityVector3 = new UnityVector3(0, 0, 0);
 
     private Start() {
@@ -70,24 +73,25 @@ export default class Starter extends ZepetoScriptBehaviour {
             room.OnStateChange += this.OnStateChange;
         };
 
-        this.InitGame();
 
-        this.StartCoroutine(this.SendMessageLoop(0.1));
+        this.StartCoroutine(this.SendMessageLoop(1 / 60));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
     }
 
-    private InitGame() {
-        for (let i = 0; i < this.tailLength; i++) {
-            let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
-            this.tails.push(train);
-            this.tailTransforms.push(train.transform);
+    //TODO: 꼬리 GameObject Pooling
+    public InitPlayer(sessionId: string){
+        let tails: PlayerTails = new PlayerTails();
 
-            this.markManagers.push(new MarkManager());
-            UnityEngine.Debug.Log(i.toString() + "markManager" + this.markManagers[i]);
-            //this.tailTransforms[i] = this.tails[i].GetComponent<Transform>();
-        }
-        UnityEngine.Debug.Log(this.markManagers.length);
 
+            for (let i = 0; i < this.tailLength; i++) {
+                let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
+
+                tails.tails.push(train);
+                tails.tailTransforms.push(train.transform);
+                tails.markManagers.push(new MarkManager());
+            }
+
+            this.playerTailsDatas.set(sessionId, tails);
     }
 
     // 일정 Interval Time으로 내(local)캐릭터 transform을 server로 전송합니다.
@@ -105,6 +109,8 @@ export default class Starter extends ZepetoScriptBehaviour {
             }
         }
     }
+    
+    // 웁직임 체크
     private checkMove(curPos: UnityVector3): boolean {
         if (UnityVector3.Distance(curPos, this.checkPosition) > this.moveCheck)
             return true;
@@ -112,6 +118,53 @@ export default class Starter extends ZepetoScriptBehaviour {
         return false;
     }
 
+    //스네이크 로직 함수
+    private UpdateTails(sessionId: string){
+        const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
+
+        const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
+
+        if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
+            //if (this.checkMove(myPlayer.character.transform.position)) {
+            UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
+            //head
+            tails.markManagers[0].UpdateMarkList(zepetoPlayer.character.transform.position, zepetoPlayer.character.transform.rotation);
+
+            for (let i = 1; i < this.tailLength; i++) {
+                const markManager: MarkManager = tails.markManagers[i];
+                UnityEngine.Debug.Log(markManager);
+                markManager.UpdateMarkList(tails.tailTransforms[i - 1].position, tails.tailTransforms[i - 1].rotation);
+            }
+            //if (this.checkMove(zepetoPlayer.character.transform.position)) {
+                for (let i = 0; i < this.tailLength; i++) {
+                    const markManager: MarkManager = tails.markManagers[i];
+                    UnityEngine.Debug.Log(tails.tailTransforms[i].position);
+                    
+                    if (i == 0) {
+                        if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween) {
+                            while (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
+                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
+                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                                markManager.markList.shift();
+                            }
+                        }
+                    }
+                    else {
+                        if (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween) {
+                            while (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
+                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
+                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                                markManager.markList.shift();
+                            }
+                        }
+                    }
+
+                }
+            //}
+        }
+    }
+
+    // 업데이트 코루틴
     private * UpdateSnakeMove(tick: number) {
         while (true) {
             yield new UnityEngine.WaitForSeconds(tick);
@@ -119,59 +172,25 @@ export default class Starter extends ZepetoScriptBehaviour {
             if (this.room != null && this.room.IsConnected) {
                 const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId); {
                     if (hasPlayer) {
-                        const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
-                        if (myPlayer.character.CurrentState != CharacterState.Idle) {
-                            //if (this.checkMove(myPlayer.character.transform.position)) {
-                            UnityEngine.Debug.Log(myPlayer.character.transform.position);
-                            //head
-                            this.markManagers[0].UpdateMarkList(myPlayer.character.transform.position, myPlayer.character.transform.rotation);
 
-                            for (let i = 1; i < this.tailLength; i++) {
-                                const markManager: MarkManager = this.markManagers[i];
-                                UnityEngine.Debug.Log(markManager);
-                                markManager.UpdateMarkList(this.tailTransforms[i - 1].position, this.tailTransforms[i - 1].rotation);
-                            }
-                            if (this.checkMove(myPlayer.character.transform.position)) {
-                                for (let i = 0; i < this.tailLength; i++) {
-                                    const markManager: MarkManager = this.markManagers[i];
-                                    UnityEngine.Debug.Log(this.tailTransforms[i].position);
-                                    
-                                    if (i == 0) {
-                                        if (UnityVector3.Distance(myPlayer.character.transform.position, this.tailTransforms[i].position) >= this.distanceBetween) {
-                                            while (UnityVector3.Distance(myPlayer.character.transform.position, this.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                                this.tailTransforms[i].position = UnityVector3.Lerp(this.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                                this.tailTransforms[i].rotation = Quaternion.Lerp(this.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                                markManager.markList.shift();
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        if (UnityVector3.Distance(this.tailTransforms[i - 1].position, this.tailTransforms[i].position) >= this.distanceBetween) {
-                                            while (UnityVector3.Distance(this.tailTransforms[i - 1].position, this.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                                this.tailTransforms[i].position = UnityVector3.Lerp(this.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                                this.tailTransforms[i].rotation = Quaternion.Lerp(this.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                                markManager.markList.shift();
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
+                        this.UpdateTails(this.room.SessionId);
                     }
                 }
             }
         }
     }
-    private InitTailTransform() {
-        const myPlayer = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer;
 
-        const direction = new UnityVector3(myPlayer.character.transform.forward.x * -1, myPlayer.character.transform.forward.y * -1, myPlayer.character.transform.forward.z * -1);
+    //TODO: 유저 접속 시 스폰 초기화
+    private InitTailTransform(sessionId: string) {
+        const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
+        const tailData = this.playerTailsDatas.get(sessionId);
+
+        const direction = new UnityVector3(zepetoPlayer.character.transform.forward.x * -1, zepetoPlayer.character.transform.forward.y * -1, zepetoPlayer.character.transform.forward.z * -1);
 
         for (let i = 1; i <= 3; i++) {
-            const trainPos = new UnityVector3(myPlayer.character.transform.position.x + (direction.x * (0.8 * i)), myPlayer.character.transform.position.y + (direction.y * (0.8 * i)), myPlayer.character.transform.position.z + (direction.z * (0.8 * i)));
+            const trainPos = new UnityVector3(zepetoPlayer.character.transform.position.x + (direction.x * (0.8 * i)), zepetoPlayer.character.transform.position.y + (direction.y * (0.8 * i)), zepetoPlayer.character.transform.position.z + (direction.z * (0.8 * i)));
 
-            this.tailTransforms[i - 1].position = trainPos;
+            tailData.tailTransforms[i - 1].position = trainPos;
         }
     }
 
@@ -183,7 +202,6 @@ export default class Starter extends ZepetoScriptBehaviour {
             // [CharacterController] (Local)Player 인스턴스가 Scene에 완전히 로드되었을 때 호출
             ZepetoPlayers.instance.OnAddedLocalPlayer.AddListener(() => {
                 const myPlayer = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer;
-                this.InitTailTransform();
                 myPlayer.character.OnChangedState.AddListener((cur, next) => {
                     this.SendState(next);
                 });
@@ -231,28 +249,11 @@ export default class Starter extends ZepetoScriptBehaviour {
         const isLocal = this.room.SessionId === player.sessionId;
         ZepetoPlayers.instance.CreatePlayerWithUserId(sessionId, player.zepetoUserId, spawnInfo, isLocal);
         
-        if (!isLocal) {
-            let tails: PlayerTails = new PlayerTails();
+        this.InitPlayer(sessionId);
 
-
-            for (let i = 0; i < this.tailLength; i++) {
-                let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
-
-                tails.tails.push(train);
-                tails.tailTransforms.push(train.transform);
-                tails.markManagers.push(new MarkManager());
-
-                //this.tails.push(train);
-                //this.tailTransforms.push(train.transform);
-
-                //this.markManagers.push(new MarkManager());
-                //this.tailTransforms[i] = this.tails[i].GetComponent<Transform>();
-            }
-
-            this.playerTailsMap.set(sessionId, tails);
-        }
     }
 
+    //TODO: 꼬리 GameObject Pooling
     private OnLeavePlayer(sessionId: string, player: Player) {
         console.log(`[OnRemove] players - sessionId : ${sessionId}`);
         this.currentPlayers.delete(sessionId);
@@ -260,6 +261,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         ZepetoPlayers.instance.RemovePlayer(sessionId);
     }
 
+    // 필드 유저 업데이트
     private OnUpdatePlayer(sessionId: string, player: Player) {
 
         const position = this.ParseVector3(player.transform.position);
@@ -270,46 +272,9 @@ export default class Starter extends ZepetoScriptBehaviour {
         if (player.state === CharacterState.JumpIdle || player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
 
-        const tails: PlayerTails = this.playerTailsMap.get(sessionId);
+        const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
 
-        if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
-            //if (this.checkMove(myPlayer.character.transform.position)) {
-            UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
-            //head
-            tails.markManagers[0].UpdateMarkList(zepetoPlayer.character.transform.position, zepetoPlayer.character.transform.rotation);
-
-            for (let i = 1; i < this.tailLength; i++) {
-                const markManager: MarkManager = tails.markManagers[i];
-                UnityEngine.Debug.Log(markManager);
-                markManager.UpdateMarkList(tails.tailTransforms[i - 1].position, tails.tailTransforms[i - 1].rotation);
-            }
-            if (this.checkMove(zepetoPlayer.character.transform.position)) {
-                for (let i = 0; i < this.tailLength; i++) {
-                    const markManager: MarkManager = tails.markManagers[i];
-                    UnityEngine.Debug.Log(tails.tailTransforms[i].position);
-                    
-                    if (i == 0) {
-                        if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween) {
-                            while (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                markManager.markList.shift();
-                            }
-                        }
-                    }
-                    else {
-                        if (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween) {
-                            while (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                markManager.markList.shift();
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
+        this.UpdateTails(sessionId);
     }
 
     private SendTransform(transform: UnityEngine.Transform) {
