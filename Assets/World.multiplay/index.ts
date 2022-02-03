@@ -3,6 +3,7 @@ import {DataStorage} from "ZEPETO.Multiplay.DataStorage";
 import {Player, Transform, Vector} from "ZEPETO.Multiplay.Schema";
 
 export default class extends Sandbox {
+    private starList: Array<Vector>;
 
     constructor() {
         super();
@@ -30,10 +31,29 @@ export default class extends Sandbox {
             player.transform = transform;
         });
 
-        this.onMessage("onChangedState", (client, message) => {
+        this.onMessage("onChangedState", (client, message) => { 
             const player = this.state.players.get(client.sessionId);
             player.state = message.state;
         });
+
+        this.onMessage("onAttack", (client, message) =>{
+            this.onAttack(client.sessionId, message.targetSessionId);
+        });
+    }
+    //데미지 처리
+    onAttack(atkSessionId: string, targetSessionId: string){
+        const atkPlayer: Player = this.state.players.get(atkSessionId);
+
+        const targetPlayer: Player = this.state.players.get(targetSessionId);
+
+        const changeExp = targetPlayer.exp - atkPlayer.atkDamage;
+
+        if(changeExp <= 0){
+            //TODO: Game over
+        }
+        else{
+            targetPlayer.exp = changeExp;
+        }
     }
 
     async onJoin(client: SandboxPlayer) {

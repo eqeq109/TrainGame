@@ -12,7 +12,8 @@ declare module "ZEPETO.Multiplay.Schema" {
 		zepetoUserId: string;
 		transform: Transform;
 		state: number;
-		tails: number;
+		exp: number;
+		atkDamage: number;
 	}
 	class Transform extends Schema {
 		position: Vector;

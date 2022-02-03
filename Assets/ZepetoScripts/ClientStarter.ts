@@ -4,7 +4,7 @@ import { Room, RoomData } from 'ZEPETO.Multiplay'
 import { Player, State, Vector } from 'ZEPETO.Multiplay.Schema'
 import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer } from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
-import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody } from 'UnityEngine'
+import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint } from 'UnityEngine'
 
 // 스네이크 위치 히스토리
 export interface Mark {
@@ -46,13 +46,16 @@ export class PlayerTails{
 export default class Starter extends ZepetoScriptBehaviour {
 
     public multiplay: ZepetoWorldMultiplay;
+    //기차 프리팹
+    public tailPrefab: GameObject;
+    //기차 물리 head
+    public headPrefab: GameObject;
 
     private room: Room;
     private currentPlayers: Map<string, Player> = new Map<string, Player>();
     //유저별 스네이크 객체 맵
     private playerTailsDatas: Map<string, PlayerTails> = new Map<string, PlayerTails>();
-    //기차 프리팹
-    public tailPrefab: GameObject;
+
 
     //꼬리 최대개수(기본값: 5)
     private tailLength: int = 5;
@@ -79,19 +82,20 @@ export default class Starter extends ZepetoScriptBehaviour {
     }
 
     //TODO: 꼬리 GameObject Pooling
-    public InitPlayer(sessionId: string){
+    public InitPlayer(sessionId: string) {
         let tails: PlayerTails = new PlayerTails();
 
+        
 
-            for (let i = 0; i < this.tailLength; i++) {
-                let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
+        for (let i = 0; i < this.tailLength; i++) {
+            let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
 
-                tails.tails.push(train);
-                tails.tailTransforms.push(train.transform);
-                tails.markManagers.push(new MarkManager());
-            }
+            tails.tails.push(train);
+            tails.tailTransforms.push(train.transform);
+            tails.markManagers.push(new MarkManager());
+        }
 
-            this.playerTailsDatas.set(sessionId, tails);
+        this.playerTailsDatas.set(sessionId, tails);
     }
 
     // 일정 Interval Time으로 내(local)캐릭터 transform을 server로 전송합니다.
@@ -275,6 +279,15 @@ export default class Starter extends ZepetoScriptBehaviour {
         const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
 
         this.UpdateTails(sessionId);
+
+        
+    }
+
+    private SendAttack(targetSessionId: string){
+        const data = new RoomData();
+
+        data.Add("targetSessionId", targetSessionId);
+        this.room.Send("onAttack", data.GetObject());
     }
 
     private SendTransform(transform: UnityEngine.Transform) {

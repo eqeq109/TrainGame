@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: 21b574835e27c474fb1d04500353eee5
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    UnityEngine = require(\"UnityEngine\");\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nclass
+    Star extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n       
+    this.StartCoroutine(this.RotateStar(1 / 60));\r\n    }\r\n    *RotateStar(tick)
+    {\r\n        while (true) {\r\n            yield new UnityEngine.WaitForSeconds(tick);\r\n           
+    this.starTransform.Rotate(UnityEngine_1.Vector3.up);\r\n        }\r\n    }\r\n}\r\nexports.default
+    = Star;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3Rhci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN0YXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFFckQsMkNBQTJDO0FBQzNDLDZDQUFpSjtBQUVqSixNQUFxQixJQUFLLFNBQVEscUNBQXFCO0lBRW5ELEtBQUs7UUFDRCxJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQyxHQUFHLEVBQUUsQ0FBQyxDQUFDLENBQUM7SUFDakQsQ0FBQztJQUdPLENBQUUsVUFBVSxDQUFDLElBQVk7UUFDN0IsT0FBTyxJQUFJLEVBQUU7WUFDVCxNQUFNLElBQUksV0FBVyxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsQ0FBQztZQUMzQyxJQUFJLENBQUMsYUFBYSxDQUFDLE1BQU0sQ0FBQyxxQkFBWSxDQUFDLEVBQUUsQ0FBQyxDQUFDO1NBRTlDO0lBQ0wsQ0FBQztDQUNKO0FBZEQsdUJBY0MifQ==","assetPath":"Assets/ZepetoScripts/Star.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"starTransform","type":"UnityEngine.Transform","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"Star","description":""},"isCompiled":true}'
+  typescriptHash: 7c019a1e599d8a56726611c3e01e76ef
