@@ -1,0 +1,40 @@
+fileFormatVersion: 2
+guid: 6074a3dfbe92e59438d3f2199c49de32
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
+    \\\"__esModule\\\", { value: true });\\r\\nconst UnityEngine_1 = require(\\\"UnityEngine\\\");\\r\\n//\uC624\uBE0C\uC81D\uD2B8
+    \uD480\\r\\nclass ObjectPool {\\r\\n    // start(count: int, source: GameObject){\\r\\n   
+    //     this.prefab = source;\\r\\n    //     for (let i = 0; i < count; i++)
+    {\\r\\n    //         let train: GameObject = GameObject.Instantiate<GameObject>(source);\\r\\n   
+    //         Debug.Log(i.toString());\\r\\n    //         this.pool.push(train);\\r\\n   
+    //         train.SetActive(false);\\r\\n    //         // tails.markManagers.push(new
+    MarkManager());\\r\\n    //     }\\r\\n    // }\\r\\n    constructor(count, source)
+    {\\r\\n        this.pool = new Array();\\r\\n        this.prefab = source;\\r\\n       
+    for (let i = 0; i < count; i++) {\\r\\n            let train = UnityEngine_1.GameObject.Instantiate(source);\\r\\n           
+    this.pool.push(train);\\r\\n            train.SetActive(false);\\r\\n           
+    // tails.markManagers.push(new MarkManager());\\r\\n        }\\r\\n    }\\r\\n   
+    GetObject() {\\r\\n        if (this.pool.length <= 0) {\\r\\n            for
+    (let i = 0; i < 10; i++) {\\r\\n                let train = UnityEngine_1.GameObject.Instantiate(this.prefab);\\r\\n               
+    this.pool.push(train);\\r\\n                train.SetActive(false);\\r\\n           
+    }\\r\\n        }\\r\\n        const pop = this.pool.pop();\\r\\n        pop.SetActive(true);\\r\\n       
+    return pop;\\r\\n    }\\r\\n    ReturnObject(object) {\\r\\n        object.SetActive(false);\\r\\n       
+    this.pool.push(object);\\r\\n    }\\r\\n}\\r\\nexports.default = ObjectPool;\\r\\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT2JqZWN0UG9vbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk9iamVjdFBvb2wudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQSw2Q0FBd0o7QUFFeEosUUFBUTtBQUNSLE1BQXFCLFVBQVU7SUFJM0IseUNBQXlDO0lBQ3pDLDRCQUE0QjtJQUM1Qix3Q0FBd0M7SUFDeEMsOEVBQThFO0lBQzlFLG1DQUFtQztJQUNuQyxpQ0FBaUM7SUFDakMsa0NBQWtDO0lBQ2xDLHlEQUF5RDtJQUN6RCxRQUFRO0lBQ1IsSUFBSTtJQUNKLFlBQVksS0FBVSxFQUFFLE1BQWtCO1FBYm5DLFNBQUksR0FBc0IsSUFBSSxLQUFLLEVBQWMsQ0FBQztRQWNyRCxJQUFJLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQztRQUNyQixLQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsS0FBSyxFQUFFLENBQUMsRUFBRSxFQUFFO1lBQzVCLElBQUksS0FBSyxHQUFlLHdCQUFVLENBQUMsV0FBVyxDQUFhLE1BQU0sQ0FBQyxDQUFDO1lBRW5FLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDO1lBQ3RCLEtBQUssQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7WUFDdkIsOENBQThDO1NBQ2pEO0lBQ0wsQ0FBQztJQUdELFNBQVM7UUFDTCxJQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsTUFBTSxJQUFJLENBQUMsRUFBQztZQUNyQixLQUFJLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsRUFBRSxFQUFFLENBQUMsRUFBRSxFQUFDO2dCQUN2QixJQUFJLEtBQUssR0FBZSx3QkFBVSxDQUFDLFdBQVcsQ0FBYSxJQUFJLENBQUMsTUFBTSxDQUFDLENBQUM7Z0JBQ3hFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDO2dCQUN0QixLQUFLLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO2FBQzFCO1NBQ0o7UUFDRCxNQUFNLEdBQUcsR0FBRyxJQUFJLENBQUMsSUFBSSxDQUFDLEdBQUcsRUFBRSxDQUFDO1FBQzVCLEdBQUcsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDcEIsT0FBTyxHQUFHLENBQUM7SUFDZixDQUFDO0lBRUQsWUFBWSxDQUFDLE1BQWtCO1FBQzNCLE1BQU0sQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDeEIsSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLENBQUM7SUFFM0IsQ0FBQztDQUVKO0FBN0NELDZCQTZDQyJ9\",\"assetPath\":\"Assets/ZepetoScripts/ObjectPool.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"\",\"name\":\"pool\",\"type\":\"Array\",\"isArray\":false,\"enumKeys\":[],\"enumValues\":[],\"attributes\":[]}],\"name\":\"ObjectPool\",\"description\":\"\"},\"isCompiled\":true}"
+  typescriptHash: 0b6fd4a58f53e14ddad147204b307c36

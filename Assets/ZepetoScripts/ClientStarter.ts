@@ -1,46 +1,27 @@
-import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
+import { ZepetoScriptBehaviour, ZepetoScriptBehaviourComponent, ZepetoScriptInstance, ZepetoScriptContext } from 'ZEPETO.Script'
 import { WorldMultiplayChatContent, ZepetoWorldMultiplay } from 'ZEPETO.World'
 import { Room, RoomData } from 'ZEPETO.Multiplay'
-import { Player, State, Vector } from 'ZEPETO.Multiplay.Schema'
-import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer } from 'ZEPETO.Character.Controller'
+import { Player, State, Vector, DateObject } from 'ZEPETO.Multiplay.Schema'
+import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer, ZepetoCharacter } from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
-import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint } from 'UnityEngine'
+import { GameObject, Vector3 as UnityVector3, Object, 
+    Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Coroutine} from 'UnityEngine';
+import Tail from "./Tail";
+import Star from "./Star";
+import ObjectPool from "./ObjectPool";
+import {Mark, MarkManager, PlayerTails} from "./SnakeLogics";
+import { UnityEvent$1 } from 'UnityEngine.Events'
+import {DateTime, Delegate, MulticastDelegate} from 'System';
+import { GenericDelegate } from 'Puerts';
+import {Action$1} from 'System';
+import { DirectorSampleTime } from 'UnityEngine.PlayerLoop.Initialization'
+import { System } from 'UnityEngine.Rendering.VirtualTexturing'
 
-// 스네이크 위치 히스토리
-export interface Mark {
-    position: UnityVector3;
-    rotation: Quaternion;
-}
+const maxClient: int = 16;
 
-//히스토리 기록 객체
-export class MarkManager {
-    public markList: Array<Mark>;
-
-    constructor() {
-        this.markList = new Array<Mark>();
-    }
-
-    public UpdateMarkList(pos: UnityVector3, rot: Quaternion): void {
-        this.markList.push({ position: pos, rotation: rot });
-    }
-
-    public ClearMarkList(pos: UnityVector3, rot: Quaternion): void {
-        this.markList = [];
-        this.markList.push({ position: pos, rotation: rot });
-    }
-}
-
-//유저별 스네이크 객체
-export class PlayerTails{
-    public tails: Array<GameObject>;
-    public markManagers: Array<MarkManager>;
-    public tailTransforms: Array<Transform>;
-    
-    constructor(){
-        this.tails = new Array<GameObject>();
-        this.markManagers = new Array<MarkManager>();
-        this.tailTransforms = new Array<Transform>();
-    }
+interface AvailableTimeObject{
+    sessionId: string,
+    availableTime: Date,
 }
 
 export default class Starter extends ZepetoScriptBehaviour {
@@ -56,15 +37,28 @@ export default class Starter extends ZepetoScriptBehaviour {
     //유저별 스네이크 객체 맵
     private playerTailsDatas: Map<string, PlayerTails> = new Map<string, PlayerTails>();
 
+    private characterSessionIdMap: Map<number, string> = new Map<number, string>();
 
+    private attackAvailableMap: Map<string, Date> = new Map<string, Date>();
+
+    private action: Action$1<number>;
     //꼬리 최대개수(기본값: 5)
     private tailLength: int = 5;
     //꼬리간 거리
     private distanceBetween: float = 0.7;
     //움직임 체크
-    private moveCheck: float = 0.0001;
+    private moveCheck: float = 0.0001; 
     //기존 위치 기록
     private checkPosition: UnityVector3 = new UnityVector3(0, 0, 0);
+    //꼬리 오브젝트 풀
+    private tailObjectPool: ObjectPool<Tail>;
+
+    
+    
+    private initCoroutine: Coroutine;
+
+    
+    //private attackEvent: UnityEvent$1<string> = new UnityEvent$1<string>();
 
     private Start() {
 
@@ -74,28 +68,85 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         this.multiplay.RoomJoined += (room: Room) => {
             room.OnStateChange += this.OnStateChange;
+
+            // add server message listener type by "SetAvailableTime"
+            // room.AddMessageHandler("SetAvailableTime", (message: AvailableTimeObject) => {
+            //     console.log(message);
+            //     console.log(`available time:  ${message.availableTime}.`);
+            //     this.AddAvailableTimeCheck(message);
+            // });
         };
 
+        this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
+        //this.tailObjectPool.start(16 * 5, this.tailPrefab);
+        //this.attackEvent.AddListener((sessionId) => {this.OnAttackEvent(sessionId)});
+        this.action = (instanceId: number) => {this.OnAttackEvent(instanceId)};
 
         this.StartCoroutine(this.SendMessageLoop(1 / 60));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
+        this.StartCoroutine(this.CheckAttackAvailable());
     }
 
-    //TODO: 꼬리 GameObject Pooling
+    private AddAvailableTimeCheck(sessionId: string, availableTime: Date){
+        this.attackAvailableMap.set(sessionId, availableTime);
+    }
+
+    private * CheckAttackAvailable(){
+       
+        while(true){
+            yield new UnityEngine.WaitForSeconds(0.1);
+            if (this.room != null && this.room.IsConnected) {
+                this.attackAvailableMap.forEach((value, key) => {
+                    const now = new Date();
+                    if(value <= now){
+                        this.attackAvailableMap.delete(key);
+                    }
+                })
+            }
+            
+        }
+    }
+
+    //플레이어 초기화
     public InitPlayer(sessionId: string) {
         let tails: PlayerTails = new PlayerTails();
+        const exp = this.currentPlayers.get(sessionId).exp;
+        console.log(`user ID and EXP :  ${this.currentPlayers.get(sessionId).zepetoUserId} : ${this.currentPlayers.get(sessionId).exp}.`);
+        console.log(`EXP : ${this.currentPlayers.get(sessionId).exp}.`);
+        //console.log(this.currentPlayers.get(sessionId).zepetoUserId + ':' + this.currentPlayers.get(sessionId).exp);
+        const length = exp + 1;
+        //head
+        tails.markManagers.push(new MarkManager());
 
-        
-
-        for (let i = 0; i < this.tailLength; i++) {
-            let train: GameObject = GameObject.Instantiate<GameObject>(this.tailPrefab);
-
+        for (let i = 0; i < length; i++) {
+            let train: GameObject = this.tailObjectPool.GetObject(); //GameObject.Instantiate<GameObject>(this.tailPrefab);
             tails.tails.push(train);
-            tails.tailTransforms.push(train.transform);
+            //tails.tailTransforms.push(train.transform);
             tails.markManagers.push(new MarkManager());
+            
+            train.GetComponent<Tail>().Init(sessionId, this.action);
         }
-
+        //tails.markManagers.push(new MarkManager());
+        const last: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
+        last.SetLast(true);
+        
         this.playerTailsDatas.set(sessionId, tails);
+        //this.StartCoroutine(this.SetTagSessionId(sessionId));
+    }
+
+    private * InitPlayerAsync(sessionId: string){
+        while(true){
+            yield new UnityEngine.WaitForSeconds(0.1);
+            if(ZepetoPlayers.instance.HasPlayer(sessionId)){
+                this.characterSessionIdMap.set(ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.GetInstanceID(), sessionId);
+                //ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.tag = sessionId;
+                //console.log('set tag: ${ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.GetInstanceID()}');
+                console.log(`instance ID:  ${ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.GetInstanceID()}.`);
+                this.InitPlayer(sessionId);
+                break;
+            }
+        }
+        
     }
 
     // 일정 Interval Time으로 내(local)캐릭터 transform을 server로 전송합니다.
@@ -107,8 +158,9 @@ export default class Starter extends ZepetoScriptBehaviour {
                 const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId);
                 if (hasPlayer) {
                     const myPlayer = ZepetoPlayers.instance.GetPlayer(this.room.SessionId);
-                    if (myPlayer.character.CurrentState != CharacterState.Idle)
+                    if (myPlayer.character.CurrentState != CharacterState.Idle) {
                         this.SendTransform(myPlayer.character.transform);
+                    }
                 }
             }
         }
@@ -124,46 +176,72 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     //스네이크 로직 함수
     private UpdateTails(sessionId: string){
+        if(!this.playerTailsDatas.has(sessionId)){
+            return;
+        }
         const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
-
+        //UnityEngine.Debug.Log(tails);
+        
         const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
+
+        const exp = this.currentPlayers.get(sessionId).exp;
+        const length = exp + 1;
+        console.log(sessionId);
+        console.log(exp);
+        console.log(tails.tails);
+        console.log(tails.markManagers);
+        console.log(length);
 
         if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
             //if (this.checkMove(myPlayer.character.transform.position)) {
-            UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
+            //UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
             //head
             tails.markManagers[0].UpdateMarkList(zepetoPlayer.character.transform.position, zepetoPlayer.character.transform.rotation);
 
-            for (let i = 1; i < this.tailLength; i++) {
-                const markManager: MarkManager = tails.markManagers[i];
-                UnityEngine.Debug.Log(markManager);
-                markManager.UpdateMarkList(tails.tailTransforms[i - 1].position, tails.tailTransforms[i - 1].rotation);
+            // for (let i = 1; i < length; i++) {
+            //     const markManager: MarkManager = tails.markManagers[i];
+            //     //UnityEngine.Debug.Log(markManager);
+            //     markManager.UpdateMarkList(tails.tailTransforms[i - 1].position, tails.tailTransforms[i - 1].rotation);
+            // }
+            for(let i = 0; i < tails.tails.length; i++){
+                const markManager: MarkManager = tails.markManagers[i + 1];
+                markManager.UpdateMarkList(tails.tails[i].transform.position, tails.tails[i].transform.rotation);
             }
             //if (this.checkMove(zepetoPlayer.character.transform.position)) {
-                for (let i = 0; i < this.tailLength; i++) {
-                    const markManager: MarkManager = tails.markManagers[i];
-                    UnityEngine.Debug.Log(tails.tailTransforms[i].position);
-                    
-                    if (i == 0) {
-                        if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween) {
-                            while (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                markManager.markList.shift();
-                            }
+            const markManager: MarkManager = tails.markManagers[0];
+
+            if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position) >= this.distanceBetween) {
+                while (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position) >= this.distanceBetween && markManager.markList.length > 0) {
+                    tails.tails[0].transform.position = markManager.markList[0].position;//UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
+                    tails.tails[0].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                    markManager.markList.shift();
+                }
+            }
+            for (let i = 1; i < tails.tails.length; i++) {
+                const markManager: MarkManager = tails.markManagers[i];
+                //UnityEngine.Debug.Log(tails.tailTransforms[i].position);
+
+                // if (i == 0) {
+
+                //     }
+                //else {
+                try {
+                    if (UnityVector3.Distance(tails.tails[i - 1].transform.position, tails.tails[i].transform.position) >= this.distanceBetween) {
+                        while (UnityVector3.Distance(tails.tails[i - 1].transform.position, tails.tails[i].transform.position) >= this.distanceBetween && markManager.markList.length > 0) {
+                            tails.tails[i].transform.position = markManager.markList[0].position;//UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
+                            tails.tails[i].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                            markManager.markList.shift();
                         }
                     }
-                    else {
-                        if (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween) {
-                            while (UnityVector3.Distance(tails.tailTransforms[i - 1].position, tails.tailTransforms[i].position) >= this.distanceBetween && markManager.markList.length > 0) {
-                                tails.tailTransforms[i].position = UnityVector3.Lerp(tails.tailTransforms[i].position, markManager.markList[0].position, 100 * Time.deltaTime);
-                                tails.tailTransforms[i].rotation = Quaternion.Lerp(tails.tailTransforms[i].rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
-                                markManager.markList.shift();
-                            }
-                        }
-                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    console.log(`index : ${i}.`);
 
                 }
+                //}
+
+            }
             //}
         }
     }
@@ -194,7 +272,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         for (let i = 1; i <= 3; i++) {
             const trainPos = new UnityVector3(zepetoPlayer.character.transform.position.x + (direction.x * (0.8 * i)), zepetoPlayer.character.transform.position.y + (direction.y * (0.8 * i)), zepetoPlayer.character.transform.position.z + (direction.z * (0.8 * i)));
 
-            tailData.tailTransforms[i - 1].position = trainPos;
+            tailData.tails[i - 1].transform.position = trainPos;
         }
     }
 
@@ -214,12 +292,19 @@ export default class Starter extends ZepetoScriptBehaviour {
             // [CharacterController] Player 인스턴스가 Scene에 완전히 로드되었을 때 호출
             ZepetoPlayers.instance.OnAddedPlayer.AddListener((sessionId: string) => {
                 const isLocal = this.room.SessionId === sessionId;
-                if (!isLocal) {
-                    const player: Player = this.currentPlayers.get(sessionId);
+                const player: Player = this.currentPlayers.get(sessionId);
+                
+                player.OnChange += (changeValues) => this.OnUpdatePlayer(sessionId, player);
 
-                    // [RoomState] player 인스턴스의 state가 갱신될 때마다 호출됩니다.
-                    player.OnChange += (changeValues) => this.OnUpdatePlayer(sessionId, player);
-                }
+                // if (!isLocal) {
+                //     // [RoomState] player 인스턴스의 state가 갱신될 때마다 호출됩니다.
+                    
+                //     this.CalculateTailPos(sessionId, player);
+                // }
+                // else{
+                //     this.CalculateTailPos(sessionId, player);
+                // }
+                
             });
         }
 
@@ -253,13 +338,29 @@ export default class Starter extends ZepetoScriptBehaviour {
         const isLocal = this.room.SessionId === player.sessionId;
         ZepetoPlayers.instance.CreatePlayerWithUserId(sessionId, player.zepetoUserId, spawnInfo, isLocal);
         
-        this.InitPlayer(sessionId);
+        if(this.initCoroutine != null){
+            this.StopCoroutine(this.InitPlayerAsync);
+        }
+
+        this.StartCoroutine(this.InitPlayerAsync(sessionId));
+        //this.InitPlayer(sessionId);
 
     }
 
     //TODO: 꼬리 GameObject Pooling
     private OnLeavePlayer(sessionId: string, player: Player) {
         console.log(`[OnRemove] players - sessionId : ${sessionId}`);
+        //꼬리객체 pool에 반환
+        const tail: PlayerTails = this.playerTailsDatas.get(sessionId);
+        tail.tails.forEach((object: GameObject) =>{
+            this.tailObjectPool.ReturnObject(object);
+        });
+        
+        //데이터 제거
+        this.playerTailsDatas.delete(sessionId);
+
+
+
         this.currentPlayers.delete(sessionId);
 
         ZepetoPlayers.instance.RemovePlayer(sessionId);
@@ -268,19 +369,86 @@ export default class Starter extends ZepetoScriptBehaviour {
     // 필드 유저 업데이트
     private OnUpdatePlayer(sessionId: string, player: Player) {
 
-        const position = this.ParseVector3(player.transform.position);
+        const isLocal = this.room.SessionId === sessionId;
+        if(!isLocal){
+            const position = this.ParseVector3(player.transform.position);
 
         const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
         zepetoPlayer.character.MoveToPosition(position);
 
         if (player.state === CharacterState.JumpIdle || player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
-
-        const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
-
-        this.UpdateTails(sessionId);
-
+        }
         
+
+            if (this.playerTailsDatas.has(sessionId)) {
+                const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
+    
+                this.UpdateTails(sessionId);
+    
+                const changedTailCount = player.exp + 1;
+    
+                //exp 증감에 따라 처리해준다.
+                // while (tails.tails.length > player.exp + 1) {
+                    
+                // }
+    
+                const minusTailCount = tails.tails.length - changedTailCount;
+                for(let i = 0; i < minusTailCount; i++){
+                    const tailObject: GameObject = tails.tails.pop();
+                    //tails.tailTransforms.pop();
+                    tails.markManagers.pop();
+                    this.tailObjectPool.ReturnObject(tailObject);
+                }
+    
+                const addTailCount = changedTailCount - tails.tails.length;
+                for(let i = 0; i < addTailCount; i++){
+                    console.log(player.exp);
+                    const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
+                    currentlast.SetLast(false);
+                    const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
+                    newLast.Init(sessionId, this.action);
+                    tails.tails.push(newLast.gameObject);
+                    newLast.SetLast(true);
+                    tails.markManagers.push(new MarkManager());
+                }
+    
+                if(player.atkAvailable){
+                    const date = this.ParseDateObject(player.atkAvailable);
+                    const now = new Date();
+                    if(date > now){
+                        this.AddAvailableTimeCheck(sessionId, date);
+                    }
+                }
+                // while (tails.tails.length < player.exp + 1) {
+                    
+                // }
+            }
+    }
+    private CalculateTailPos(sessionId: string, player: Player){
+       
+    }
+
+
+    //trigger event 시 호출될 공격 함수
+    private OnAttackEvent(instanceId: number){
+        if(!this.characterSessionIdMap.has(instanceId)){
+            return;
+        }
+        const sessionId: string = this.characterSessionIdMap.get(instanceId);
+        if(sessionId === this.room.SessionId){
+            return;
+        }
+
+        if(this.attackAvailableMap.has(sessionId)){
+            return;
+        }
+
+        let addTime = new Date();
+        addTime.setSeconds(addTime.getSeconds() + 1);
+        this.attackAvailableMap.set(sessionId, addTime);
+
+        this.SendAttack(sessionId);
     }
 
     private SendAttack(targetSessionId: string){
@@ -320,5 +488,18 @@ export default class Starter extends ZepetoScriptBehaviour {
                 vector3.y,
                 vector3.z
             );
+    }
+
+    private ParseDateObject(dateObject: DateObject): Date{
+        const date = new Date();
+        date.setFullYear(dateObject.year);
+        date.setMonth(dateObject.month);
+        date.setDate(dateObject.date);
+        date.setTime(dateObject.time);
+        date.setMinutes(dateObject.minutes);
+        date.setSeconds(dateObject.seconds);
+        date.setMilliseconds(dateObject.milliseconds);
+
+        return date;
     }
 }

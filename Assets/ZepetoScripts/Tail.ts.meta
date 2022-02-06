@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: f6b0c07a775c49a44b2bc96d16ac7df4
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nclass Tail extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.isLast
+    = false;\r\n    }\r\n    Start() {\r\n    }\r\n    Init(id, event) {\r\n       
+    //console.log(''init'');\r\n        this.triggerEvent = event;\r\n        this.isLast
+    = false;\r\n        this.ownerId = id;\r\n    }\r\n    SetLast(last) {\r\n       
+    this.isLast = last;\r\n    }\r\n    OnTriggerEnter(coll) {\r\n        if (!this.ownerId)
+    {\r\n            return;\r\n        }\r\n        if (!coll.gameObject.GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter)))
+    {\r\n            //console.log(`not have zepetocharacter ${coll.gameObject.name}.`);\r\n           
+    return;\r\n        }\r\n        else {\r\n            // console.log(`exist zepetocharacter
+    ${coll.gameObject.name}.`);\r\n            // console.log(`tag:  ${coll.gameObject.GetInstanceID().toString()}.`);\r\n       
+    }\r\n        if (!this.isLast) {\r\n            return;\r\n        }\r\n       
+    if (this.triggerEvent != null) {\r\n            this.triggerEvent(coll.gameObject.GetInstanceID());\r\n           
+    //this.triggerEvent.Invoke(this.ownerId);\r\n        }\r\n    }\r\n}\r\nexports.default
+    = Tail;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGFpbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlRhaWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQsNkNBQXdJO0FBR3hJLDZFQUFzSDtBQUd0SCxNQUFxQixJQUFLLFNBQVEscUNBQXFCO0lBQXZEOztRQUdZLFdBQU0sR0FBWSxLQUFLLENBQUM7SUFzQ3BDLENBQUM7SUFwQ0csS0FBSztJQUVMLENBQUM7SUFFTSxJQUFJLENBQUMsRUFBVSxFQUFDLEtBQXVCO1FBQzFDLHNCQUFzQjtRQUN0QixJQUFJLENBQUMsWUFBWSxHQUFHLEtBQUssQ0FBQztRQUMxQixJQUFJLENBQUMsTUFBTSxHQUFHLEtBQUssQ0FBQztRQUNwQixJQUFJLENBQUMsT0FBTyxHQUFHLEVBQUUsQ0FBQztJQUN0QixDQUFDO0lBRU0sT0FBTyxDQUFDLElBQWE7UUFDeEIsSUFBSSxDQUFDLE1BQU0sR0FBRyxJQUFJLENBQUM7SUFDdkIsQ0FBQztJQUVELGNBQWMsQ0FBQyxJQUFjO1FBQ3pCLElBQUcsQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFDO1lBQ2IsT0FBTztTQUNWO1FBQ0QsSUFBRyxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsWUFBWSxTQUFDLDZDQUFlLEVBQUcsRUFBQztZQUNoRCxtRUFBbUU7WUFDbkUsT0FBTztTQUNWO2FBQ0k7WUFDRCxpRUFBaUU7WUFDakUsdUVBQXVFO1NBQzFFO1FBQ0QsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUU7WUFDZCxPQUFPO1NBQ1Y7UUFDRCxJQUFJLElBQUksQ0FBQyxZQUFZLElBQUksSUFBSSxFQUFFO1lBQzNCLElBQUksQ0FBQyxZQUFZLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxhQUFhLEVBQUUsQ0FBQyxDQUFDO1lBQ25ELHlDQUF5QztTQUM1QztJQUNMLENBQUM7Q0FFSjtBQXpDRCx1QkF5Q0MifQ==","assetPath":"Assets/ZepetoScripts/Tail.ts","manifest":{"properties":[{"assembly":"mscorlib","name":"ownerId","type":"System.String","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"triggerEvent","type":"__type","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"Tail","description":""},"isCompiled":true}'
+  typescriptHash: a2d76f87eb5e26ae9ef634937dcc3a10

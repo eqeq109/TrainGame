@@ -14,6 +14,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		state: number;
 		exp: number;
 		atkDamage: number;
+		atkAvailable: DateObject;
 	}
 	class Transform extends Schema {
 		position: Vector;
@@ -23,5 +24,14 @@ declare module "ZEPETO.Multiplay.Schema" {
 		x: number;
 		y: number;
 		z: number;
+	}
+	class DateObject extends Schema {
+		year: number;
+		month: number;
+		date: number;
+		time: number;
+		minutes: number;
+		seconds: number;
+		milliseconds: number;
 	}
 }

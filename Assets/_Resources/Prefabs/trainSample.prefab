@@ -578,6 +578,7 @@ GameObject:
   - component: {fileID: 8131269437744661262}
   - component: {fileID: -2010561807418671053}
   - component: {fileID: -5352498753093286168}
+  - component: {fileID: 4619859544559756985}
   m_Layer: 0
   m_Name: trainSample
   m_TagString: Untagged
@@ -637,6 +638,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4619859544559756985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8904675105967348148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1673316429, guid: 921f0445823004a16a499d629dd566a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  script:
+    keys:
+    - ownerId
+    unityValues:
+    - {fileID: 0}
+    values:
+    - '{"type":"System.String, mscorlib","value":""}'
+    unityArrayValues: []
+    arrayValues: []
+    script: {fileID: 4458252877524076426, guid: f6b0c07a775c49a44b2bc96d16ac7df4, type: 3}
+    isExpaned: 0
 --- !u!1 &8997849598734997121
 GameObject:
   m_ObjectHideFlags: 0
