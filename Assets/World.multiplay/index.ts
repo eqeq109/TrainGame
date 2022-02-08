@@ -2,7 +2,7 @@ import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
 import {DataStorage} from "ZEPETO.Multiplay.DataStorage";
 import {Player, Transform, Vector, DateObject} from "ZEPETO.Multiplay.Schema";
 
-const maxExp: number = 6;
+const maxExp: number = 5;
 
 // interface AvailableTimeObject{
 //     sessionId: string,
@@ -43,6 +43,7 @@ export default class extends Sandbox {
             player.state = message.state;
         });
 
+        //데미지 처리
         this.onMessage("onAttack", (client, message) =>{
 
         const atkSessionId = client.sessionId;
@@ -53,30 +54,17 @@ export default class extends Sandbox {
         const targetPlayer: Player = this.state.players.get(targetSessionId);
         
         //피격 유저 처리
-        
-
-        if(targetPlayer.exp <= 1){
+        if(targetPlayer.exp <= 0){
             //TODO: Game over
         }
         else
         {
-            const changeExp = targetPlayer.exp - 1//atkPlayer.atkDamage;
-            targetPlayer.exp = changeExp;
-            // const targetClient = this.clients.find(t => t.sessionId === targetSessionId);
-            // const storage: DataStorage = targetClient.loadDataStorage(); //client.loadDataStorage();
-
-            // storage.set("exp", targetPlayer.exp);
+            targetPlayer.exp = targetPlayer.exp - 1;
         }
-
 
         //공격 유저 처리
         if(atkPlayer.exp < maxExp){
-            const addExp = atkPlayer.exp + 1;
-            atkPlayer.exp = addExp;
-            // const atkClient = this.clients.find(t => t.sessionId === atkSessionId);
-            // const storage: DataStorage = atkClient.loadDataStorage(); //client.loadDataStorage();
-
-            // storage.set("exp", atkPlayer.exp);
+            atkPlayer.exp = atkPlayer.exp + 1;
         }
 
         const availableTime = new Date();
@@ -93,68 +81,7 @@ export default class extends Sandbox {
 
         console.log(`[OnAttack] sessionId : ${atkSessionId}, exp : ${atkPlayer.exp}`);
         console.log(`[OnTarget] sessionId : ${targetSessionId}, exp : ${targetPlayer.exp}`);
-            //this.onAttack(client.sessionId, message.targetSessionId);
         });
-    }
-    //데미지 처리
-    onAttack(atkSessionId: string, targetSessionId: string){
-
-
-        const atkPlayer: Player = this.state.players.get(atkSessionId);
-        
-        const targetPlayer: Player = this.state.players.get(targetSessionId);
-        
-        //피격 유저 처리
-        const changeExp = targetPlayer.exp - 1//atkPlayer.atkDamage;
-
-        if(changeExp <= 0){
-            //TODO: Game over
-        }
-        else if(changeExp > maxExp){
-            
-        }
-        else
-        {
-            targetPlayer.exp = changeExp;
-            // const targetClient = this.clients.find(t => t.sessionId === targetSessionId);
-            // const storage: DataStorage = targetClient.loadDataStorage(); //client.loadDataStorage();
-
-            // storage.set("exp", targetPlayer.exp);
-        }
-
-
-        //공격 유저 처리
-        if(atkPlayer.exp < maxExp){
-            const addExp = atkPlayer.exp + 1;
-            atkPlayer.exp = addExp;
-            // const atkClient = this.clients.find(t => t.sessionId === atkSessionId);
-            // const storage: DataStorage = atkClient.loadDataStorage(); //client.loadDataStorage();
-
-            // storage.set("exp", atkPlayer.exp);
-        }
-
-        const availableTime = new Date();
-        availableTime.setSeconds(availableTime.getSeconds() + 1);
-        const dateData = new DateObject();
-        dateData.year = availableTime.getFullYear();
-        dateData.month = availableTime.getMonth();
-        dateData.date = availableTime.getDate();
-        dateData.time = availableTime.getTime();
-        dateData.minutes = availableTime.getMinutes();
-        dateData.seconds = availableTime.getSeconds();
-        dateData.milliseconds = availableTime.getMilliseconds();
-        targetPlayer.atkAvailable = dateData;// availableTime;
-
-        console.log(`[OnAttack] sessionId : ${atkSessionId}, exp : ${atkPlayer.exp}`);
-        console.log(`[OnTarget] sessionId : ${targetSessionId}, exp : ${targetPlayer.exp}`);
-
-        // let data: AvailableTimeObject = {
-        //     sessionId: targetSessionId,
-        //     availableTime: availableTime,
-        // };
-        
-        //this.broadcast("SetAvailableTime", data);
-
     }
     
 
@@ -188,12 +115,44 @@ export default class extends Sandbox {
         if(exp == null) exp = 0;
         await storage.set("exp", exp);
         player.exp = exp;
-        
+
+
+        const transform = new Transform();
+        transform.position = new Vector();
+        transform.position.x = this.getRandomArbitrary(-34, 31);//message.position.x;
+        transform.position.y = 0;
+        transform.position.z = this.getRandomArbitrary(-23, 7);
+
+        transform.rotation = new Vector();
+        transform.rotation.x = 0;
+        transform.rotation.y = 0;
+        transform.rotation.z = 0;
+
+        player.transform = transform;
+
+        const availableTime = new Date();
+        availableTime.setSeconds(availableTime.getSeconds() + 1);
+        const dateData = new DateObject();
+        dateData.year = availableTime.getFullYear();
+        dateData.month = availableTime.getMonth();
+        dateData.date = availableTime.getDate();
+        dateData.time = availableTime.getTime();
+        dateData.minutes = availableTime.getMinutes();
+        dateData.seconds = availableTime.getSeconds();
+        dateData.milliseconds = availableTime.getMilliseconds();
+        player.atkAvailable = dateData;// availableTime;
+
         //let attackDamage = await storage.get("attackDamage");
 
         // client 객체의 고유 키값인 sessionId 를 사용해서 Player 객체를 관리.
         // set 으로 추가된 player 객체에 대한 정보를 클라이언트에서는 players 객체에 add_OnAdd 이벤트를 추가하여 확인 할 수 있음.
         this.state.players.set(client.sessionId, player);
+
+      
+    }
+
+     getRandomArbitrary(min: number, max: number) {
+        return Math.random() * (max - min) + min;
     }
 
     onTick(deltaTime: number): void {

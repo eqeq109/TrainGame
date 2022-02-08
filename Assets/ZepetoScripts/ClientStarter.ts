@@ -6,6 +6,7 @@ import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer, ZepetoCharacter
 import * as UnityEngine from "UnityEngine";
 import { GameObject, Vector3 as UnityVector3, Object, 
     Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Coroutine} from 'UnityEngine';
+import {Text, Image} from 'UnityEngine.UI';
 import Tail from "./Tail";
 import Star from "./Star";
 import ObjectPool from "./ObjectPool";
@@ -41,9 +42,8 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private attackAvailableMap: Map<string, Date> = new Map<string, Date>();
 
-    private action: Action$1<number>;
-    //꼬리 최대개수(기본값: 5)
-    private tailLength: int = 5;
+    private action: Action$1<string>;
+
     //꼬리간 거리
     private distanceBetween: float = 0.7;
     //움직임 체크
@@ -53,6 +53,10 @@ export default class Starter extends ZepetoScriptBehaviour {
     //꼬리 오브젝트 풀
     private tailObjectPool: ObjectPool<Tail>;
 
+    //UI
+    public textLevel: Text;
+    public textExp: Text;
+    public imageGauge: Image;
     
     
     private initCoroutine: Coroutine;
@@ -80,7 +84,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
         //this.tailObjectPool.start(16 * 5, this.tailPrefab);
         //this.attackEvent.AddListener((sessionId) => {this.OnAttackEvent(sessionId)});
-        this.action = (instanceId: number) => {this.OnAttackEvent(instanceId)};
+        this.action = (ownerId: string) => {this.OnAttackEvent(ownerId)};
 
         this.StartCoroutine(this.SendMessageLoop(1 / 60));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
@@ -107,12 +111,20 @@ export default class Starter extends ZepetoScriptBehaviour {
         }
     }
 
+    private Update(){
+
+    }
+
     //플레이어 초기화
-    public InitPlayer(sessionId: string) {
+    public InitPlayer(sessionId: string, position: UnityEngine.Vector3, rotation: UnityEngine.Vector3) {
+        
+        const player = ZepetoPlayers.instance.GetPlayer(sessionId);
+
         let tails: PlayerTails = new PlayerTails();
         const exp = this.currentPlayers.get(sessionId).exp;
         console.log(`user ID and EXP :  ${this.currentPlayers.get(sessionId).zepetoUserId} : ${this.currentPlayers.get(sessionId).exp}.`);
         console.log(`EXP : ${this.currentPlayers.get(sessionId).exp}.`);
+
         //console.log(this.currentPlayers.get(sessionId).zepetoUserId + ':' + this.currentPlayers.get(sessionId).exp);
         const length = exp + 1;
         //head
@@ -120,6 +132,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         for (let i = 0; i < length; i++) {
             let train: GameObject = this.tailObjectPool.GetObject(); //GameObject.Instantiate<GameObject>(this.tailPrefab);
+            train.transform.position = position;
             tails.tails.push(train);
             //tails.tailTransforms.push(train.transform);
             tails.markManagers.push(new MarkManager());
@@ -134,7 +147,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         //this.StartCoroutine(this.SetTagSessionId(sessionId));
     }
 
-    private * InitPlayerAsync(sessionId: string){
+    private * InitPlayerAsync(sessionId: string, position: UnityEngine.Vector3, rotation: UnityEngine.Vector3){
         while(true){
             yield new UnityEngine.WaitForSeconds(0.1);
             if(ZepetoPlayers.instance.HasPlayer(sessionId)){
@@ -142,7 +155,7 @@ export default class Starter extends ZepetoScriptBehaviour {
                 //ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.tag = sessionId;
                 //console.log('set tag: ${ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.GetInstanceID()}');
                 console.log(`instance ID:  ${ZepetoPlayers.instance.GetPlayer(sessionId).character.gameObject.GetInstanceID()}.`);
-                this.InitPlayer(sessionId);
+                this.InitPlayer(sessionId, position, rotation);
                 break;
             }
         }
@@ -186,13 +199,13 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         const exp = this.currentPlayers.get(sessionId).exp;
         const length = exp + 1;
-        console.log(sessionId);
-        console.log(exp);
-        console.log(tails.tails);
-        console.log(tails.markManagers);
-        console.log(length);
+        // console.log(sessionId);
+        // console.log(exp);
+        // console.log(tails.tails);
+        // console.log(tails.markManagers);
+        // console.log(length);
 
-        if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
+        //if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
             //if (this.checkMove(myPlayer.character.transform.position)) {
             //UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
             //head
@@ -243,7 +256,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
             }
             //}
-        }
+        //}
     }
 
     // 업데이트 코루틴
@@ -294,7 +307,13 @@ export default class Starter extends ZepetoScriptBehaviour {
                 const isLocal = this.room.SessionId === sessionId;
                 const player: Player = this.currentPlayers.get(sessionId);
                 
-                player.OnChange += (changeValues) => this.OnUpdatePlayer(sessionId, player);
+                if(!isLocal){
+                    
+                    player.OnChange += (changeValues) => this.OnUpdatePlayer(sessionId, player);
+                }
+                player.OnChange += (changeValues) => this.OnUpdatePlayerData(sessionId, player);
+                
+                
 
                 // if (!isLocal) {
                 //     // [RoomState] player 인스턴스의 state가 갱신될 때마다 호출됩니다.
@@ -342,9 +361,18 @@ export default class Starter extends ZepetoScriptBehaviour {
             this.StopCoroutine(this.InitPlayerAsync);
         }
 
-        this.StartCoroutine(this.InitPlayerAsync(sessionId));
+        this.StartCoroutine(this.InitPlayerAsync(sessionId, position, rotation));
+
+        if(sessionId == this.room.SessionId){
+            this.UpdateUI(player);
+        }
         //this.InitPlayer(sessionId);
 
+    }
+    private UpdateUI(player: Player){
+        this.textLevel.text = (player.exp + 1).toString();
+                this.textExp.text = '0/1';
+                this.imageGauge.fillAmount = 0;
     }
 
     //TODO: 꼬리 GameObject Pooling
@@ -381,49 +409,60 @@ export default class Starter extends ZepetoScriptBehaviour {
         }
         
 
-            if (this.playerTailsDatas.has(sessionId)) {
-                const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
-    
-                this.UpdateTails(sessionId);
-    
-                const changedTailCount = player.exp + 1;
-    
-                //exp 증감에 따라 처리해준다.
-                // while (tails.tails.length > player.exp + 1) {
-                    
-                // }
-    
-                const minusTailCount = tails.tails.length - changedTailCount;
-                for(let i = 0; i < minusTailCount; i++){
+           
+    }
+    private OnUpdatePlayerData(sessionId: string, player: Player){
+        if (this.playerTailsDatas.has(sessionId)) {
+            const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
+
+            this.UpdateTails(sessionId);
+
+            const changedTailCount = player.exp + 1;
+
+            //exp 증감에 따라 처리해준다.
+            // while (tails.tails.length > player.exp + 1) {
+
+            // }
+
+            const minusTailCount = tails.tails.length - changedTailCount;
+            if (minusTailCount > 0) {
+                for (let i = 0; i < minusTailCount; i++) {
                     const tailObject: GameObject = tails.tails.pop();
                     //tails.tailTransforms.pop();
                     tails.markManagers.pop();
                     this.tailObjectPool.ReturnObject(tailObject);
                 }
-    
-                const addTailCount = changedTailCount - tails.tails.length;
-                for(let i = 0; i < addTailCount; i++){
-                    console.log(player.exp);
-                    const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
-                    currentlast.SetLast(false);
-                    const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
-                    newLast.Init(sessionId, this.action);
-                    tails.tails.push(newLast.gameObject);
-                    newLast.SetLast(true);
-                    tails.markManagers.push(new MarkManager());
-                }
-    
-                if(player.atkAvailable){
-                    const date = this.ParseDateObject(player.atkAvailable);
-                    const now = new Date();
-                    if(date > now){
-                        this.AddAvailableTimeCheck(sessionId, date);
-                    }
-                }
-                // while (tails.tails.length < player.exp + 1) {
-                    
-                // }
+
+                tails.tails[tails.tails.length - 1].GetComponent<Tail>().SetLast(true);
             }
+
+            const addTailCount = changedTailCount - tails.tails.length;
+            for (let i = 0; i < addTailCount; i++){
+                //console.log(player.exp);
+                const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
+                currentlast.SetLast(false);
+                const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
+                newLast.Init(sessionId, this.action);
+                tails.tails.push(newLast.gameObject);
+                newLast.SetLast(true);
+                tails.markManagers.push(new MarkManager());
+            }
+
+            if(player.atkAvailable){
+                const date = this.ParseDateObject(player.atkAvailable);
+                const now = new Date();
+                if(date > now){
+                    this.AddAvailableTimeCheck(sessionId, date);
+                }
+            }
+
+            if(sessionId == this.room.SessionId){
+                this.UpdateUI(player);
+            }
+            // while (tails.tails.length < player.exp + 1) {
+                
+            // }
+        }
     }
     private CalculateTailPos(sessionId: string, player: Player){
        
@@ -431,24 +470,24 @@ export default class Starter extends ZepetoScriptBehaviour {
 
 
     //trigger event 시 호출될 공격 함수
-    private OnAttackEvent(instanceId: number){
-        if(!this.characterSessionIdMap.has(instanceId)){
-            return;
-        }
-        const sessionId: string = this.characterSessionIdMap.get(instanceId);
-        if(sessionId === this.room.SessionId){
+    private OnAttackEvent(ownerId: string){
+        // if(!this.characterSessionIdMap.has(instanceId)){
+        //     return;
+        // }
+        // const sessionId: string = this.characterSessionIdMap.get(instanceId);
+        if(ownerId === this.room.SessionId){
             return;
         }
 
-        if(this.attackAvailableMap.has(sessionId)){
+        if(this.attackAvailableMap.has(ownerId)){
             return;
         }
 
         let addTime = new Date();
         addTime.setSeconds(addTime.getSeconds() + 1);
-        this.attackAvailableMap.set(sessionId, addTime);
+        this.attackAvailableMap.set(ownerId, addTime);
 
-        this.SendAttack(sessionId);
+        this.SendAttack(ownerId);
     }
 
     private SendAttack(targetSessionId: string){

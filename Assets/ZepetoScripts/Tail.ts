@@ -7,14 +7,14 @@ import {Action$1} from 'System';
 
 export default class Tail extends ZepetoScriptBehaviour {
     public ownerId: string;
-    public triggerEvent: Action$1<number>;//UnityEvent$1<string>;
-    private isLast: boolean = false;
+    public triggerEvent: Action$1<string>;//UnityEvent$1<string>;
+    public isLast: boolean = false;
     
     Start() {    
 
     }
 
-    public Init(id: string,event: Action$1<number>){//UnityEvent$1<string> ){
+    public Init(id: string,event: Action$1<string>){//UnityEvent$1<string> ){
         //console.log('init');
         this.triggerEvent = event;
         this.isLast = false;
@@ -25,6 +25,23 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.isLast = last;
     }
 
+    OnCollisionEnter(coll: Collider){
+        if(!this.ownerId){
+            return;
+        }
+        if(!coll.gameObject.GetComponent<ZepetoCharacter>()){
+            //console.log(`not have zepetocharacter ${coll.gameObject.name}.`);
+            return;
+        }
+        if (!this.isLast) {
+            return;
+        }
+        if (this.triggerEvent != null) {
+            this.triggerEvent(this.ownerId);
+            //this.triggerEvent.Invoke(this.ownerId);
+        }
+    }
+
     OnTriggerEnter(coll: Collider) {
         if(!this.ownerId){
             return;
@@ -33,15 +50,11 @@ export default class Tail extends ZepetoScriptBehaviour {
             //console.log(`not have zepetocharacter ${coll.gameObject.name}.`);
             return;
         }
-        else {
-            // console.log(`exist zepetocharacter ${coll.gameObject.name}.`);
-            // console.log(`tag:  ${coll.gameObject.GetInstanceID().toString()}.`);
-        }
         if (!this.isLast) {
             return;
         }
         if (this.triggerEvent != null) {
-            this.triggerEvent(coll.gameObject.GetInstanceID());
+            this.triggerEvent(this.ownerId);
             //this.triggerEvent.Invoke(this.ownerId);
         }
     }
