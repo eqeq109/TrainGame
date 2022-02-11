@@ -25,7 +25,8 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.isLast = last;
     }
 
-    OnCollisionEnter(coll: Collider){
+    OnCollisionEnter(coll: Collision){
+        console.log(coll);
         if(!this.ownerId){
             return;
         }
@@ -43,6 +44,7 @@ export default class Tail extends ZepetoScriptBehaviour {
     }
 
     OnTriggerEnter(coll: Collider) {
+        console.log(coll);
         if(!this.ownerId){
             return;
         }

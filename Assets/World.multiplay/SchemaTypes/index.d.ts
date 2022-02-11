@@ -15,6 +15,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		exp: number;
 		atkDamage: number;
 		atkAvailable: DateObject;
+		tailTransforms: ArraySchema<Transform>;
 	}
 	class Transform extends Schema {
 		position: Vector;

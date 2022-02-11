@@ -1,11 +1,11 @@
 import { ZepetoScriptBehaviour, ZepetoScriptBehaviourComponent, ZepetoScriptInstance, ZepetoScriptContext } from 'ZEPETO.Script'
 import { WorldMultiplayChatContent, ZepetoWorldMultiplay } from 'ZEPETO.World'
 import { Room, RoomData } from 'ZEPETO.Multiplay'
-import { Player, State, Vector, DateObject } from 'ZEPETO.Multiplay.Schema'
+import { Player, State, Vector, DateObject, Transform as PacketTransform } from 'ZEPETO.Multiplay.Schema'
 import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer, ZepetoCharacter } from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
 import { GameObject, Vector3 as UnityVector3, Object, 
-    Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Coroutine} from 'UnityEngine';
+    Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Coroutine, ForceMode, SpringJoint, HingeJoint} from 'UnityEngine';
 import {Text, Image} from 'UnityEngine.UI';
 import Tail from "./Tail";
 import Star from "./Star";
@@ -17,13 +17,10 @@ import { GenericDelegate } from 'Puerts';
 import {Action$1} from 'System';
 import { DirectorSampleTime } from 'UnityEngine.PlayerLoop.Initialization'
 import { System } from 'UnityEngine.Rendering.VirtualTexturing'
+import { LinqTunnelAttribute } from 'JetBrains.Annotations'
 
 const maxClient: int = 16;
 
-interface AvailableTimeObject{
-    sessionId: string,
-    availableTime: Date,
-}
 
 export default class Starter extends ZepetoScriptBehaviour {
 
@@ -32,6 +29,8 @@ export default class Starter extends ZepetoScriptBehaviour {
     public tailPrefab: GameObject;
     //기차 물리 head
     public headPrefab: GameObject;
+
+    public jointParentPrefab: GameObject;
 
     private room: Room;
     private currentPlayers: Map<string, Player> = new Map<string, Player>();
@@ -42,12 +41,16 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private attackAvailableMap: Map<string, Date> = new Map<string, Date>();
 
-    private action: Action$1<string>;
+    private hitAction: Action$1<string>;
+
+    private tailTransformArray: Array<Transform> = new Array<Transform>();
+   
 
     //꼬리간 거리
+    private distanceBetweenCharacter: float = 0.7;
     private distanceBetween: float = 0.7;
     //움직임 체크
-    private moveCheck: float = 0.0001; 
+    private moveCheck: float = 0.001; 
     //기존 위치 기록
     private checkPosition: UnityVector3 = new UnityVector3(0, 0, 0);
     //꼬리 오브젝트 풀
@@ -61,6 +64,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     
     private initCoroutine: Coroutine;
 
+ 
     
     //private attackEvent: UnityEvent$1<string> = new UnityEvent$1<string>();
 
@@ -69,7 +73,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.multiplay.RoomCreated += (room: Room) => {
             this.room = room;
         };
-
+        
         this.multiplay.RoomJoined += (room: Room) => {
             room.OnStateChange += this.OnStateChange;
 
@@ -84,9 +88,9 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
         //this.tailObjectPool.start(16 * 5, this.tailPrefab);
         //this.attackEvent.AddListener((sessionId) => {this.OnAttackEvent(sessionId)});
-        this.action = (ownerId: string) => {this.OnAttackEvent(ownerId)};
+        this.hitAction = (ownerId: string) => {this.OnAttackEvent(ownerId)};
 
-        this.StartCoroutine(this.SendMessageLoop(1 / 60));
+        this.StartCoroutine(this.SendMessageLoop(0.1));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
         this.StartCoroutine(this.CheckAttackAvailable());
     }
@@ -120,6 +124,8 @@ export default class Starter extends ZepetoScriptBehaviour {
         
         const player = ZepetoPlayers.instance.GetPlayer(sessionId);
 
+        const joint = GameObject.Instantiate<GameObject>(this.jointParentPrefab, player.character.gameObject.transform);
+        
         let tails: PlayerTails = new PlayerTails();
         const exp = this.currentPlayers.get(sessionId).exp;
         console.log(`user ID and EXP :  ${this.currentPlayers.get(sessionId).zepetoUserId} : ${this.currentPlayers.get(sessionId).exp}.`);
@@ -137,8 +143,26 @@ export default class Starter extends ZepetoScriptBehaviour {
             //tails.tailTransforms.push(train.transform);
             tails.markManagers.push(new MarkManager());
             
-            train.GetComponent<Tail>().Init(sessionId, this.action);
+            train.GetComponent<Tail>().Init(sessionId, this.hitAction);
+            
         }
+
+        // if(this.room.SessionId === sessionId){
+        //     for(let i = 0; i < tails.tails.length; i++){
+
+        //     }
+        // }
+
+        // for(let i = 0; i < tails.tails.length; i++){
+        //     console.log(i);
+        //     let train: GameObject = tails.tails[i];
+        //     if(i === 0){            
+        //         train.GetComponent<HingeJoint>().connectedBody = joint.GetComponent<Rigidbody>();
+        //     }
+        //     else{
+        //         train.GetComponent<HingeJoint>().connectedBody = tails.tails[i - 1].GetComponent<Rigidbody>();
+        //     }
+        // }
         //tails.markManagers.push(new MarkManager());
         const last: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
         last.SetLast(true);
@@ -159,7 +183,6 @@ export default class Starter extends ZepetoScriptBehaviour {
                 break;
             }
         }
-        
     }
 
     // 일정 Interval Time으로 내(local)캐릭터 transform을 server로 전송합니다.
@@ -174,6 +197,7 @@ export default class Starter extends ZepetoScriptBehaviour {
                     if (myPlayer.character.CurrentState != CharacterState.Idle) {
                         this.SendTransform(myPlayer.character.transform);
                     }
+                    this.checkPosition = myPlayer.character.transform.position;
                 }
             }
         }
@@ -199,64 +223,56 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         const exp = this.currentPlayers.get(sessionId).exp;
         const length = exp + 1;
-        // console.log(sessionId);
-        // console.log(exp);
-        // console.log(tails.tails);
-        // console.log(tails.markManagers);
-        // console.log(length);
 
-        //if (zepetoPlayer.character.CurrentState != CharacterState.Idle) {
-            //if (this.checkMove(myPlayer.character.transform.position)) {
-            //UnityEngine.Debug.Log(zepetoPlayer.character.transform.position);
-            //head
+
+        if (this.checkMove(zepetoPlayer.character.transform.position)) {
             tails.markManagers[0].UpdateMarkList(zepetoPlayer.character.transform.position, zepetoPlayer.character.transform.rotation);
 
-            // for (let i = 1; i < length; i++) {
-            //     const markManager: MarkManager = tails.markManagers[i];
-            //     //UnityEngine.Debug.Log(markManager);
-            //     markManager.UpdateMarkList(tails.tailTransforms[i - 1].position, tails.tailTransforms[i - 1].rotation);
-            // }
-            for(let i = 0; i < tails.tails.length; i++){
+
+            for (let i = 0; i < tails.tails.length; i++) {
                 const markManager: MarkManager = tails.markManagers[i + 1];
                 markManager.UpdateMarkList(tails.tails[i].transform.position, tails.tails[i].transform.rotation);
             }
             //if (this.checkMove(zepetoPlayer.character.transform.position)) {
             const markManager: MarkManager = tails.markManagers[0];
 
-            if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position) >= this.distanceBetween) {
-                while (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position) >= this.distanceBetween && markManager.markList.length > 0) {
-                    tails.tails[0].transform.position = markManager.markList[0].position;//UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
-                    tails.tails[0].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+            //let distance: float = UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position);
+
+            if (UnityVector3.Distance(zepetoPlayer.character.transform.position, tails.tails[0].transform.position) >= this.distanceBetweenCharacter) {
+                while (UnityVector3.Distance(zepetoPlayer.character.transform.position, markManager.markList[0].position) > (this.distanceBetween + 0.1)) {
                     markManager.markList.shift();
                 }
+                //let t: float = Time.deltaTime * distance / this.distanceBetween * 10;
+                tails.tails[0].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                //let moveRotation: UnityVector3 = markManager.markList[0].position - tails.tails[0].transform.position ; 
+                tails.tails[0].transform.position = markManager.markList[0].position;//GetComponent<Rigidbody>().MovePosition(markManager.markList[0].position);//.AddForce(moveRotation * 10, ForceMode.Force);// ////UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
+                markManager.markList.shift();
             }
+
             for (let i = 1; i < tails.tails.length; i++) {
                 const markManager: MarkManager = tails.markManagers[i];
-                //UnityEngine.Debug.Log(tails.tailTransforms[i].position);
 
-                // if (i == 0) {
-
-                //     }
-                //else {
                 try {
+
                     if (UnityVector3.Distance(tails.tails[i - 1].transform.position, tails.tails[i].transform.position) >= this.distanceBetween) {
-                        while (UnityVector3.Distance(tails.tails[i - 1].transform.position, tails.tails[i].transform.position) >= this.distanceBetween && markManager.markList.length > 0) {
-                            tails.tails[i].transform.position = markManager.markList[0].position;//UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
-                            tails.tails[i].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                        while (UnityVector3.Distance(tails.tails[i - 1].transform.position, markManager.markList[0].position) > (this.distanceBetween + 0.1)) {
                             markManager.markList.shift();
                         }
+                        tails.tails[i].transform.rotation = markManager.markList[0].rotation;//Quaternion.Lerp(tails.tails[i].transform.rotation, markManager.markList[0].rotation, 100 * Time.deltaTime);
+                        //let moveRotation: UnityVector3 = markManager.markList[0].position - tails.tails[i].transform.position ; 
+                        tails.tails[i].transform.position = markManager.markList[0].position;//GetComponent<Rigidbody>().MovePosition(markManager.markList[0].position);//.AddForce(moveRotation * 10, ForceMode.Force);//////UnityVector3.Lerp(tails.tails[i].transform.position, markManager.markList[0].position, 100 * Time.deltaTime);
+                        markManager.markList.shift();
                     }
+
+
                 }
                 catch (e) {
                     console.log(e);
                     console.log(`index : ${i}.`);
 
                 }
-                //}
-
             }
-            //}
-        //}
+        }
     }
 
     // 업데이트 코루틴
@@ -371,7 +387,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     }
     private UpdateUI(player: Player){
         this.textLevel.text = (player.exp + 1).toString();
-                this.textExp.text = '0/1';
+                //this.textExp.text = '0/1';
                 this.imageGauge.fillAmount = 0;
     }
 
@@ -386,8 +402,6 @@ export default class Starter extends ZepetoScriptBehaviour {
         
         //데이터 제거
         this.playerTailsDatas.delete(sessionId);
-
-
 
         this.currentPlayers.delete(sessionId);
 
@@ -404,25 +418,24 @@ export default class Starter extends ZepetoScriptBehaviour {
         const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
         zepetoPlayer.character.MoveToPosition(position);
 
-        if (player.state === CharacterState.JumpIdle || player.state === CharacterState.JumpMove)
+        if (player.state === CharacterState.JumpIdle) //|| player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
         }
         
 
-           
+
     }
-    private OnUpdatePlayerData(sessionId: string, player: Player){
+    private OnUpdatePlayerData(sessionId: string, player: Player) {
         if (this.playerTailsDatas.has(sessionId)) {
             const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
 
-            this.UpdateTails(sessionId);
+            if (sessionId !== this.room.SessionId) {
+                this.UpdateTails(sessionId);
+            }
 
             const changedTailCount = player.exp + 1;
 
             //exp 증감에 따라 처리해준다.
-            // while (tails.tails.length > player.exp + 1) {
-
-            // }
 
             const minusTailCount = tails.tails.length - changedTailCount;
             if (minusTailCount > 0) {
@@ -437,21 +450,23 @@ export default class Starter extends ZepetoScriptBehaviour {
             }
 
             const addTailCount = changedTailCount - tails.tails.length;
-            for (let i = 0; i < addTailCount; i++){
-                //console.log(player.exp);
-                const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
-                currentlast.SetLast(false);
-                const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
-                newLast.Init(sessionId, this.action);
-                tails.tails.push(newLast.gameObject);
-                newLast.SetLast(true);
-                tails.markManagers.push(new MarkManager());
+            if (addTailCount > 0) {
+                for (let i = 0; i < addTailCount; i++) {
+                    //console.log(player.exp);
+                    const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
+                    currentlast.SetLast(false);
+                    const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
+                    newLast.Init(sessionId, this.hitAction);
+                    tails.tails.push(newLast.gameObject);
+                    newLast.SetLast(true);
+                    tails.markManagers.push(new MarkManager());
+                }
             }
 
-            if(player.atkAvailable){
+            if (player.atkAvailable) {
                 const date = this.ParseDateObject(player.atkAvailable);
                 const now = new Date();
-                if(date > now){
+                if (date > now){
                     this.AddAvailableTimeCheck(sessionId, date);
                 }
             }
@@ -511,8 +526,15 @@ export default class Starter extends ZepetoScriptBehaviour {
         rot.Add("y", transform.localEulerAngles.y);
         rot.Add("z", transform.localEulerAngles.z);
         data.Add("rotation", rot.GetObject());
+
+        
+
         this.room.Send("onChangedTransform", data.GetObject());
+        
+
     }
+
+
 
     private SendState(state: CharacterState) {
         const data = new RoomData();

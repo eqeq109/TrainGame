@@ -6181,6 +6181,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.66106737, y: 0.6685518, z: 0.8927035}
   m_Center: {x: -0.00000022351742, y: 0, z: 0.432945}
+--- !u!114 &225605142 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8095627419938649824, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+  m_PrefabInstance: {fileID: 1132045758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &225937937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32242,7 +32253,7 @@ MonoBehaviour:
     verticalController: {fileID: 2919188649297340810, guid: c93455f4813024972abd7e02718b345a, type: 3}
     horizontalController: {fileID: 2787167779785370926, guid: 6f2611065df244d8c99ceed0336f3aab, type: 3}
   floatingUIData:
-    showNickNameLocalPlayer: 0
+    showNickNameLocalPlayer: 1
     showNickNameOtherPlayers: 1
     showBubbleChatLocalPlayer: 1
     showBubbleChatOtherPlayers: 1
@@ -38145,6 +38156,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8095627418650358862, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+      propertyPath: m_text
+      value: 1/0
+      objectReference: {fileID: 0}
     - target: {fileID: 8095627419012689344, guid: c564dd4441ec0784980d02335c16757c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -38251,6 +38266,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+--- !u!114 &1132045759 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6649402930962492804, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+  m_PrefabInstance: {fileID: 1132045758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1137015353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68033,11 +68059,20 @@ MonoBehaviour:
     - multiplay
     - tailPrefab
     - headPrefab
+    - imageGauge
+    - textLevel
+    - jointParentPrefab
     unityValues:
     - {fileID: 582525452}
     - {fileID: 8904675105967348148, guid: 1597ff370104f6f4f991baed6efe4874, type: 3}
     - {fileID: 3733625825251654350, guid: 25ec7c5299e32b7469c9a266882f4469, type: 3}
+    - {fileID: 225605142}
+    - {fileID: 1132045759}
+    - {fileID: 3733625825251654350, guid: 25ec7c5299e32b7469c9a266882f4469, type: 3}
     values:
+    - 
+    - 
+    - 
     - 
     - 
     - 

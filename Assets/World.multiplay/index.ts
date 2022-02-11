@@ -36,6 +36,8 @@ export default class extends Sandbox {
             transform.rotation.z = message.rotation.z;
 
             player.transform = transform;
+            
+            
         });
 
         this.onMessage("onChangedState", (client, message) => { 
@@ -112,7 +114,7 @@ export default class extends Sandbox {
         await storage.set("VisitCount", ++visit_cnt);
         //최초 스탯 세팅
         let exp = await storage.get("exp") as number;
-        if(exp == null) exp = 0;
+        if(exp == null) exp = 5;
         await storage.set("exp", exp);
         player.exp = exp;
 

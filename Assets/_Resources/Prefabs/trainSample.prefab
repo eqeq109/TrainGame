@@ -578,7 +578,8 @@ GameObject:
   - component: {fileID: 8131269437744661262}
   - component: {fileID: -2010561807418671053}
   - component: {fileID: 4619859544559756985}
-  - component: {fileID: 5058775679519574323}
+  - component: {fileID: 4664143527710479796}
+  - component: {fileID: 4652740432651957774}
   m_Layer: 0
   m_Name: trainSample
   m_TagString: Untagged
@@ -618,10 +619,10 @@ BoxCollider:
   m_GameObject: {fileID: 8904675105967348148}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.21, y: 3.14, z: 2.23}
-  m_Center: {x: 0, y: 1.6, z: -0.42}
+  m_Size: {x: 2.21, y: 3.14, z: 1.54}
+  m_Center: {x: 0, y: 1.6, z: -0.8}
 --- !u!114 &4619859544559756985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,8 +649,24 @@ MonoBehaviour:
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: f6b0c07a775c49a44b2bc96d16ac7df4, type: 3}
     isExpaned: 0
---- !u!143 &5058775679519574323
-CharacterController:
+--- !u!54 &4664143527710479796
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8904675105967348148}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &4652740432651957774
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -658,14 +675,10 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 3.83
-  m_Radius: 1.33
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.47, z: -0.32}
+  m_Radius: 1.45
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.2, z: -0.68}
 --- !u!1 &8997849598734997121
 GameObject:
   m_ObjectHideFlags: 0
