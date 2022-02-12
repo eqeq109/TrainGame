@@ -429,9 +429,9 @@ export default class Starter extends ZepetoScriptBehaviour {
         if (this.playerTailsDatas.has(sessionId)) {
             const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
 
-            if (sessionId !== this.room.SessionId) {
-                this.UpdateTails(sessionId);
-            }
+            // if (sessionId !== this.room.SessionId) {
+            //     this.UpdateTails(sessionId);
+            // }
 
             const changedTailCount = player.exp + 1;
 
@@ -474,9 +474,27 @@ export default class Starter extends ZepetoScriptBehaviour {
             if(sessionId == this.room.SessionId){
                 this.UpdateUI(player);
             }
+
+            if(sessionId != this.room.SessionId){
+                this.UpdateEnemyTailPos(sessionId, player);
+            }
+
             // while (tails.tails.length < player.exp + 1) {
                 
             // }
+        }
+    }
+
+    private UpdateEnemyTailPos(sessionId: string, player: Player){
+        const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
+
+        for(let i = 0; i < tails.tails.Length; i++){
+            const transform: PacketTransform = player.tailTransforms[i];
+            tails.tails[i].transform.position.x = transform.position.x;
+            tails.tails[i].transform.position.y = transform.position.y;
+            tails.tails[i].transform.position.z = transform.position.z;
+
+            tails.tails[i].transform.rotation = Quaternion.Euler(this.ParseVector3(transform.rotation));
         }
     }
     private CalculateTailPos(sessionId: string, player: Player){
@@ -527,11 +545,25 @@ export default class Starter extends ZepetoScriptBehaviour {
         rot.Add("z", transform.localEulerAngles.z);
         data.Add("rotation", rot.GetObject());
 
-        
+        const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
+
+        const posArr: Array<PacketTransform> = new Array<PacketTransform>(); 
+        for(let i = 0; i < tails.tails.length; i++){
+            const tail = tails.tails[i];
+            const transform: PacketTransform = new PacketTransform();
+            transform.position.x = tails.tails[i].transform.position.x;
+            transform.position.y = tails.tails[i].transform.position.y;
+            transform.position.z = tails.tails[i].transform.position.z;
+
+            transform.rotation.x = tails.tails[i].transform.localEulerAngles.x;
+            transform.rotation.y = tails.tails[i].transform.localEulerAngles.y;
+            transform.rotation.z = tails.tails[i].transform.localEulerAngles.z;
+            
+            posArr.push(transform);
+        }
+        data.Add("tailTransforms", posArr);
 
         this.room.Send("onChangedTransform", data.GetObject());
-        
-
     }
 
 

@@ -10,6 +10,7 @@ const maxExp: number = 5;
 // }
 
 export default class extends Sandbox {
+
     //private starList: Array<Vector>;
 
     constructor() {
@@ -36,7 +37,8 @@ export default class extends Sandbox {
             transform.rotation.z = message.rotation.z;
 
             player.transform = transform;
-            
+            const tailPosArr: Array<Transform> = message.tailTransforms;
+            console.log(tailPosArr);
             
         });
 
@@ -50,7 +52,7 @@ export default class extends Sandbox {
 
         const atkSessionId = client.sessionId;
         const targetSessionId = message.targetSessionId;
-            
+        
         const atkPlayer: Player = this.state.players.get(atkSessionId);
         
         const targetPlayer: Player = this.state.players.get(targetSessionId);
