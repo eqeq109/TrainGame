@@ -1,6 +1,6 @@
 import { ZepetoScriptBehaviour, ZepetoScriptBehaviourComponent, ZepetoScriptInstance, ZepetoScriptContext } from 'ZEPETO.Script'
 import { WorldMultiplayChatContent, ZepetoWorldMultiplay } from 'ZEPETO.World'
-import { Room, RoomData } from 'ZEPETO.Multiplay'
+import { Room, RoomData, ArraySchema$1 } from 'ZEPETO.Multiplay'
 import { Player, State, Vector, DateObject, Transform as PacketTransform } from 'ZEPETO.Multiplay.Schema'
 import { CharacterState, SpawnInfo, ZepetoPlayers, ZepetoPlayer, ZepetoCharacter } from 'ZEPETO.Character.Controller'
 import * as UnityEngine from "UnityEngine";
@@ -20,6 +20,16 @@ import { System } from 'UnityEngine.Rendering.VirtualTexturing'
 import { LinqTunnelAttribute } from 'JetBrains.Annotations'
 
 const maxClient: int = 16;
+
+class TransformData {
+    position: VectorData = new VectorData();
+    rotation: VectorData = new VectorData();
+}
+class VectorData {
+    x: number = 0;
+    y: number = 0;
+    z: number = 0;
+}
 
 
 export default class Starter extends ZepetoScriptBehaviour {
@@ -547,22 +557,35 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
 
-        const posArr: Array<PacketTransform> = new Array<PacketTransform>(); 
+        const posArr: Array<RoomData> = new Array<RoomData>(); 
         for(let i = 0; i < tails.tails.length; i++){
             const tail = tails.tails[i];
-            const transform: PacketTransform = new PacketTransform();
-            transform.position.x = tails.tails[i].transform.position.x;
-            transform.position.y = tails.tails[i].transform.position.y;
-            transform.position.z = tails.tails[i].transform.position.z;
+            // const transform: Transform = new Transform();
+            // transform.position.x = tails.tails[i].transform.position.x;
+            // transform.position.y = tails.tails[i].transform.position.y;
+            // transform.position.z = tails.tails[i].transform.position.z;
 
-            transform.rotation.x = tails.tails[i].transform.localEulerAngles.x;
-            transform.rotation.y = tails.tails[i].transform.localEulerAngles.y;
-            transform.rotation.z = tails.tails[i].transform.localEulerAngles.z;
+            // transform.rotation.x = tails.tails[i].transform.localEulerAngles.x;
+            // transform.rotation.y = tails.tails[i].transform.localEulerAngles.y;
+            // transform.rotation.z = tails.tails[i].transform.localEulerAngles.z;
+            const pos = new RoomData();
+            pos.Add("x", tails.tails[i].transform.position.x);
+            pos.Add("y", tails.tails[i].transform.position.y);
+            pos.Add("z", tails.tails[i].transform.position.z);
+
+            const rot = new RoomData();
+            rot.Add("x", tails.tails[i].transform.localEulerAngles.x);
+            rot.Add("y", tails.tails[i].transform.localEulerAngles.x);
+            rot.Add("z", tails.tails[i].transform.localEulerAngles.x);
+
+            const transform: RoomData = new RoomData();
+            transform.Add("position", pos.GetObject());
+            transform.Add("rotation", rot.GetObject());
             
             posArr.push(transform);
         }
         data.Add("tailTransforms", posArr);
-
+        console.log(data.GetObject());
         this.room.Send("onChangedTransform", data.GetObject());
     }
 

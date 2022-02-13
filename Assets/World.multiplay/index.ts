@@ -24,7 +24,6 @@ export default class extends Sandbox {
 
         this.onMessage("onChangedTransform", (client, message) => {
             const player = this.state.players.get(client.sessionId);
-
             const transform = new Transform();
             transform.position = new Vector();
             transform.position.x = message.position.x;
@@ -37,8 +36,9 @@ export default class extends Sandbox {
             transform.rotation.z = message.rotation.z;
 
             player.transform = transform;
-            const tailPosArr: Array<Transform> = message.tailTransforms;
-            console.log(tailPosArr);
+            console.log(message.tailTransforms);
+            //const tailPosArr: Array<Transform> = message.tailTransforms;
+            
             
         });
 
