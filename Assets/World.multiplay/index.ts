@@ -24,6 +24,9 @@ export default class extends Sandbox {
 
         this.onMessage("onChangedTransform", (client, message) => {
             const player = this.state.players.get(client.sessionId);
+            //console.log(message);
+            console.log(message.tailTransforms[0].position.x);
+
             const transform = new Transform();
             transform.position = new Vector();
             transform.position.x = message.position.x;
@@ -36,7 +39,24 @@ export default class extends Sandbox {
             transform.rotation.z = message.rotation.z;
 
             player.transform = transform;
-            console.log(message.tailTransforms);
+
+            player.tailTransforms.clear();
+
+            for(let i = 0; i < player.exp + 1; i++){
+                const tailTransform = new Transform();
+                tailTransform.position.x = message.tailTransforms[i].position.x;
+                tailTransform.position.y = message.tailTransforms[i].position.y;
+                tailTransform.position.z = message.tailTransforms[i].position.z;
+
+                tailTransform.rotation.x = message.tailTransforms[i].rotation.x;
+                tailTransform.rotation.y = message.tailTransforms[i].rotation.y;
+                tailTransform.rotation.z = message.tailTransforms[i].rotation.z;
+
+                player.tailTransforms.push(tailTransform);
+            }
+
+            //player.tailTransforms = tailPosArr;
+            
             //const tailPosArr: Array<Transform> = message.tailTransforms;
             
             

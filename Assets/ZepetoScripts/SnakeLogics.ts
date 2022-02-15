@@ -32,6 +32,6 @@ export class PlayerTails{
     //public tailTransforms: Array<Transform> = new Array<Transform>();;
     
     constructor(){
-
+        
     }
 }

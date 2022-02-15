@@ -497,18 +497,18 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private UpdateEnemyTailPos(sessionId: string, player: Player){
         const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
+        if(player.tailTransforms === null || player.tailTransforms.Count === 0){
+            return;
+        }
 
         for(let i = 0; i < tails.tails.Length; i++){
-            const transform: PacketTransform = player.tailTransforms[i];
-            tails.tails[i].transform.position.x = transform.position.x;
-            tails.tails[i].transform.position.y = transform.position.y;
-            tails.tails[i].transform.position.z = transform.position.z;
+            tails.tails[i].transform.position.x = player.tailTransforms[i].position.x;
+            tails.tails[i].transform.position.y = player.tailTransforms[i].position.y;
+            tails.tails[i].transform.position.z = player.tailTransforms[i].position.z;
+            
+            tails.tails[i].transform.rotation = Quaternion.Euler(this.ParseVector3(player.tailTransforms[i].rotation));
 
-            tails.tails[i].transform.rotation = Quaternion.Euler(this.ParseVector3(transform.rotation));
         }
-    }
-    private CalculateTailPos(sessionId: string, player: Player){
-       
     }
 
 
@@ -557,10 +557,13 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
 
-        const posArr: Array<RoomData> = new Array<RoomData>(); 
+        const posArrData = new RoomData();
+
+        const posArr: TransformData[] = [];
+
         for(let i = 0; i < tails.tails.length; i++){
             const tail = tails.tails[i];
-            // const transform: Transform = new Transform();
+            // const transform: TransformData = new TransformData();
             // transform.position.x = tails.tails[i].transform.position.x;
             // transform.position.y = tails.tails[i].transform.position.y;
             // transform.position.z = tails.tails[i].transform.position.z;
@@ -568,25 +571,32 @@ export default class Starter extends ZepetoScriptBehaviour {
             // transform.rotation.x = tails.tails[i].transform.localEulerAngles.x;
             // transform.rotation.y = tails.tails[i].transform.localEulerAngles.y;
             // transform.rotation.z = tails.tails[i].transform.localEulerAngles.z;
-            const pos = new RoomData();
-            pos.Add("x", tails.tails[i].transform.position.x);
-            pos.Add("y", tails.tails[i].transform.position.y);
-            pos.Add("z", tails.tails[i].transform.position.z);
+            // posArr.push(transform);
+            
+            const pos1 = new RoomData();
+            pos1.Add("x", tails.tails[i].transform.position.x);
+            pos1.Add("y", tails.tails[i].transform.position.y);
+            pos1.Add("z", tails.tails[i].transform.position.z);
 
-            const rot = new RoomData();
-            rot.Add("x", tails.tails[i].transform.localEulerAngles.x);
-            rot.Add("y", tails.tails[i].transform.localEulerAngles.x);
-            rot.Add("z", tails.tails[i].transform.localEulerAngles.x);
+            const rot1 = new RoomData();
+            rot1.Add("x", tails.tails[i].transform.localEulerAngles.x);
+            rot1.Add("y", tails.tails[i].transform.localEulerAngles.x);
+            rot1.Add("z", tails.tails[i].transform.localEulerAngles.x);
 
             const transform: RoomData = new RoomData();
-            transform.Add("position", pos.GetObject());
-            transform.Add("rotation", rot.GetObject());
-            
-            posArr.push(transform);
+            transform.Add("position", pos1.GetObject());
+            transform.Add("rotation", rot1.GetObject());
+
+            posArrData.Add(i.toString(), transform.GetObject());
         }
-        data.Add("tailTransforms", posArr);
-        console.log(data.GetObject());
+        
+        data.Add("tailTransforms", posArrData.GetObject());
+
         this.room.Send("onChangedTransform", data.GetObject());
+
+
+        //Array<RoomData> = new Array<RoomData>(); 
+       
     }
 
 
