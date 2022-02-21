@@ -339,17 +339,6 @@ export default class Starter extends ZepetoScriptBehaviour {
                 }
                 player.OnChange += (changeValues) => this.OnUpdatePlayerData(sessionId, player);
                 
-                
-
-                // if (!isLocal) {
-                //     // [RoomState] player 인스턴스의 state가 갱신될 때마다 호출됩니다.
-                    
-                //     this.CalculateTailPos(sessionId, player);
-                // }
-                // else{
-                //     this.CalculateTailPos(sessionId, player);
-                // }
-                
             });
         }
 
@@ -379,7 +368,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         const rotation = this.ParseVector3(player.transform.rotation);
         spawnInfo.position = position;
         spawnInfo.rotation = UnityEngine.Quaternion.Euler(rotation);
-
+        
         const isLocal = this.room.SessionId === player.sessionId;
         ZepetoPlayers.instance.CreatePlayerWithUserId(sessionId, player.zepetoUserId, spawnInfo, isLocal);
         
@@ -393,12 +382,12 @@ export default class Starter extends ZepetoScriptBehaviour {
             this.UpdateUI(player);
         }
         //this.InitPlayer(sessionId);
-
     }
+
     private UpdateUI(player: Player){
         this.textLevel.text = (player.exp + 1).toString();
                 //this.textExp.text = '0/1';
-                this.imageGauge.fillAmount = 0;
+        this.imageGauge.fillAmount = 0;
     }
 
     //TODO: 꼬리 GameObject Pooling
@@ -439,10 +428,6 @@ export default class Starter extends ZepetoScriptBehaviour {
         if (this.playerTailsDatas.has(sessionId)) {
             const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
 
-            // if (sessionId !== this.room.SessionId) {
-            //     this.UpdateTails(sessionId);
-            // }
-
             const changedTailCount = player.exp + 1;
 
             //exp 증감에 따라 처리해준다.
@@ -481,11 +466,11 @@ export default class Starter extends ZepetoScriptBehaviour {
                 }
             }
 
-            if(sessionId == this.room.SessionId){
+            if(sessionId === this.room.SessionId){
                 this.UpdateUI(player);
             }
 
-            if(sessionId != this.room.SessionId){
+            if(sessionId !== this.room.SessionId){
                 this.UpdateEnemyTailPos(sessionId, player);
             }
 
@@ -497,17 +482,31 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private UpdateEnemyTailPos(sessionId: string, player: Player){
         const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
-        if(player.tailTransforms === null || player.tailTransforms.Count === 0){
+        
+        if(player.tailTransforms.Count === 0){
+            console.log('tailTransform is empty');
             return;
         }
+        let loopCount: int = tails.tails.length;
+        if (player.tailTransforms.Count as int !== tails.tails.length as int) {
+            loopCount = player.tailTransforms.Count > tails.tails.length ? tails.tails.length : player.tailTransforms.Count;
+        }
 
-        for(let i = 0; i < tails.tails.Length; i++){
-            tails.tails[i].transform.position.x = player.tailTransforms[i].position.x;
-            tails.tails[i].transform.position.y = player.tailTransforms[i].position.y;
-            tails.tails[i].transform.position.z = player.tailTransforms[i].position.z;
+        for (let i = 0; i < loopCount; i++) {
+            console.log(player.tailTransforms[i].position.x);
+            tails.tails[i].transform.position = new UnityVector3(player.tailTransforms[i].position.x,
+                player.tailTransforms[i].position.y, player.tailTransforms[i].position.z);
             
-            tails.tails[i].transform.rotation = Quaternion.Euler(this.ParseVector3(player.tailTransforms[i].rotation));
+            // UnityVector3.Lerp(tails.tails[i].transform.position, 
+            //     new UnityVector3(player.tailTransforms[i].position.x,
+            //     player.tailTransforms[i].position.y, player.tailTransforms[i].position.z), Time.deltaTime * 40);
 
+            tails.tails[i].transform.localRotation = Quaternion.Euler(this.ParseVector3(player.tailTransforms[i].rotation));
+             //Quaternion.Lerp(tails.tails[i].transform.localRotation, Quaternion.Euler(player.tailTransforms[i].rotation.x, player.tailTransforms[i].rotation.y,
+            //     player.tailTransforms[i].rotation.z), Time.deltaTime * 40);
+
+
+                //
         }
     }
 
@@ -580,8 +579,8 @@ export default class Starter extends ZepetoScriptBehaviour {
 
             const rot1 = new RoomData();
             rot1.Add("x", tails.tails[i].transform.localEulerAngles.x);
-            rot1.Add("y", tails.tails[i].transform.localEulerAngles.x);
-            rot1.Add("z", tails.tails[i].transform.localEulerAngles.x);
+            rot1.Add("y", tails.tails[i].transform.localEulerAngles.y);
+            rot1.Add("z", tails.tails[i].transform.localEulerAngles.z);
 
             const transform: RoomData = new RoomData();
             transform.Add("position", pos1.GetObject());
@@ -589,6 +588,8 @@ export default class Starter extends ZepetoScriptBehaviour {
 
             posArrData.Add(i.toString(), transform.GetObject());
         }
+
+        posArrData.Add("tailCount", tails.tails.length);
         
         data.Add("tailTransforms", posArrData.GetObject());
 

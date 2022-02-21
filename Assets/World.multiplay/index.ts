@@ -24,8 +24,6 @@ export default class extends Sandbox {
 
         this.onMessage("onChangedTransform", (client, message) => {
             const player = this.state.players.get(client.sessionId);
-            //console.log(message);
-            console.log(message.tailTransforms[0].position.x);
 
             const transform = new Transform();
             transform.position = new Vector();
@@ -42,7 +40,12 @@ export default class extends Sandbox {
 
             player.tailTransforms.clear();
 
-            for(let i = 0; i < player.exp + 1; i++){
+            
+
+            for(let i = 0; i < message.tailTransforms.tailCount; i++){
+                console.log(`[tailPos] x : ${message.tailTransforms[i].position.x}, 
+                y : ${message.tailTransforms[i].position.y}, z : ${message.tailTransforms[i].position.z}`);
+                
                 const tailTransform = new Transform();
                 tailTransform.position.x = message.tailTransforms[i].position.x;
                 tailTransform.position.y = message.tailTransforms[i].position.y;
@@ -54,12 +57,6 @@ export default class extends Sandbox {
 
                 player.tailTransforms.push(tailTransform);
             }
-
-            //player.tailTransforms = tailPosArr;
-            
-            //const tailPosArr: Array<Transform> = message.tailTransforms;
-            
-            
         });
 
         this.onMessage("onChangedState", (client, message) => { 
@@ -165,6 +162,22 @@ export default class extends Sandbox {
         dateData.seconds = availableTime.getSeconds();
         dateData.milliseconds = availableTime.getMilliseconds();
         player.atkAvailable = dateData;// availableTime;
+
+        player.tailTransforms.clear();
+
+        for(let i = 0; i < player.exp + 1; i++){
+            const tailTransform = new Transform();
+            tailTransform.position.x = player.transform.position.x;
+            tailTransform.position.y = player.transform.position.y;
+            tailTransform.position.z = player.transform.position.z;
+
+            tailTransform.rotation.x = player.transform.rotation.x;
+            tailTransform.rotation.y = player.transform.rotation.y;
+            tailTransform.rotation.z = player.transform.rotation.z;
+
+            player.tailTransforms.push(tailTransform);
+        }
+        
 
         //let attackDamage = await storage.get("attackDamage");
 
