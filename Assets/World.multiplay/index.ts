@@ -43,8 +43,8 @@ export default class extends Sandbox {
             
 
             for(let i = 0; i < message.tailTransforms.tailCount; i++){
-                console.log(`[tailPos] x : ${message.tailTransforms[i].position.x}, 
-                y : ${message.tailTransforms[i].position.y}, z : ${message.tailTransforms[i].position.z}`);
+                //console.log(`[tailPos] x : ${message.tailTransforms[i].position.x}, 
+                //y : ${message.tailTransforms[i].position.y}, z : ${message.tailTransforms[i].position.z}`);
                 
                 const tailTransform = new Transform();
                 tailTransform.position.x = message.tailTransforms[i].position.x;
@@ -103,6 +103,19 @@ export default class extends Sandbox {
         console.log(`[OnAttack] sessionId : ${atkSessionId}, exp : ${atkPlayer.exp}`);
         console.log(`[OnTarget] sessionId : ${targetSessionId}, exp : ${targetPlayer.exp}`);
         });
+
+
+        this.onMessage("onCatchStar", (client, message) =>{
+
+            const player: Player = this.state.players.get(client.sessionId);
+            
+
+            //별 먹음 처리
+            if(player.exp < maxExp){
+                player.exp = player.exp + 1;
+            }
+    
+            });
     }
     
 
@@ -191,10 +204,56 @@ export default class extends Sandbox {
      getRandomArbitrary(min: number, max: number) {
         return Math.random() * (max - min) + min;
     }
-
+    private starSpawnCheck: number = 0;
+    private bombSpawnCheck: number = 0;
+    private starSpawnTime: number = 5 * 60;
+    private bombSpawnTime: number = 10 * 60;
     onTick(deltaTime: number): void {
         //  서버에서 설정된 타임마다 반복적으로 호출되며 deltaTime 을 이용하여 일정한 interval 이벤트를 관리할 수 있음.
+        this.starSpawnCheck += deltaTime;
+        this.bombSpawnCheck += deltaTime;
+
+        if(this.starSpawnCheck >= this.starSpawnTime){
+            this.SpawnStar();
+            this.starSpawnCheck = 0;
+        }
+        if(this.bombSpawnCheck >= this.bombSpawnTime){
+            this.SpawnBomb();
+            this.bombSpawnCheck = 0;
+        }
     }
+
+    private SpawnBomb = (): void => {
+        const transform = new Transform();
+        transform.position = new Vector();
+        transform.position.x = this.getRandomArbitrary(-34, 31);//message.position.x;
+        transform.position.y = 0;
+        transform.position.z = this.getRandomArbitrary(-23, 7);
+
+        transform.rotation = new Vector();
+        transform.rotation.x = 0;
+        transform.rotation.y = 0;
+        transform.rotation.z = 0;
+
+        this.broadcast("SpawnBomb", transform);
+    }
+    private SpawnStar = (): void => {
+        const transform = new Transform();
+        transform.position = new Vector();
+        transform.position.x = this.getRandomArbitrary(-34, 31);//message.position.x;
+        transform.position.y = 0;
+        transform.position.z = this.getRandomArbitrary(-23, 7);
+
+        transform.rotation = new Vector();
+        transform.rotation.x = 0;
+        transform.rotation.y = 0;
+        transform.rotation.z = 0;
+
+        this.broadcast("SpawnStar", transform);
+        console.log("SpawnStar");
+    }
+
+    
 
     async onLeave(client: SandboxPlayer, consented?: boolean) {
 
