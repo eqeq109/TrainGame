@@ -9,6 +9,7 @@ import { GameObject, Vector3 as UnityVector3, Object,
 import {Text, Image} from 'UnityEngine.UI';
 import Tail from "./Tail";
 import Star from "./Star";
+import Bomb from "./Bomb";
 import ObjectPool from "./ObjectPool";
 import {Mark, MarkManager, PlayerTails} from "./SnakeLogics";
 import { UnityEvent$1 } from 'UnityEngine.Events'
@@ -37,6 +38,10 @@ export default class Starter extends ZepetoScriptBehaviour {
     public multiplay: ZepetoWorldMultiplay;
     //기차 프리팹
     public tailPrefab: GameObject;
+    //폭탄 프리팹
+    public bombPrefab: GameObject;
+    //별 프리팹
+    public starPrefab: GameObject;
     //기차 물리 head
     public headPrefab: GameObject;
 
@@ -53,7 +58,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private hitAction: Action$1<string>;
 
-    private tailTransformArray: Array<Transform> = new Array<Transform>();
+    private catchStarAction: Function;
    
 
     //꼬리간 거리
@@ -65,6 +70,11 @@ export default class Starter extends ZepetoScriptBehaviour {
     private checkPosition: UnityVector3 = new UnityVector3(0, 0, 0);
     //꼬리 오브젝트 풀
     private tailObjectPool: ObjectPool<Tail>;
+    //폭탄 오브젝트 풀
+    private bombObjectPool: ObjectPool<Bomb>;
+    //별 오브젝트 풀
+    private starObjectPool: ObjectPool<Star>;
+
 
     //UI
     public textLevel: Text;
@@ -74,31 +84,37 @@ export default class Starter extends ZepetoScriptBehaviour {
     
     private initCoroutine: Coroutine;
 
- 
-    
-    //private attackEvent: UnityEvent$1<string> = new UnityEvent$1<string>();
-
+    private SpawnStarAction(message: PacketTransform){
+        console.log(message);
+        const position = this.ParseVector3(message.position);
+        this.SpawnStar(position);
+    }
     private Start() {
 
         this.multiplay.RoomCreated += (room: Room) => {
             this.room = room;
+
+            
         };
         
         this.multiplay.RoomJoined += (room: Room) => {
             room.OnStateChange += this.OnStateChange;
 
-            // add server message listener type by "SetAvailableTime"
-            // room.AddMessageHandler("SetAvailableTime", (message: AvailableTimeObject) => {
-            //     console.log(message);
-            //     console.log(`available time:  ${message.availableTime}.`);
-            //     this.AddAvailableTimeCheck(message);
-            // });
+            room.AddMessageHandler("SpawnStar", this.SpawnStarAction.bind(this));  
+            
         };
 
         this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
+        
+        //this.bombObjectPool = new ObjectPool<Bomb>(20, this.bombPrefab);
+        
+        this.starObjectPool = new ObjectPool<Star>(200, this.starPrefab);
         //this.tailObjectPool.start(16 * 5, this.tailPrefab);
         //this.attackEvent.AddListener((sessionId) => {this.OnAttackEvent(sessionId)});
         this.hitAction = (ownerId: string) => {this.OnAttackEvent(ownerId)};
+        this.catchStarAction = (instanceId: number, star: GameObject) => {
+            this.OnCatchStarEvent(instanceId, star);
+        };
 
         this.StartCoroutine(this.SendMessageLoop(0.1));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
@@ -127,6 +143,11 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private Update(){
 
+    }
+
+    private SpawnStar(position: UnityEngine.Vector3){
+        let star: GameObject = this.starObjectPool.GetObject();
+        star.GetComponent<Star>().Init(this.catchStarAction, position);
     }
 
     //플레이어 초기화
@@ -509,7 +530,17 @@ export default class Starter extends ZepetoScriptBehaviour {
                 //
         }
     }
+    private OnCatchStarEvent(instanceId: number, star: GameObject){
+        if(!this.characterSessionIdMap.has(instanceId)){
+            return;
+        }
+        const sessionId: string = this.characterSessionIdMap.get(instanceId);
 
+        if(sessionId === this.room.SessionId){
+            this.room.Send("onCatchStar", "");
+            this.starObjectPool.ReturnObject(star);
+        }
+    }
 
     //trigger event 시 호출될 공격 함수
     private OnAttackEvent(ownerId: string){
