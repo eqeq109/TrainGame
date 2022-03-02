@@ -62,6 +62,7 @@ export default class extends Sandbox {
             const player = this.state.players.get(client.sessionId);
             player.state = message.state;
         });
+       
 
         //데미지 처리
         this.onMessage("onAttack", (client, message) =>{
@@ -110,13 +111,25 @@ export default class extends Sandbox {
             
 
             //별 먹음 처리
-            if(player.exp < maxExp){
+            if (player.exp < maxExp) {
                 player.exp = player.exp + 1;
             }
-    
-            });
+
+        });
+
+        this.onMessage("onHitByBomb", (client, message) => {
+
+            const player: Player = this.state.players.get(client.sessionId);
+
+
+            //폭탄 피격 처리
+            if (player.exp > 0) {
+                player.exp = player.exp - 1;
+            }
+
+        });
     }
-    
+
 
     async onJoin(client: SandboxPlayer) {
 
