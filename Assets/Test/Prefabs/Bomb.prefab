@@ -4952,6 +4952,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5473864049186481963}
+  - component: {fileID: 1041515677621426092}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -4977,6 +4978,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1041515677621426092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5473864049186481962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1673316429, guid: 921f0445823004a16a499d629dd566a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  script:
+    keys:
+    - indicatorFill
+    - particleExplode
+    - objectBomb
+    unityValues:
+    - {fileID: 5473864049339770160}
+    - {fileID: 2685055566059865781}
+    - {fileID: 5473864048433147125}
+    values:
+    - 
+    - 
+    - 
+    unityArrayValues: []
+    arrayValues: []
+    script: {fileID: 4458252877524076426, guid: cdbd61599916bd34f97100f6b270a89f, type: 3}
+    isExpaned: 0
 --- !u!1 &5473864049339770319
 GameObject:
   m_ObjectHideFlags: 0

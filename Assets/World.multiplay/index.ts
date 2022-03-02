@@ -1,7 +1,6 @@
 import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
 import {DataStorage} from "ZEPETO.Multiplay.DataStorage";
 import {Player, Transform, Vector, DateObject} from "ZEPETO.Multiplay.Schema";
-
 const maxExp: number = 5;
 
 // interface AvailableTimeObject{
@@ -206,8 +205,9 @@ export default class extends Sandbox {
     }
     private starSpawnCheck: number = 0;
     private bombSpawnCheck: number = 0;
-    private starSpawnTime: number = 5 * 60;
-    private bombSpawnTime: number = 10 * 60;
+    private starSpawnTime: number = 3000;
+    private bombSpawnTime: number = 10000;
+
     onTick(deltaTime: number): void {
         //  서버에서 설정된 타임마다 반복적으로 호출되며 deltaTime 을 이용하여 일정한 interval 이벤트를 관리할 수 있음.
         this.starSpawnCheck += deltaTime;
@@ -234,8 +234,10 @@ export default class extends Sandbox {
         transform.rotation.x = 0;
         transform.rotation.y = 0;
         transform.rotation.z = 0;
+        
 
         this.broadcast("SpawnBomb", transform);
+        console.log("SpawnBomb");
     }
     private SpawnStar = (): void => {
         const transform = new Transform();

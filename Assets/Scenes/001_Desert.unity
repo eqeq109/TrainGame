@@ -68006,6 +68006,7 @@ MonoBehaviour:
     - textLevel
     - jointParentPrefab
     - starPrefab
+    - bombPrefab
     unityValues:
     - {fileID: 582525452}
     - {fileID: 8904675105967348148, guid: 1597ff370104f6f4f991baed6efe4874, type: 3}
@@ -68014,7 +68015,9 @@ MonoBehaviour:
     - {fileID: 1132045759}
     - {fileID: 3733625825251654350, guid: 25ec7c5299e32b7469c9a266882f4469, type: 3}
     - {fileID: 7658499013950243626, guid: 8bbc73dead5a1e045bca054fbc14d20e, type: 3}
+    - {fileID: 5473864049186481962, guid: 5173d1ffc13f8184cac369f23f62d34f, type: 3}
     values:
+    - 
     - 
     - 
     - 

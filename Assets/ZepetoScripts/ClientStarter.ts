@@ -59,6 +59,10 @@ export default class Starter extends ZepetoScriptBehaviour {
     private hitAction: Action$1<string>;
 
     private catchStarAction: Function;
+
+    private hitByBombAction: Function;
+
+    private returnBombAction: Function;
    
 
     //꼬리간 거리
@@ -84,37 +88,50 @@ export default class Starter extends ZepetoScriptBehaviour {
     
     private initCoroutine: Coroutine;
 
-    private SpawnStarAction(message: PacketTransform){
-        console.log(message);
-        const position = this.ParseVector3(message.position);
-        this.SpawnStar(position);
-    }
     private Start() {
+
+        this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
+        
+        this.bombObjectPool = new ObjectPool<Bomb>(20, this.bombPrefab);
+        
+        this.starObjectPool = new ObjectPool<Star>(200, this.starPrefab);
 
         this.multiplay.RoomCreated += (room: Room) => {
             this.room = room;
-
-            
         };
         
         this.multiplay.RoomJoined += (room: Room) => {
             room.OnStateChange += this.OnStateChange;
 
-            room.AddMessageHandler("SpawnStar", this.SpawnStarAction.bind(this));  
+            room.AddMessageHandler("SpawnStar", (message: PacketTransform) => {
+                console.log(message.position);
+                const position: UnityEngine.Vector3 = this.ParseVector3(message.position);
+                this.SpawnStar(position);
+            });  
+
+            room.AddMessageHandler("SpawnBomb", (message: PacketTransform) => {
+                console.log(message.position);
+                const position: UnityEngine.Vector3 = this.ParseVector3(message.position);
+                this.SpawnBomb(position);
+            });  
             
         };
 
-        this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);//GameObject.Instantiate<GameObject>(new GameObject).AddComponent<ObjectPool<Tail>>();//new ObjectPool<Tail>(16 * 5, this.tailPrefab);
         
-        //this.bombObjectPool = new ObjectPool<Bomb>(20, this.bombPrefab);
-        
-        this.starObjectPool = new ObjectPool<Star>(200, this.starPrefab);
         //this.tailObjectPool.start(16 * 5, this.tailPrefab);
         //this.attackEvent.AddListener((sessionId) => {this.OnAttackEvent(sessionId)});
         this.hitAction = (ownerId: string) => {this.OnAttackEvent(ownerId)};
         this.catchStarAction = (instanceId: number, star: GameObject) => {
             this.OnCatchStarEvent(instanceId, star);
         };
+
+        this.hitByBombAction = (instanceId: number, bomb: GameObject) => {
+            this.OnHitByBombEvent(instanceId, bomb);
+        }
+
+        this.returnBombAction = (bomb: GameObject) =>{
+            this.ReturnBomb(bomb);
+        }
 
         this.StartCoroutine(this.SendMessageLoop(0.1));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
@@ -142,12 +159,21 @@ export default class Starter extends ZepetoScriptBehaviour {
     }
 
     private Update(){
-
+        
     }
 
     private SpawnStar(position: UnityEngine.Vector3){
         let star: GameObject = this.starObjectPool.GetObject();
         star.GetComponent<Star>().Init(this.catchStarAction, position);
+    }
+
+    private SpawnBomb(position: UnityEngine.Vector3){
+        let bomb: GameObject = this.bombObjectPool.GetObject();
+        bomb.GetComponent<Bomb>().Init(this.hitByBombAction, this.returnBombAction, position);
+    }
+
+    private ReturnBomb(bomb: GameObject){
+        this.bombObjectPool.ReturnObject(bomb);
     }
 
     //플레이어 초기화
@@ -539,6 +565,17 @@ export default class Starter extends ZepetoScriptBehaviour {
         if(sessionId === this.room.SessionId){
             this.room.Send("onCatchStar", "");
             this.starObjectPool.ReturnObject(star);
+        }
+    }
+
+    private OnHitByBombEvent(instanceId: number, bomb: GameObject){
+        if(!this.characterSessionIdMap.has(instanceId)){
+            return;
+        }
+        const sessionId: string = this.characterSessionIdMap.get(instanceId);
+
+        if(sessionId === this.room.SessionId){
+            this.room.Send("onHitByBomb", "");
         }
     }
 
