@@ -89,7 +89,7 @@ export default class extends Sandbox {
         }
 
         const availableTime = new Date();
-        availableTime.setSeconds(availableTime.getSeconds() + 1);
+        availableTime.setSeconds(availableTime.getSeconds() + 2);
         const dateData = new DateObject();
         dateData.year = availableTime.getFullYear();
         dateData.month = availableTime.getMonth();
@@ -126,6 +126,18 @@ export default class extends Sandbox {
             if (player.exp > 0) {
                 player.exp = player.exp - 1;
             }
+
+            const availableTime = new Date();
+            availableTime.setSeconds(availableTime.getSeconds() + 2);
+            const dateData = new DateObject();
+            dateData.year = availableTime.getFullYear();
+            dateData.month = availableTime.getMonth();
+            dateData.date = availableTime.getDate();
+            dateData.time = availableTime.getTime();
+            dateData.minutes = availableTime.getMinutes();
+            dateData.seconds = availableTime.getSeconds();
+            dateData.milliseconds = availableTime.getMilliseconds();
+            player.atkAvailable = dateData;// availableTime;
 
         });
     }
@@ -177,7 +189,7 @@ export default class extends Sandbox {
         player.transform = transform;
 
         const availableTime = new Date();
-        availableTime.setSeconds(availableTime.getSeconds() + 1);
+        availableTime.setSeconds(availableTime.getSeconds() + 2);
         const dateData = new DateObject();
         dateData.year = availableTime.getFullYear();
         dateData.month = availableTime.getMonth();
@@ -219,7 +231,7 @@ export default class extends Sandbox {
     private starSpawnCheck: number = 0;
     private bombSpawnCheck: number = 0;
     private starSpawnTime: number = 3000;
-    private bombSpawnTime: number = 10000;
+    private bombSpawnTime: number = 5000;
 
     onTick(deltaTime: number): void {
         //  서버에서 설정된 타임마다 반복적으로 호출되며 deltaTime 을 이용하여 일정한 interval 이벤트를 관리할 수 있음.

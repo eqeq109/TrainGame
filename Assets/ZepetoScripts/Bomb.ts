@@ -28,7 +28,7 @@ export default class Bomb extends ZepetoScriptBehaviour {
         this.returnEvent = returnObject;
         if(this.animation != null) this.StopCoroutine(this.SetAnimation);
         this.objectBomb.transform.localPosition = new UnityEngine.Vector3(0, 20, 0);
-        this.gameObject.transform.position = new UnityEngine.Vector3(0, 0, 0);//position;
+        this.gameObject.transform.position = position;
         this.objectBomb.gameObject.SetActive(true);
         this.animation = this.StartCoroutine(this.SetAnimation());
     }

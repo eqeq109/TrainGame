@@ -27,7 +27,7 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.tailModel.SetActive(!first);
     }
 
-    private fullTime: float = 1;
+    private fullTime: float = 2;
     private partTime: float = 0.5;
     private * HitAnimation(){
         let playTime: float = 0;
@@ -41,12 +41,12 @@ export default class Tail extends ZepetoScriptBehaviour {
             if(partProcessTime <= this.partTime){
                 partProcessTime += Time.deltaTime;
 
-                material.SetFloat('_Alpha', easing.inCirc2(0.1, 1, partProcessTime / this.partTime));
+                material.SetFloat('_Alpha', easing.inCirc2(1, 0, partProcessTime / this.partTime));
             }
             else if (partProcessTime <= 1){
                 partProcessTime += Time.deltaTime;
 
-                material.SetFloat('_Alpha', easing.inCirc2(1, 0.1, (partProcessTime - 0.25) / this.partTime));
+                material.SetFloat('_Alpha', easing.inCirc2(0, 1, (partProcessTime - 0.5) / this.partTime));
             }else{
                 partProcessTime = 0;
             }
@@ -62,7 +62,7 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.isLast = last;
     }
     public PlayHitAnimation(){
-        if(!this.hitedRoutine){
+        if(this.hitedRoutine){
             this.StopCoroutine(this.hitedRoutine);
         }
         this.hitedRoutine = this.StartCoroutine(this.HitAnimation());
