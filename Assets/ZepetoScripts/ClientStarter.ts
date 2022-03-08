@@ -429,7 +429,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         if (player.state === CharacterState.JumpIdle) //|| player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
         }
-        
+        this.UpdateTails(sessionId);
 
 
     }
@@ -482,9 +482,9 @@ export default class Starter extends ZepetoScriptBehaviour {
                 this.UpdateUI(player);
             }
 
-            if(sessionId !== this.room.SessionId){
-                this.UpdateEnemyTailPos(sessionId, player);
-            }
+            // if(sessionId !== this.room.SessionId){
+            //     this.UpdateEnemyTailPos(sessionId, player);
+            // }
         }
     }
 
@@ -574,35 +574,35 @@ export default class Starter extends ZepetoScriptBehaviour {
         rot.Add("z", transform.localEulerAngles.z);
         data.Add("rotation", rot.GetObject());
 
-        const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
+        // const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
 
-        const posArrData = new RoomData();
+        // const posArrData = new RoomData();
 
-        const posArr: TransformData[] = [];
+        // const posArr: TransformData[] = [];
 
-        for(let i = 0; i < tails.tails.length; i++){
-            const tail = tails.tails[i];
+        // for(let i = 0; i < tails.tails.length; i++){
+        //     const tail = tails.tails[i];
             
-            const pos1 = new RoomData();
-            pos1.Add("x", tails.tails[i].transform.position.x);
-            pos1.Add("y", tails.tails[i].transform.position.y);
-            pos1.Add("z", tails.tails[i].transform.position.z);
+        //     const pos1 = new RoomData();
+        //     pos1.Add("x", tails.tails[i].transform.position.x);
+        //     pos1.Add("y", tails.tails[i].transform.position.y);
+        //     pos1.Add("z", tails.tails[i].transform.position.z);
 
-            const rot1 = new RoomData();
-            rot1.Add("x", tails.tails[i].transform.localEulerAngles.x);
-            rot1.Add("y", tails.tails[i].transform.localEulerAngles.y);
-            rot1.Add("z", tails.tails[i].transform.localEulerAngles.z);
+        //     const rot1 = new RoomData();
+        //     rot1.Add("x", tails.tails[i].transform.localEulerAngles.x);
+        //     rot1.Add("y", tails.tails[i].transform.localEulerAngles.y);
+        //     rot1.Add("z", tails.tails[i].transform.localEulerAngles.z);
 
-            const transform: RoomData = new RoomData();
-            transform.Add("position", pos1.GetObject());
-            transform.Add("rotation", rot1.GetObject());
+        //     const transform: RoomData = new RoomData();
+        //     transform.Add("position", pos1.GetObject());
+        //     transform.Add("rotation", rot1.GetObject());
 
-            posArrData.Add(i.toString(), transform.GetObject());
-        }
+        //     posArrData.Add(i.toString(), transform.GetObject());
+        // }
 
-        posArrData.Add("tailCount", tails.tails.length);
+        // posArrData.Add("tailCount", tails.tails.length);
         
-        data.Add("tailTransforms", posArrData.GetObject());
+        // data.Add("tailTransforms", posArrData.GetObject());
 
         this.room.Send("onChangedTransform", data.GetObject());
     }

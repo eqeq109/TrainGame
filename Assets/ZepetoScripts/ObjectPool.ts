@@ -1,5 +1,6 @@
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Debug } from 'UnityEngine'
+import { GameObject, Vector3 as UnityVector3, Object, Transform, Time, Mathf, Quaternion, BoxCollider, Rigidbody, FixedJoint, Debug, Vector3 } from 'UnityEngine'
+import { transform } from 'typescript';
 
 //오브젝트 풀
 export default class ObjectPool<T> {
@@ -19,8 +20,7 @@ export default class ObjectPool<T> {
     constructor(count: int, source: GameObject) {
         this.prefab = source;
         for (let i = 0; i < count; i++) {
-            let train: GameObject = GameObject.Instantiate<GameObject>(source);
-
+            let train: GameObject = GameObject.Instantiate<GameObject>(source, new Vector3(10000, 10000, 10000), new Quaternion(0, 0, 0, 0));
             this.pool.push(train);
             train.SetActive(false);
             // tails.markManagers.push(new MarkManager());

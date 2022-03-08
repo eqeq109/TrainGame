@@ -37,25 +37,25 @@ export default class extends Sandbox {
 
             player.transform = transform;
 
-            player.tailTransforms.clear();
+            // player.tailTransforms.clear();
 
             
 
-            for(let i = 0; i < message.tailTransforms.tailCount; i++){
-                //console.log(`[tailPos] x : ${message.tailTransforms[i].position.x}, 
-                //y : ${message.tailTransforms[i].position.y}, z : ${message.tailTransforms[i].position.z}`);
+            // for(let i = 0; i < message.tailTransforms.tailCount; i++){
+            //     //console.log(`[tailPos] x : ${message.tailTransforms[i].position.x}, 
+            //     //y : ${message.tailTransforms[i].position.y}, z : ${message.tailTransforms[i].position.z}`);
                 
-                const tailTransform = new Transform();
-                tailTransform.position.x = message.tailTransforms[i].position.x;
-                tailTransform.position.y = message.tailTransforms[i].position.y;
-                tailTransform.position.z = message.tailTransforms[i].position.z;
+            //     const tailTransform = new Transform();
+            //     tailTransform.position.x = message.tailTransforms[i].position.x;
+            //     tailTransform.position.y = message.tailTransforms[i].position.y;
+            //     tailTransform.position.z = message.tailTransforms[i].position.z;
 
-                tailTransform.rotation.x = message.tailTransforms[i].rotation.x;
-                tailTransform.rotation.y = message.tailTransforms[i].rotation.y;
-                tailTransform.rotation.z = message.tailTransforms[i].rotation.z;
+            //     tailTransform.rotation.x = message.tailTransforms[i].rotation.x;
+            //     tailTransform.rotation.y = message.tailTransforms[i].rotation.y;
+            //     tailTransform.rotation.z = message.tailTransforms[i].rotation.z;
 
-                player.tailTransforms.push(tailTransform);
-            }
+            //     player.tailTransforms.push(tailTransform);
+            // }
         });
 
         this.onMessage("onChangedState", (client, message) => { 

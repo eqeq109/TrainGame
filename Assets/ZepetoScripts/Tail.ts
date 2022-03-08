@@ -25,6 +25,7 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.ownerId = id;
         this.headModel.SetActive(first);
         this.tailModel.SetActive(!first);
+        this.isFirst = first;
     }
 
     private fullTime: float = 2;
@@ -33,7 +34,9 @@ export default class Tail extends ZepetoScriptBehaviour {
         let playTime: float = 0;
         let partProcessTime: float = 0;
         const model: GameObject = this.isFirst ? this.headModel : this.tailModel;
-        const material: Material = model.GetComponent<Renderer>().sharedMaterial;
+        
+        const material: Material = model.GetComponent<Renderer>().material;
+        
         while(true){
             yield new WaitForEndOfFrame();
             playTime += Time.deltaTime;
