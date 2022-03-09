@@ -61,6 +61,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     private moveCheck: float = 0.001; 
     //기존 위치 기록
     private checkPosition: UnityVector3 = new UnityVector3(0, 0, 0);
+    private checkPositionMap: Map<string, UnityVector3> = new Map<string, UnityVector3>();
     //꼬리 오브젝트 풀
     private tailObjectPool: ObjectPool<Tail>;
     //폭탄 오브젝트 풀
@@ -119,6 +120,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         this.StartCoroutine(this.SendMessageLoop(0.1));
         this.StartCoroutine(this.UpdateSnakeMove(1 / 60));
+        this.StartCoroutine(this.UpdateOpponentSnakeMove(1/ 60));
         this.StartCoroutine(this.CheckAttackAvailable());
     }
 
@@ -218,15 +220,15 @@ export default class Starter extends ZepetoScriptBehaviour {
                     if (myPlayer.character.CurrentState != CharacterState.Idle) {
                         this.SendTransform(myPlayer.character.transform);
                     }
-                    this.checkPosition = myPlayer.character.transform.position;
+                    this.checkPositionMap.set(this.room.SessionId, myPlayer.character.transform.position);
                 }
             }
         }
     }
     
     // 웁직임 체크
-    private checkMove(curPos: UnityVector3): boolean {
-        if (UnityVector3.Distance(curPos, this.checkPosition) > this.moveCheck)
+    private checkMove(curPos: UnityVector3, sessionId: string): boolean {
+        if (UnityVector3.Distance(curPos, this.checkPositionMap.get(sessionId)) > this.moveCheck)
             return true;
 
         return false;
@@ -246,7 +248,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         const length = exp + 1;
 
 
-        if (this.checkMove(zepetoPlayer.character.transform.position)) {
+        if (this.checkMove(zepetoPlayer.character.transform.position, sessionId)) {
             tails.markManagers[0].UpdateMarkList(zepetoPlayer.character.transform.position, zepetoPlayer.character.transform.rotation);
 
 
@@ -306,6 +308,19 @@ export default class Starter extends ZepetoScriptBehaviour {
                         this.UpdateTails(this.room.SessionId);
                     }
                 }
+            }
+        }
+    }
+
+    private * UpdateOpponentSnakeMove(tick: number) {
+        while(true) {
+            yield new UnityEngine.WaitForSeconds(tick);
+            if(this.room != null && this.room.IsConnected){
+                this.currentPlayers.forEach((player: Player, sessionId: string) => {
+                    if(ZepetoPlayers.instance.HasPlayer(sessionId)){
+                        this.UpdateTails(sessionId);
+                    }
+                });
             }
         }
     }
@@ -425,11 +440,12 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(sessionId);
         zepetoPlayer.character.MoveToPosition(position);
+        this.checkPositionMap.set(sessionId, position);
 
         if (player.state === CharacterState.JumpIdle) //|| player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
         }
-        this.UpdateTails(sessionId);
+        
 
 
     }
