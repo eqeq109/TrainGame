@@ -166,15 +166,12 @@ export default class Starter extends ZepetoScriptBehaviour {
     public InitPlayer(sessionId: string, position: UnityEngine.Vector3, rotation: UnityEngine.Vector3) {
         
         const player = ZepetoPlayers.instance.GetPlayer(sessionId);
-
-        const joint = GameObject.Instantiate<GameObject>(this.jointParentPrefab, player.character.gameObject.transform);
         
         let tails: PlayerTails = new PlayerTails();
         const exp = this.currentPlayers.get(sessionId).exp;
         console.log(`user ID and EXP :  ${this.currentPlayers.get(sessionId).zepetoUserId} : ${this.currentPlayers.get(sessionId).exp}.`);
         console.log(`EXP : ${this.currentPlayers.get(sessionId).exp}.`);
 
-        //console.log(this.currentPlayers.get(sessionId).zepetoUserId + ':' + this.currentPlayers.get(sessionId).exp);
         const length = exp + 1;
         //head
         tails.markManagers.push(new MarkManager());
@@ -290,7 +287,6 @@ export default class Starter extends ZepetoScriptBehaviour {
                 catch (e) {
                     console.log(e);
                     console.log(`index : ${i}.`);
-
                 }
             }
         }
@@ -304,7 +300,6 @@ export default class Starter extends ZepetoScriptBehaviour {
             if (this.room != null && this.room.IsConnected) {
                 const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.room.SessionId); {
                     if (hasPlayer) {
-
                         this.UpdateTails(this.room.SessionId);
                     }
                 }
@@ -445,9 +440,6 @@ export default class Starter extends ZepetoScriptBehaviour {
         if (player.state === CharacterState.JumpIdle) //|| player.state === CharacterState.JumpMove)
             zepetoPlayer.character.Jump();
         }
-        
-
-
     }
     private OnUpdatePlayerData(sessionId: string, player: Player) {
         if (this.playerTailsDatas.has(sessionId)) {
