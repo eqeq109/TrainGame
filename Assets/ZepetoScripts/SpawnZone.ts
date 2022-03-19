@@ -1,16 +1,15 @@
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { Color, Gizmos, Vector3 } from 'UnityEngine'
+import { SpawnType } from './CommonTypes';
 
 
 
 export default class SpawnZone extends ZepetoScriptBehaviour {
-
+    public spawnType: SpawnType = SpawnType.star;
     Start() {    
         
     }
     Update() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(this.transform.position, new Vector3(1,1,1));
     }
 
     OnGUI(){

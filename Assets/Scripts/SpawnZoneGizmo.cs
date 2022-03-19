@@ -6,6 +6,8 @@ using UnityEngine;
 public class SpawnZoneGizmo : MonoBehaviour
 {
     // Start is called before the first frame update
+    public float Width = 0;
+    public float Height = 0;
 
     void Start()
     {
@@ -21,6 +23,6 @@ public class SpawnZoneGizmo : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(Vector3.zero, new Vector3(3, 0.1f, 3));
+        Gizmos.DrawCube(this.transform.position, new Vector3(Width, 0.1f, Height));
     }
 }
