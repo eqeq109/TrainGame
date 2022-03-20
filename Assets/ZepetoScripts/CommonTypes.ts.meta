@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: cb65c6435a6d275488881763db9261f2
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nexports.SpawnType = void 0;\r\nvar SpawnType;\r\n(function
+    (SpawnType) {\r\n    SpawnType[SpawnType[\"star\"] = 0] = \"star\";\r\n    SpawnType[SpawnType[\"bomb\"]
+    = 1] = \"bomb\";\r\n    SpawnType[SpawnType[\"player\"] = 2] = \"player\";\r\n})(SpawnType
+    = exports.SpawnType || (exports.SpawnType = {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29tbW9uVHlwZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJDb21tb25UeXBlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxJQUFZLFNBSVg7QUFKRCxXQUFZLFNBQVM7SUFDakIseUNBQVEsQ0FBQTtJQUNSLHlDQUFRLENBQUE7SUFDUiw2Q0FBVSxDQUFBO0FBQ2QsQ0FBQyxFQUpXLFNBQVMsR0FBVCxpQkFBUyxLQUFULGlCQUFTLFFBSXBCIn0=","assetPath":"Assets/ZepetoScripts/CommonTypes.ts","manifest":{"properties":[],"name":"CommonTypes","description":""},"isCompiled":true}'
+  typescriptHash: 56f182ce604fae2de2b9fd5ac83f78f6

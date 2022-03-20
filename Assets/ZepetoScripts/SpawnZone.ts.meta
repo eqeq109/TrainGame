@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: da55f4c0d4fc372479d2056d6fbba597
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/SpawnZone.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
+  typescriptHash: f0f55bdf1d6fbdff28b36f55e9cc3c22
