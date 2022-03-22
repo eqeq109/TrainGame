@@ -12,6 +12,7 @@ import Bomb from "./Bomb";
 import ObjectPool from "./ObjectPool";
 import { MarkManager, PlayerTails } from "./SnakeLogics";
 import { Action$1 } from 'System';
+import { FunctionLikeDeclaration } from 'typescript'
 
 class TransformData {
     position: VectorData = new VectorData();
@@ -46,13 +47,17 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private attackAvailableMap: Map<string, Date> = new Map<string, Date>();
 
-    private hitAction: Action$1<string>;
+    private hitAction: Function;
 
     private catchStarAction: Function;
 
     private hitByBombAction: Function;
 
     private returnBombAction: Function;
+
+    private returnTailAction: Function;
+
+    private returnStarAction: Function;
    
     //꼬리간 거리
     private distanceBetweenCharacter: float = 0.7;
@@ -113,9 +118,14 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.hitByBombAction = (instanceId: number, bomb: GameObject) => {
             this.OnHitByBombEvent(instanceId, bomb);
         }
-
+        this.returnStarAction = (star: GameObject) => {
+            this.ReturnStar(star);
+        }
         this.returnBombAction = (bomb: GameObject) =>{
             this.ReturnBomb(bomb);
+        }
+        this.returnTailAction = (tail: GameObject) => {
+            this.ReturnTail(tail);
         }
 
         this.StartCoroutine(this.SendMessageLoop(0.1));
@@ -150,16 +160,21 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     private SpawnStar(position: UnityEngine.Vector3){
         let star: GameObject = this.starObjectPool.GetObject();
-        star.GetComponent<Star>().Init(this.catchStarAction, position);
+        star.GetComponent<Star>().Init(this.catchStarAction, position, this.returnStarAction);
     }
 
     private SpawnBomb(position: UnityEngine.Vector3){
         let bomb: GameObject = this.bombObjectPool.GetObject();
         bomb.GetComponent<Bomb>().Init(this.hitByBombAction, this.returnBombAction, position);
     }
-
+    private ReturnStar(star: GameObject){
+        this.starObjectPool.ReturnObject(star);
+    }
     private ReturnBomb(bomb: GameObject){
         this.bombObjectPool.ReturnObject(bomb);
+    }
+    private ReturnTail(tail: GameObject){
+        this.tailObjectPool.ReturnObject(tail);
     }
 
     //플레이어 초기화
@@ -183,7 +198,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             //tails.tailTransforms.push(train.transform);
             tails.markManagers.push(new MarkManager());
             
-            train.GetComponent<Tail>().Init(sessionId, i === 0, this.hitAction);   
+            train.GetComponent<Tail>().Init(sessionId, i === 0, this.hitAction, this.returnTailAction);   
         }
 
         const last: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
@@ -455,7 +470,8 @@ export default class Starter extends ZepetoScriptBehaviour {
                     const tailObject: GameObject = tails.tails.pop();
                     //tails.tailTransforms.pop();
                     tails.markManagers.pop();
-                    this.tailObjectPool.ReturnObject(tailObject);
+                    tailObject.GetComponent<Tail>().PlayBlowAnimation();
+                    //this.tailObjectPool.ReturnObject(tailObject);
                 }
 
                 tails.tails[tails.tails.length - 1].GetComponent<Tail>().SetLast(true);
@@ -468,7 +484,7 @@ export default class Starter extends ZepetoScriptBehaviour {
                     const currentlast: Tail = tails.tails[tails.tails.length - 1].GetComponent<Tail>();
                     currentlast.SetLast(false);
                     const newLast: Tail = this.tailObjectPool.GetObject().GetComponent<Tail>();
-                    newLast.Init(sessionId, false, this.hitAction);
+                    newLast.Init(sessionId, false, this.hitAction, this.returnTailAction);
                     tails.tails.push(newLast.gameObject);
                     newLast.SetLast(true);
                     tails.markManagers.push(new MarkManager());
@@ -524,7 +540,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
         if(sessionId === this.room.SessionId){
             this.room.Send("onCatchStar", "");
-            this.starObjectPool.ReturnObject(star);
+            star.GetComponent<Star>().PlayBlowAnimation();
         }
     }
 
@@ -541,10 +557,6 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     //trigger event 시 호출될 공격 함수
     private OnAttackEvent(ownerId: string){
-        // if(!this.characterSessionIdMap.has(instanceId)){
-        //     return;
-        // }
-        // const sessionId: string = this.characterSessionIdMap.get(instanceId);
         if(ownerId === this.room.SessionId){
             return;
         }

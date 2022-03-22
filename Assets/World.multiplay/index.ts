@@ -2,6 +2,7 @@ import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
 import {DataStorage} from "ZEPETO.Multiplay.DataStorage";
 import {Player, Transform, Vector, DateObject} from "ZEPETO.Multiplay.Schema";
 const maxExp: number = 5;
+import { ExpTable, TrainCountTable } from "./Level";
 
 // interface AvailableTimeObject{
 //     sessionId: string,

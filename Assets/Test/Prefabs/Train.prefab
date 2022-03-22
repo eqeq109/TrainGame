@@ -4948,16 +4948,19 @@ MonoBehaviour:
     - isFirst
     - headModel
     - tailModel
+    - blowEffect
     unityValues:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 4958525816854330594}
     - {fileID: 7039308199054630637}
+    - {fileID: 1376049796}
     values:
     - '{"type":"System.String, mscorlib","value":""}'
     - '{"type":"System.Boolean, mscorlib","value":"False"}'
     - '{"type":"System.Boolean, mscorlib","value":"False"}'
+    - 
     - 
     - 
     unityArrayValues: []

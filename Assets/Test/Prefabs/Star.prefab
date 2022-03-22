@@ -4912,9 +4912,15 @@ MonoBehaviour:
   script:
     keys:
     - starTransform
+    - blowEffect
+    - model
     unityValues:
     - {fileID: 7658499013950243625}
+    - {fileID: 3837507347816786769}
+    - {fileID: 7388469198496952524}
     values:
+    - 
+    - 
     - 
     unityArrayValues: []
     arrayValues: []
@@ -4994,6 +5000,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26b2e1b97f989db4486cb79c4145325f, type: 3}
+--- !u!1 &7388469198496952524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 26b2e1b97f989db4486cb79c4145325f, type: 3}
+  m_PrefabInstance: {fileID: 7658499014607654301}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7909109551065148022 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 26b2e1b97f989db4486cb79c4145325f, type: 3}

@@ -1,0 +1,45 @@
+fileFormatVersion: 2
+guid: fdb01bed671531a40a01a9da0d9afcb6
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nexports.TrainCountTable = exports.ExpTable = void 0;\r\nexports.ExpTable
+    = [\r\n    { level: 2, requireScore: 2, accumulateScore: 2, },\r\n    { level:
+    3, requireScore: 2, accumulateScore: 4, },\r\n    { level: 4, requireScore: 2,
+    accumulateScore: 6, },\r\n    { level: 5, requireScore: 2, accumulateScore: 8,
+    },\r\n    { level: 6, requireScore: 2, accumulateScore: 10, },\r\n    { level:
+    7, requireScore: 3, accumulateScore: 13, },\r\n    { level: 8, requireScore:
+    3, accumulateScore: 16, },\r\n    { level: 9, requireScore: 3, accumulateScore:
+    19, },\r\n    { level: 10, requireScore: 3, accumulateScore: 22, },\r\n    {
+    level: 11, requireScore: 3, accumulateScore: 25, },\r\n    { level: 12, requireScore:
+    5, accumulateScore: 30, },\r\n    { level: 13, requireScore: 5, accumulateScore:
+    35, },\r\n    { level: 14, requireScore: 5, accumulateScore: 40, },\r\n    {
+    level: 15, requireScore: 5, accumulateScore: 45, },\r\n    { level: 16, requireScore:
+    5, accumulateScore: 50, },\r\n    { level: 17, requireScore: 8, accumulateScore:
+    58, },\r\n    { level: 18, requireScore: 8, accumulateScore: 66, },\r\n    {
+    level: 19, requireScore: 8, accumulateScore: 74, },\r\n    { level: 20, requireScore:
+    8, accumulateScore: 82, },\r\n    { level: 21, requireScore: 8, accumulateScore:
+    90, },\r\n    { level: 22, requireScore: 16, accumulateScore: 106, },\r\n   
+    { level: 23, requireScore: 16, accumulateScore: 122, },\r\n    { level: 24, requireScore:
+    16, accumulateScore: 138, },\r\n    { level: 25, requireScore: 16, accumulateScore:
+    155, },\r\n];\r\nexports.TrainCountTable = [\r\n    { count: 2, requireScore:
+    10, accumulateScore: 10, },\r\n    { count: 3, requireScore: 15, accumulateScore:
+    25, },\r\n    { count: 4, requireScore: 25, accumulateScore: 50, },\r\n    {
+    count: 5, requireScore: 40, accumulateScore: 90, },\r\n];\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTGV2ZWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJMZXZlbC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFNYSxRQUFBLFFBQVEsR0FBZ0I7SUFDakMsRUFBRSxLQUFLLEVBQUUsQ0FBQyxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLENBQUMsR0FBRTtJQUNqRCxFQUFFLEtBQUssRUFBRSxDQUFDLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsQ0FBQyxHQUFFO0lBQ2pELEVBQUUsS0FBSyxFQUFFLENBQUMsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxDQUFDLEdBQUU7SUFDakQsRUFBRSxLQUFLLEVBQUUsQ0FBQyxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLENBQUMsR0FBRTtJQUNqRCxFQUFFLEtBQUssRUFBRSxDQUFDLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ2xELEVBQUUsS0FBSyxFQUFFLENBQUMsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbEQsRUFBRSxLQUFLLEVBQUUsQ0FBQyxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNsRCxFQUFFLEtBQUssRUFBRSxDQUFDLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ2xELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbkQsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNuRCxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ25ELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbkQsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNuRCxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ25ELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbkQsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNuRCxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ25ELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsQ0FBQyxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbkQsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLFlBQVksRUFBRSxDQUFDLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNuRCxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsWUFBWSxFQUFFLENBQUMsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ25ELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsRUFBRSxFQUFFLGVBQWUsRUFBRSxHQUFHLEdBQUU7SUFDckQsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLFlBQVksRUFBRSxFQUFFLEVBQUUsZUFBZSxFQUFFLEdBQUcsR0FBRTtJQUNyRCxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsWUFBWSxFQUFFLEVBQUUsRUFBRSxlQUFlLEVBQUUsR0FBRyxHQUFFO0lBQ3JELEVBQUUsS0FBSyxFQUFFLEVBQUUsRUFBRSxZQUFZLEVBQUUsRUFBRSxFQUFFLGVBQWUsRUFBRSxHQUFHLEdBQUU7Q0FDeEQsQ0FBQTtBQVFZLFFBQUEsZUFBZSxHQUFxQjtJQUM3QyxFQUFFLEtBQUssRUFBRSxDQUFDLEVBQUUsWUFBWSxFQUFFLEVBQUUsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0lBQ25ELEVBQUUsS0FBSyxFQUFFLENBQUMsRUFBRSxZQUFZLEVBQUUsRUFBRSxFQUFFLGVBQWUsRUFBRSxFQUFFLEdBQUU7SUFDbkQsRUFBRSxLQUFLLEVBQUUsQ0FBQyxFQUFFLFlBQVksRUFBRSxFQUFFLEVBQUUsZUFBZSxFQUFFLEVBQUUsR0FBRTtJQUNuRCxFQUFFLEtBQUssRUFBRSxDQUFDLEVBQUUsWUFBWSxFQUFFLEVBQUUsRUFBRSxlQUFlLEVBQUUsRUFBRSxHQUFFO0NBQ3RELENBQUEifQ==","assetPath":"Assets/ZepetoScripts/Level.ts","manifest":{"properties":[],"name":"Level","description":""},"isCompiled":true}'
+  typescriptHash: 6134f17c2630e2622b5d6cbaec88e638

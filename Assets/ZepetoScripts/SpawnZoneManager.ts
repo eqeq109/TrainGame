@@ -27,6 +27,9 @@ export default class SpawnZoneManager extends ZepetoScriptBehaviour {
 
         let index: number = Random.Range(0, availableZones.Length);
         const selectedZone = availableZones[index];
+
+        
+
         return Vector3.zero;
     }
 

@@ -54,7 +54,7 @@ export default class Bomb extends ZepetoScriptBehaviour {
         this.particleExplode.Play();
         timer = 0;
         this.detectionAvailable = true;
-        yield new UnityEngine.WaitForSeconds(1);
+        yield new UnityEngine.WaitForSeconds(0.3);
         this.detectionAvailable = false;
         this.particleExplode.gameObject.SetActive(false);
         this.returnEvent(this.gameObject);

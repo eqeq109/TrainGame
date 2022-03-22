@@ -1,6 +1,6 @@
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 
-import { Collider, Collider2D, Collision, Collision2D, Coroutine, GameObject, Material, Renderer, Time, WaitForEndOfFrame } from 'UnityEngine';
+import { Collider, Collider2D, Collision, Collision2D, Coroutine, GameObject, Material, ParticleSystem, Renderer, Time, WaitForEndOfFrame } from 'UnityEngine';
 import { ZepetoCharacter } from 'ZEPETO.Character.Controller';
 import {Action$1} from 'System';
 import { easing } from './EasingFunctions';
@@ -8,17 +8,21 @@ import { easing } from './EasingFunctions';
 export default class Tail extends ZepetoScriptBehaviour {
     public isFirst: boolean = false;
     public ownerId: string;
-    public triggerEvent: Action$1<string>;//UnityEvent$1<string>;
+    public triggerEvent: Function;//UnityEvent$1<string>;
+    public returnObjectEvent: Function;
     public isLast: boolean = false;
     public headModel: GameObject;
     public tailModel: GameObject;
     public hitedRoutine: Coroutine;
+    public blowRoutine: Coroutine;
+
+    public blowEffect: ParticleSystem;
     
     Start() {    
 
     }
 
-    public Init(id: string, first: boolean, event: Action$1<string>){//UnityEvent$1<string> ){
+    public Init(id: string, first: boolean, event: Function, returnObject: Function){//UnityEvent$1<string> ){
         //console.log('init');
         this.triggerEvent = event;
         this.isLast = false;
@@ -26,6 +30,8 @@ export default class Tail extends ZepetoScriptBehaviour {
         this.headModel.SetActive(first);
         this.tailModel.SetActive(!first);
         this.isFirst = first;
+        this.blowEffect.gameObject.SetActive(false);
+        this.returnObjectEvent = returnObject;
     }
 
     private fullTime: float = 2;
@@ -60,6 +66,20 @@ export default class Tail extends ZepetoScriptBehaviour {
         }
         yield null;
     }
+    private blowPartTime: float = 0.5;
+    private * BlowAnimation(){
+        let playTime: float = 0;
+        this.blowEffect.gameObject.SetActive(true);
+        this.isFirst ? this.headModel.SetActive(false): this.tailModel.SetActive(false);
+        
+        this.blowEffect.Play();
+        while(playTime <= this.blowPartTime){
+            yield new WaitForEndOfFrame();
+            playTime += Time.deltaTime;
+        }
+        this.blowEffect.gameObject.SetActive(false);
+        this.returnObjectEvent(this.gameObject);
+    }
 
     public SetLast(last: boolean){
         this.isLast = last;
@@ -70,23 +90,12 @@ export default class Tail extends ZepetoScriptBehaviour {
         }
         this.hitedRoutine = this.StartCoroutine(this.HitAnimation());
     }
-
-    // OnCollisionEnter(coll: Collision){
-    //     if(!this.ownerId){
-    //         return;
-    //     }
-    //     if(!coll.gameObject.GetComponent<ZepetoCharacter>()){
-    //         //console.log(`not have zepetocharacter ${coll.gameObject.name}.`);
-    //         return;
-    //     }
-    //     if (!this.isLast) {
-    //         return;
-    //     }
-    //     if (this.triggerEvent != null) {
-    //         this.triggerEvent(this.ownerId);
-    //         //this.triggerEvent.Invoke(this.ownerId);
-    //     }
-    // }
+    public PlayBlowAnimation(){
+        if(this.blowRoutine){
+            this.StopCoroutine(this.blowRoutine);
+        }
+        this.blowRoutine = this.StartCoroutine(this.BlowAnimation());
+    }
 
     OnTriggerEnter(coll: Collider) {
         if(!this.ownerId){
