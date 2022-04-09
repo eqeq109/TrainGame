@@ -82,7 +82,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     private initCoroutine: Coroutine;
 
     private Start() {
-
+        //오브젝트 풀 초기화
         this.tailObjectPool = new ObjectPool<Tail>(16 * 5, this.tailPrefab);
         
         this.bombObjectPool = new ObjectPool<Bomb>(20, this.bombPrefab);
@@ -96,12 +96,13 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.multiplay.RoomJoined += (room: Room) => {
             room.OnStateChange += this.OnStateChange;
 
+            //별 스폰 리스너
             room.AddMessageHandler("SpawnStar", (message: PacketTransform) => {
                 console.log(message.position);
                 const position: UnityEngine.Vector3 = this.ParseVector3(message.position);
                 this.SpawnStar(position);
             });  
-
+            //폭탄 스폰 리스너
             room.AddMessageHandler("SpawnBomb", (message: PacketTransform) => {
                 console.log(message.position);
                 const position: UnityEngine.Vector3 = this.ParseVector3(message.position);
@@ -138,6 +139,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.attackAvailableMap.set(sessionId, availableTime);
     }
 
+    //캐릭터가 공격 불가상태인지 체크
     private * CheckAttackAvailable(){
        
         while(true){
@@ -158,6 +160,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         
     }
 
+
     private SpawnStar(position: UnityEngine.Vector3){
         let star: GameObject = this.starObjectPool.GetObject();
         star.GetComponent<Star>().Init(this.catchStarAction, position, this.returnStarAction);
@@ -167,6 +170,8 @@ export default class Starter extends ZepetoScriptBehaviour {
         let bomb: GameObject = this.bombObjectPool.GetObject();
         bomb.GetComponent<Bomb>().Init(this.hitByBombAction, this.returnBombAction, position);
     }
+
+    //풀 반환 함수들
     private ReturnStar(star: GameObject){
         this.starObjectPool.ReturnObject(star);
     }
@@ -207,6 +212,7 @@ export default class Starter extends ZepetoScriptBehaviour {
         this.playerTailsDatas.set(sessionId, tails);
     }
 
+    //캐릭터 인스턴스가 생성될 때까지 기다렸다가 초기화
     private * InitPlayerAsync(sessionId: string, position: UnityEngine.Vector3, rotation: UnityEngine.Vector3){
         while(true){
             yield new UnityEngine.WaitForSeconds(0.1);
@@ -321,7 +327,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             }
         }
     }
-
+    
     private * UpdateOpponentSnakeMove(tick: number) {
         while(true) {
             yield new UnityEngine.WaitForSeconds(tick);
@@ -418,13 +424,13 @@ export default class Starter extends ZepetoScriptBehaviour {
         //this.InitPlayer(sessionId);
     }
 
+    //state 변화에 따라 UI 업데이트
     private UpdateUI(player: Player){
         this.textLevel.text = (player.exp + 1).toString();
                 //this.textExp.text = '0/1';
         this.imageGauge.fillAmount = 0;
     }
 
-    //TODO: 꼬리 GameObject Pooling
     private OnLeavePlayer(sessionId: string, player: Player) {
         console.log(`[OnRemove] players - sessionId : ${sessionId}`);
         //꼬리객체 pool에 반환
@@ -456,6 +462,8 @@ export default class Starter extends ZepetoScriptBehaviour {
             zepetoPlayer.character.Jump();
         }
     }
+
+    // state 변화에 따라 필드 동기화
     private OnUpdatePlayerData(sessionId: string, player: Player) {
         if (this.playerTailsDatas.has(sessionId)) {
             const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
@@ -511,27 +519,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             // }
         }
     }
-
-    private UpdateEnemyTailPos(sessionId: string, player: Player){
-        const tails: PlayerTails = this.playerTailsDatas.get(sessionId);
-        
-        if(player.tailTransforms.Count === 0){
-            console.log('tailTransform is empty');
-            return;
-        }
-        let loopCount: int = tails.tails.length;
-        if (player.tailTransforms.Count as int !== tails.tails.length as int) {
-            loopCount = player.tailTransforms.Count > tails.tails.length ? tails.tails.length : player.tailTransforms.Count;
-        }
-
-        for (let i = 0; i < loopCount; i++) {
-            console.log(player.tailTransforms[i].position.x);
-            tails.tails[i].transform.position = new UnityVector3(player.tailTransforms[i].position.x,
-                player.tailTransforms[i].position.y, player.tailTransforms[i].position.z);
-            
-            tails.tails[i].transform.localRotation = Quaternion.Euler(this.ParseVector3(player.tailTransforms[i].rotation));
-        }
-    }
+    // 별 획득 이벤트
     private OnCatchStarEvent(instanceId: number, star: GameObject){
         if(!this.characterSessionIdMap.has(instanceId)){
             return;
@@ -543,7 +531,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             star.GetComponent<Star>().PlayBlowAnimation();
         }
     }
-
+    //폭탄 피격 이벤트
     private OnHitByBombEvent(instanceId: number, bomb: GameObject){
         if(!this.characterSessionIdMap.has(instanceId)){
             return;
@@ -593,36 +581,6 @@ export default class Starter extends ZepetoScriptBehaviour {
         rot.Add("y", transform.localEulerAngles.y);
         rot.Add("z", transform.localEulerAngles.z);
         data.Add("rotation", rot.GetObject());
-
-        // const tails: PlayerTails = this.playerTailsDatas.get(this.room.SessionId);
-
-        // const posArrData = new RoomData();
-
-        // const posArr: TransformData[] = [];
-
-        // for(let i = 0; i < tails.tails.length; i++){
-        //     const tail = tails.tails[i];
-            
-        //     const pos1 = new RoomData();
-        //     pos1.Add("x", tails.tails[i].transform.position.x);
-        //     pos1.Add("y", tails.tails[i].transform.position.y);
-        //     pos1.Add("z", tails.tails[i].transform.position.z);
-
-        //     const rot1 = new RoomData();
-        //     rot1.Add("x", tails.tails[i].transform.localEulerAngles.x);
-        //     rot1.Add("y", tails.tails[i].transform.localEulerAngles.y);
-        //     rot1.Add("z", tails.tails[i].transform.localEulerAngles.z);
-
-        //     const transform: RoomData = new RoomData();
-        //     transform.Add("position", pos1.GetObject());
-        //     transform.Add("rotation", rot1.GetObject());
-
-        //     posArrData.Add(i.toString(), transform.GetObject());
-        // }
-
-        // posArrData.Add("tailCount", tails.tails.length);
-        
-        // data.Add("tailTransforms", posArrData.GetObject());
 
         this.room.Send("onChangedTransform", data.GetObject());
     }
