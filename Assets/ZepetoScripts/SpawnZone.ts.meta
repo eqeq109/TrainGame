@@ -18,5 +18,11 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/SpawnZone.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
-  typescriptHash: f0f55bdf1d6fbdff28b36f55e9cc3c22
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    CommonTypes_1 = require(\"./CommonTypes\");\r\nclass SpawnZone extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.spawnType
+    = CommonTypes_1.SpawnType.star;\r\n    }\r\n    Init(type) {\r\n    }\r\n   
+    Start() {\r\n    }\r\n    Update() {\r\n    }\r\n    OnGUI() {\r\n    }\r\n}\r\nexports.default
+    = SpawnZone;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3Bhd25ab25lLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiU3Bhd25ab25lLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsaURBQXFEO0FBRXJELCtDQUEwQztBQUkxQyxNQUFxQixTQUFVLFNBQVEscUNBQXFCO0lBQTVEOztRQUNXLGNBQVMsR0FBYyx1QkFBUyxDQUFDLElBQUksQ0FBQztJQXFCakQsQ0FBQztJQWRVLElBQUksQ0FBQyxJQUFlO0lBRzNCLENBQUM7SUFDRCxLQUFLO0lBRUwsQ0FBQztJQUNELE1BQU07SUFDTixDQUFDO0lBRUQsS0FBSztJQUVMLENBQUM7Q0FFSjtBQXRCRCw0QkFzQkMifQ==","assetPath":"Assets/ZepetoScripts/SpawnZone.ts","manifest":{"properties":[{"assembly":"","name":"spawnType","type":"SpawnType","isArray":false,"enumKeys":["star","bomb","player"],"enumValues":["0","1","2"],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"leftTop","type":"UnityEngine.Vector3","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"leftBottom","type":"UnityEngine.Vector3","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"rightTop","type":"UnityEngine.Vector3","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"rightBottom","type":"UnityEngine.Vector3","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"SpawnZone","description":""},"isCompiled":true}'
+  typescriptHash: 59da67748aeb085af6a2308254784e4f

@@ -8,7 +8,7 @@ import { easing } from './EasingFunctions';
 export default class Tail extends ZepetoScriptBehaviour {
     public isFirst: boolean = false;
     public ownerId: string;
-    public triggerEvent: Function;//UnityEvent$1<string>;
+    public triggerEvent: Function;
     public returnObjectEvent: Function;
     public isLast: boolean = false;
     public headModel: GameObject;
