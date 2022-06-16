@@ -1,4 +1,3 @@
-import { textSpanIntersectsWithTextSpan } from 'typescript'
 import { Random, Vector3 } from 'UnityEngine';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script';
 import SpawnZone from './SpawnZone';
@@ -13,7 +12,6 @@ export default class SpawnZoneManager extends ZepetoScriptBehaviour {
         }
     }
 
-
     public GetSpawnPos(seed: number, spawnType: SpawnType): Vector3 {
         const availableZones: SpawnZone[] = [];
 
@@ -27,9 +25,7 @@ export default class SpawnZoneManager extends ZepetoScriptBehaviour {
 
         let index: number = Random.Range(0, availableZones.Length);
         const selectedZone = availableZones[index];
-
         
-
         return Vector3.zero;
     }
 
