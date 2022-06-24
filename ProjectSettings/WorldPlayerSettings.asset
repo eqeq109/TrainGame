@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxClients: 16
-  canInvite: 1
   orientation: 1
+  disableInvite: 0
+  disableRoomList: 0
+  disablePrivateRoom: 0
