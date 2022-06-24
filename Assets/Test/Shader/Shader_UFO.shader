@@ -4,12 +4,15 @@ Shader "Custom/Shader_UFO"
     {
         _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _SubTex ("Ray Fx", 2D) = "White" {}
+        _RayFxAlpha ("Ray Fx Alpha",  Range(0, 1)) = 0
         [Space]
         _Alpha ("Alpha", Range(0, 1)) = 1
+        _Spread ("Ray Spread", Range(0,1)) = 0
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent+1" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent+1" } //
 
         ZWrite off
 
@@ -20,29 +23,30 @@ Shader "Custom/Shader_UFO"
         #pragma target 3.0
 
         sampler2D _MainTex;
+        sampler2D _SubTex;
 
         struct Input
         {
             float2 uv_MainTex;
+            float2 uv_SubTex;
         };
 
         fixed4 _Color;
         fixed _Alpha;
+        fixed _RayFxAlpha;
+        float _Spread;
 
-        // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-        // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-        // #pragma instancing_options assumeuniformscaling
         UNITY_INSTANCING_BUFFER_START(Props)
-            // put more per-instance properties here
         UNITY_INSTANCING_BUFFER_END(Props)
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
+            fixed4 fxColor = tex2D (_SubTex, IN.uv_SubTex);
             //o.Albedo = c.rgb;
-            o.Emission = _Color;
+            o.Emission = lerp(c.rgb, c.rgb + fxColor.rgb * fxColor.a, _RayFxAlpha) * _Color;
 
-            o.Alpha = c.a * _Alpha;
+            o.Alpha = smoothstep(0 + _Spread, 1, c.a * _Alpha);
         }
         ENDCG
     }
