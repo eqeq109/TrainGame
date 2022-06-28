@@ -4914,11 +4914,20 @@ MonoBehaviour:
     - starTransform
     - blowEffect
     - model
+    - triggerEvent
+    - returnObjectEvent
+    - blowRoutine
     unityValues:
     - {fileID: 7658499013950243625}
     - {fileID: 3837507347816786769}
     - {fileID: 7388469198496952524}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     values:
+    - 
+    - 
+    - 
     - 
     - 
     - 
