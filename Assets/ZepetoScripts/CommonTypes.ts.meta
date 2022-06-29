@@ -23,4 +23,4 @@ ScriptedImporter:
     (SpawnType) {\r\n    SpawnType[SpawnType[\"star\"] = 0] = \"star\";\r\n    SpawnType[SpawnType[\"bomb\"]
     = 1] = \"bomb\";\r\n    SpawnType[SpawnType[\"player\"] = 2] = \"player\";\r\n})(SpawnType
     = exports.SpawnType || (exports.SpawnType = {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29tbW9uVHlwZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJDb21tb25UeXBlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxJQUFZLFNBSVg7QUFKRCxXQUFZLFNBQVM7SUFDakIseUNBQVEsQ0FBQTtJQUNSLHlDQUFRLENBQUE7SUFDUiw2Q0FBVSxDQUFBO0FBQ2QsQ0FBQyxFQUpXLFNBQVMsR0FBVCxpQkFBUyxLQUFULGlCQUFTLFFBSXBCIn0=","assetPath":"Assets/ZepetoScripts/CommonTypes.ts","manifest":{"properties":[],"name":"CommonTypes","description":""},"isCompiled":true}'
-  typescriptHash: 56f182ce604fae2de2b9fd5ac83f78f6
+  typescriptHash: 2b94e477a6cfb234bc03a98bce1c014f

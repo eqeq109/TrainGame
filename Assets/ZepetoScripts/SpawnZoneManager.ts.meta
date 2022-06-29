@@ -18,18 +18,5 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
-    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst SpawnZone_1 = require(\"./SpawnZone\");\r\nclass
-    SpawnZoneManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
-    {\r\n        super(...arguments);\r\n        this.spawnZones = [];\r\n    }\r\n   
-    Start() {\r\n        for (let i = 0; i < this.transform.childCount; i++) {\r\n           
-    let zone = this.transform.GetChild(i).GetComponent($typeof(SpawnZone_1.default));\r\n           
-    this.spawnZones.push(zone);\r\n        }\r\n    }\r\n    GetSpawnPos(seed, spawnType)
-    {\r\n        const availableZones = [];\r\n        this.spawnZones.forEach((zone)
-    => {\r\n            if (zone.spawnType === spawnType) {\r\n                availableZones.push(zone);\r\n           
-    }\r\n        });\r\n        UnityEngine_1.Random.InitState(seed);\r\n       
-    let index = UnityEngine_1.Random.Range(0, availableZones.Length);\r\n       
-    const selectedZone = availableZones[index];\r\n        return UnityEngine_1.Vector3.zero;\r\n   
-    }\r\n}\r\nexports.default = SpawnZoneManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3Bhd25ab25lTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlNwYXduWm9uZU1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBOEM7QUFDOUMsaURBQXNEO0FBQ3RELDJDQUFvQztBQUdwQyxNQUFxQixnQkFBaUIsU0FBUSxxQ0FBcUI7SUFBbkU7O1FBQ1csZUFBVSxHQUFnQixFQUFFLENBQUM7SUF5QnhDLENBQUM7SUF4QkcsS0FBSztRQUNELEtBQUksSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLFVBQVUsRUFBRSxDQUFDLEVBQUUsRUFBQztZQUM5QyxJQUFJLElBQUksR0FBYyxJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxZQUFZLFNBQUMsbUJBQVMsRUFBRyxDQUFDO1lBQzNFLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO1NBQzlCO0lBQ0wsQ0FBQztJQUVNLFdBQVcsQ0FBQyxJQUFZLEVBQUUsU0FBb0I7UUFDakQsTUFBTSxjQUFjLEdBQWdCLEVBQUUsQ0FBQztRQUV2QyxJQUFJLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxDQUFDLElBQWUsRUFBRSxFQUFFO1lBQ3hDLElBQUcsSUFBSSxDQUFDLFNBQVMsS0FBSyxTQUFTLEVBQUM7Z0JBQzVCLGNBQWMsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7YUFDN0I7UUFDTCxDQUFDLENBQUMsQ0FBQztRQUVILG9CQUFNLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBRXZCLElBQUksS0FBSyxHQUFXLG9CQUFNLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSxjQUFjLENBQUMsTUFBTSxDQUFDLENBQUM7UUFDM0QsTUFBTSxZQUFZLEdBQUcsY0FBYyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBRTNDLE9BQU8scUJBQU8sQ0FBQyxJQUFJLENBQUM7SUFDeEIsQ0FBQztDQUVKO0FBMUJELG1DQTBCQyJ9","assetPath":"Assets/ZepetoScripts/SpawnZoneManager.ts","manifest":{"properties":[{"assembly":"","name":"spawnZones","type":"D:/UnityProjects/TrainGame/TrainGame/Assets/ZepetoScripts/SpawnZone.default","isArray":true,"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"SpawnZoneManager","description":""},"isCompiled":true}'
-  typescriptHash: 5eb4544a8663cf69c2cc0687b181d55e
+  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/SpawnZoneManager.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
+  typescriptHash: 6c83acc794a9c1d91a241c5492ff14f7

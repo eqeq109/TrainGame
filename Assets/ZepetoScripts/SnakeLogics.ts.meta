@@ -18,17 +18,5 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
-    \\\"__esModule\\\", { value: true });\\r\\nexports.PlayerTails = exports.MarkManager
-    = void 0;\\r\\n//\uD788\uC2A4\uD1A0\uB9AC \uAE30\uB85D \uAC1D\uCCB4\\r\\nclass
-    MarkManager {\\r\\n    constructor() {\\r\\n        this.markList = new Array();\\r\\n   
-    }\\r\\n    UpdateMarkList(pos, rot) {\\r\\n        this.markList.push({ position:
-    pos, rotation: rot });\\r\\n    }\\r\\n    ClearMarkList(pos, rot) {\\r\\n       
-    this.markList = [];\\r\\n        this.markList.push({ position: pos, rotation:
-    rot });\\r\\n    }\\r\\n}\\r\\nexports.MarkManager = MarkManager;\\r\\n//\uC720\uC800\uBCC4
-    \uC2A4\uB124\uC774\uD06C \uAC1D\uCCB4\\r\\nclass PlayerTails {\\r\\n    //public
-    tailTransforms: Array<Transform> = new Array<Transform>();;\\r\\n    constructor()
-    {\\r\\n        this.tails = new Array();\\r\\n        this.markManagers = new
-    Array();\\r\\n    }\\r\\n    ;\\r\\n    ;\\r\\n}\\r\\nexports.PlayerTails = PlayerTails;\\r\\n//#
-    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU25ha2VMb2dpY3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJTbmFrZUxvZ2ljcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFTQSxZQUFZO0FBQ1osTUFBYSxXQUFXO0lBR3BCO1FBQ0ksSUFBSSxDQUFDLFFBQVEsR0FBRyxJQUFJLEtBQUssRUFBUSxDQUFDO0lBQ3RDLENBQUM7SUFFTSxjQUFjLENBQUMsR0FBaUIsRUFBRSxHQUFlO1FBQ3BELElBQUksQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLEVBQUUsUUFBUSxFQUFFLEdBQUcsRUFBRSxRQUFRLEVBQUUsR0FBRyxFQUFFLENBQUMsQ0FBQztJQUN6RCxDQUFDO0lBRU0sYUFBYSxDQUFDLEdBQWlCLEVBQUUsR0FBZTtRQUNuRCxJQUFJLENBQUMsUUFBUSxHQUFHLEVBQUUsQ0FBQztRQUNuQixJQUFJLENBQUMsUUFBUSxDQUFDLElBQUksQ0FBQyxFQUFFLFFBQVEsRUFBRSxHQUFHLEVBQUUsUUFBUSxFQUFFLEdBQUcsRUFBRSxDQUFDLENBQUM7SUFDekQsQ0FBQztDQUNKO0FBZkQsa0NBZUM7QUFFRCxhQUFhO0FBQ2IsTUFBYSxXQUFXO0lBR3BCLG9FQUFvRTtJQUVwRTtRQUpPLFVBQUssR0FBc0IsSUFBSSxLQUFLLEVBQWMsQ0FBQztRQUNuRCxpQkFBWSxHQUF1QixJQUFJLEtBQUssRUFBZSxDQUFDO0lBS25FLENBQUM7SUFOeUQsQ0FBQztJQUNRLENBQUM7Q0FNdkU7QUFSRCxrQ0FRQyJ9\",\"assetPath\":\"Assets/ZepetoScripts/SnakeLogics.ts\",\"manifest\":{\"properties\":[],\"name\":\"MarkManager\",\"description\":\"\"},\"isCompiled\":true}"
-  typescriptHash: 5b13ca8062b2c0fad85eb53fe6c4ccb8
+  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/SnakeLogics.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
+  typescriptHash: be0960826d9c2b7aafc94d722738c233

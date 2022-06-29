@@ -18,49 +18,5 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
-    = require(\"ZEPETO.Character.Controller\");\r\nconst EasingFunctions_1 = require(\"./EasingFunctions\");\r\nclass
-    Tail extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n       
-    super(...arguments);\r\n        this.isFirst = false;\r\n        this.isLast
-    = false;\r\n        this.fullTime = 2;\r\n        this.partTime = 0.5;\r\n       
-    this.blowPartTime = 0.5;\r\n    }\r\n    Start() {\r\n    }\r\n    Init(id, first,
-    event, returnObject) {\r\n        //console.log(''init'');\r\n        this.triggerEvent
-    = event;\r\n        this.isLast = false;\r\n        this.ownerId = id;\r\n       
-    this.headModel.SetActive(first);\r\n        this.tailModel.SetActive(!first);\r\n       
-    this.isFirst = first;\r\n        this.blowEffect.gameObject.SetActive(false);\r\n       
-    this.returnObjectEvent = returnObject;\r\n    }\r\n    *HitAnimation() {\r\n       
-    let playTime = 0;\r\n        let partProcessTime = 0;\r\n        const model
-    = this.isFirst ? this.headModel : this.tailModel;\r\n        const material =
-    model.GetComponent($typeof(UnityEngine_1.Renderer)).material;\r\n        while
-    (true) {\r\n            yield new UnityEngine_1.WaitForEndOfFrame();\r\n           
-    playTime += UnityEngine_1.Time.deltaTime;\r\n            if (partProcessTime
-    <= this.partTime) {\r\n                partProcessTime += UnityEngine_1.Time.deltaTime;\r\n               
-    material.SetFloat(''_Alpha'', EasingFunctions_1.easing.inCirc2(1, 0, partProcessTime
-    / this.partTime));\r\n            }\r\n            else if (partProcessTime <=
-    1) {\r\n                partProcessTime += UnityEngine_1.Time.deltaTime;\r\n               
-    material.SetFloat(''_Alpha'', EasingFunctions_1.easing.inCirc2(0, 1, (partProcessTime
-    - 0.5) / this.partTime));\r\n            }\r\n            else {\r\n               
-    partProcessTime = 0;\r\n            }\r\n            if (playTime > this.fullTime)
-    {\r\n                material.SetFloat(''_Alpha'', 1);\r\n                break;\r\n           
-    }\r\n        }\r\n        yield null;\r\n    }\r\n    *BlowAnimation() {\r\n       
-    let playTime = 0;\r\n        this.blowEffect.gameObject.SetActive(true);\r\n       
-    this.isFirst ? this.headModel.SetActive(false) : this.tailModel.SetActive(false);\r\n       
-    this.blowEffect.Play();\r\n        while (playTime <= this.blowPartTime) {\r\n           
-    yield new UnityEngine_1.WaitForEndOfFrame();\r\n            playTime += UnityEngine_1.Time.deltaTime;\r\n       
-    }\r\n        this.blowEffect.gameObject.SetActive(false);\r\n        this.returnObjectEvent(this.gameObject);\r\n   
-    }\r\n    SetLast(last) {\r\n        this.isLast = last;\r\n    }\r\n    PlayHitAnimation()
-    {\r\n        if (this.hitedRoutine) {\r\n            this.StopCoroutine(this.hitedRoutine);\r\n       
-    }\r\n        this.hitedRoutine = this.StartCoroutine(this.HitAnimation());\r\n   
-    }\r\n    PlayBlowAnimation() {\r\n        if (this.blowRoutine) {\r\n           
-    this.StopCoroutine(this.blowRoutine);\r\n        }\r\n        this.blowRoutine
-    = this.StartCoroutine(this.BlowAnimation());\r\n    }\r\n    OnTriggerEnter(coll)
-    {\r\n        if (!this.ownerId) {\r\n            return;\r\n        }\r\n       
-    if (!coll.gameObject.GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter)))
-    {\r\n            //console.log(`not have zepetocharacter ${coll.gameObject.name}.`);\r\n           
-    return;\r\n        }\r\n        if (!this.isLast) {\r\n            return;\r\n       
-    }\r\n        if (this.triggerEvent != null) {\r\n            this.triggerEvent(this.ownerId);\r\n           
-    //this.triggerEvent.Invoke(this.ownerId);\r\n        }\r\n    }\r\n}\r\nexports.default
-    = Tail;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGFpbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlRhaWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFFckQsNkNBQStKO0FBQy9KLDZFQUE4RDtBQUU5RCx1REFBMkM7QUFFM0MsTUFBcUIsSUFBSyxTQUFRLHFDQUFxQjtJQUF2RDs7UUFDVyxZQUFPLEdBQVksS0FBSyxDQUFDO1FBSXpCLFdBQU0sR0FBWSxLQUFLLENBQUM7UUF3QnZCLGFBQVEsR0FBVSxDQUFDLENBQUM7UUFDcEIsYUFBUSxHQUFVLEdBQUcsQ0FBQztRQStCdEIsaUJBQVksR0FBVSxHQUFHLENBQUM7SUFnRHRDLENBQUM7SUFoR0csS0FBSztJQUVMLENBQUM7SUFFTSxJQUFJLENBQUMsRUFBVSxFQUFFLEtBQWMsRUFBRSxLQUFlLEVBQUUsWUFBc0I7UUFDM0Usc0JBQXNCO1FBQ3RCLElBQUksQ0FBQyxZQUFZLEdBQUcsS0FBSyxDQUFDO1FBQzFCLElBQUksQ0FBQyxNQUFNLEdBQUcsS0FBSyxDQUFDO1FBQ3BCLElBQUksQ0FBQyxPQUFPLEdBQUcsRUFBRSxDQUFDO1FBQ2xCLElBQUksQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ2hDLElBQUksQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDakMsSUFBSSxDQUFDLE9BQU8sR0FBRyxLQUFLLENBQUM7UUFDckIsSUFBSSxDQUFDLFVBQVUsQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQzVDLElBQUksQ0FBQyxpQkFBaUIsR0FBRyxZQUFZLENBQUM7SUFDMUMsQ0FBQztJQUlPLENBQUUsWUFBWTtRQUNsQixJQUFJLFFBQVEsR0FBVSxDQUFDLENBQUM7UUFDeEIsSUFBSSxlQUFlLEdBQVUsQ0FBQyxDQUFDO1FBQy9CLE1BQU0sS0FBSyxHQUFlLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLElB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","assetPath":"Assets/ZepetoScripts/Tail.ts","manifest":{"properties":[{"assembly":"mscorlib","name":"isFirst","type":"System.Boolean","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"mscorlib","name":"ownerId","type":"System.String","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"triggerEvent","type":"Function","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"returnObjectEvent","type":"Function","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"mscorlib","name":"isLast","type":"System.Boolean","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"headModel","type":"UnityEngine.GameObject","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"tailModel","type":"UnityEngine.GameObject","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"hitedRoutine","type":"UnityEngine.Coroutine","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"blowRoutine","type":"UnityEngine.Coroutine","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.ParticleSystemModule","name":"blowEffect","type":"UnityEngine.ParticleSystem","isArray":false,"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"Tail","description":""},"isCompiled":true}'
-  typescriptHash: e0abbb09378e5b987b2d50ffb191bf0e
+  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/Tail.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
+  typescriptHash: d8503ef7f2e0251da2c0ba3f58eba750

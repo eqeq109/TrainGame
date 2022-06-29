@@ -18,24 +18,5 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
-    \\\"__esModule\\\", { value: true });\\r\\nconst UnityEngine_1 = require(\\\"UnityEngine\\\");\\r\\n//\uC624\uBE0C\uC81D\uD2B8
-    \uD480\\r\\nclass ObjectPool {\\r\\n    // start(count: int, source: GameObject){\\r\\n   
-    //     this.prefab = source;\\r\\n    //     for (let i = 0; i < count; i++)
-    {\\r\\n    //         let train: GameObject = GameObject.Instantiate<GameObject>(source);\\r\\n   
-    //         Debug.Log(i.toString());\\r\\n    //         this.pool.push(train);\\r\\n   
-    //         train.SetActive(false);\\r\\n    //         // tails.markManagers.push(new
-    MarkManager());\\r\\n    //     }\\r\\n    // }\\r\\n    constructor(count, source)
-    {\\r\\n        this.pool = new Array();\\r\\n        this.prefab = source;\\r\\n       
-    for (let i = 0; i < count; i++) {\\r\\n            let train = UnityEngine_1.GameObject.Instantiate(source,
-    new UnityEngine_1.Vector3(10000, 10000, 10000), new UnityEngine_1.Quaternion(0,
-    0, 0, 0));\\r\\n            this.pool.push(train);\\r\\n            train.SetActive(false);\\r\\n           
-    // tails.markManagers.push(new MarkManager());\\r\\n        }\\r\\n    }\\r\\n   
-    GetObject() {\\r\\n        if (this.pool.length <= 0) {\\r\\n            for
-    (let i = 0; i < 10; i++) {\\r\\n                let train = UnityEngine_1.GameObject.Instantiate(this.prefab);\\r\\n               
-    this.pool.push(train);\\r\\n                train.SetActive(false);\\r\\n           
-    }\\r\\n        }\\r\\n        const pop = this.pool.pop();\\r\\n        pop.SetActive(true);\\r\\n       
-    return pop;\\r\\n    }\\r\\n    ReturnObject(object) {\\r\\n        object.SetActive(false);\\r\\n       
-    this.pool.push(object);\\r\\n    }\\r\\n}\\r\\nexports.default = ObjectPool;\\r\\n//#
-    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT2JqZWN0UG9vbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk9iamVjdFBvb2wudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQSw2Q0FBaUs7QUFHakssUUFBUTtBQUNSLE1BQXFCLFVBQVU7SUFJM0IseUNBQXlDO0lBQ3pDLDRCQUE0QjtJQUM1Qix3Q0FBd0M7SUFDeEMsOEVBQThFO0lBQzlFLG1DQUFtQztJQUNuQyxpQ0FBaUM7SUFDakMsa0NBQWtDO0lBQ2xDLHlEQUF5RDtJQUN6RCxRQUFRO0lBQ1IsSUFBSTtJQUNKLFlBQVksS0FBVSxFQUFFLE1BQWtCO1FBYm5DLFNBQUksR0FBc0IsSUFBSSxLQUFLLEVBQWMsQ0FBQztRQWNyRCxJQUFJLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQztRQUNyQixLQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsS0FBSyxFQUFFLENBQUMsRUFBRSxFQUFFO1lBQzVCLElBQUksS0FBSyxHQUFlLHdCQUFVLENBQUMsV0FBVyxDQUFhLE1BQU0sRUFBRSxJQUFJLHFCQUFPLENBQUMsS0FBSyxFQUFFLEtBQUssRUFBRSxLQUFLLENBQUMsRUFBRSxJQUFJLHdCQUFVLENBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUNqSSxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztZQUN0QixLQUFLLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1lBQ3ZCLDhDQUE4QztTQUNqRDtJQUNMLENBQUM7SUFHRCxTQUFTO1FBQ0wsSUFBRyxJQUFJLENBQUMsSUFBSSxDQUFDLE1BQU0sSUFBSSxDQUFDLEVBQUM7WUFDckIsS0FBSSxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLEVBQUUsRUFBRSxDQUFDLEVBQUUsRUFBQztnQkFDdkIsSUFBSSxLQUFLLEdBQWUsd0JBQVUsQ0FBQyxXQUFXLENBQWEsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDO2dCQUN4RSxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDdEIsS0FBSyxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQzthQUMxQjtTQUNKO1FBQ0QsTUFBTSxHQUFHLEdBQUcsSUFBSSxDQUFDLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQztRQUM1QixHQUFHLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ3BCLE9BQU8sR0FBRyxDQUFDO0lBQ2YsQ0FBQztJQUVELFlBQVksQ0FBQyxNQUFrQjtRQUMzQixNQUFNLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ3hCLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBRTNCLENBQUM7Q0FFSjtBQTVDRCw2QkE0Q0MifQ==\",\"assetPath\":\"Assets/ZepetoScripts/ObjectPool.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"\",\"name\":\"pool\",\"type\":\"Array\",\"isArray\":false,\"enumKeys\":[],\"enumValues\":[],\"attributes\":[]}],\"name\":\"ObjectPool\",\"description\":\"\"},\"isCompiled\":true}"
-  typescriptHash: a5dfa060bcf15c3065d32098e4a48290
+  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/ObjectPool.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
+  typescriptHash: 508960f1dd2360969065bfad2e297a22
