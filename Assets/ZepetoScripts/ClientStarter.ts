@@ -166,6 +166,7 @@ export default class Starter extends ZepetoScriptBehaviour {
   public howToPlayButton: Button;
   public restartButton: Button;
   public rankingButton: Button;
+  public homeButton: Button;
 
   private initCoroutine: Coroutine;
   private gameState: number;
@@ -214,6 +215,13 @@ export default class Starter extends ZepetoScriptBehaviour {
       // add button click event
       console.log("click");
       this.Restart();
+    });
+
+    this.homeButton.onClick.AddListener(() => {
+      this.lobbyUI.SetActive(true);
+      this.lobbyCamera.SetActive(true);
+      this.ingameUI.SetActive(false);
+      this.gameOverUI.SetActive(false);
     });
 
     this.howToPlayButton.onClick.AddListener(() => {
@@ -583,6 +591,7 @@ export default class Starter extends ZepetoScriptBehaviour {
             this.lobbyUI.SetActive(false);
             this.lobbyCamera.SetActive(false);
             this.ingameUI.SetActive(true);
+            this.gameOverUI.SetActive(false);
             ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(true);
           }
         } else if (
