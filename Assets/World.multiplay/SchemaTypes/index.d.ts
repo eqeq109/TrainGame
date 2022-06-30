@@ -18,6 +18,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		tailTransforms: ArraySchema<Transform>;
 		level: number;
 		trainCount: number;
+		spawnState: number;
 	}
 	class Transform extends Schema {
 		position: Vector;

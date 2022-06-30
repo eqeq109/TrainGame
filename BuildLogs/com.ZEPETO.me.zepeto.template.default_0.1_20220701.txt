@@ -1,0 +1,156 @@
+[World Settings]
+world id             com.zepeto.me.zepeto.template.default
+version              0.1                 
+max clients          16                  
+orientation          horizontal          
+disable invite       false               
+disable room list    false               
+disable private room false               
+
+[Build Manifest]
+[scenes]
+309 kb               assets/scenes/train.unity
+[assets]
+13 kb                packages/zepeto.character.controller/runtime/_resources/images/touchpad_handle_base.png
+2 kb                 assets/_resources/vfx/fx/fx_rectangle_material.mat
+855 b                assets/ui/sprites/ui_lobby_icon_train.png
+9 mb                 assets/fonts/font_sdsamliphopangbasic sdf.asset
+10 kb                assets/textmesh pro/shaders/tmp_sdf.shader
+2 kb                 assets/_resources/map/materials/map_mat_yellow.mat
+12 kb                assets/ui/sprites/ui_gameover_title.png
+560 kb               packages/zepeto.character.controller/runtime/_resources/animations/base/idle.anim
+12 kb                assets/_resources/map/models/map_wall_m.fbx
+19 kb                assets/_resources/map/animations/anim_map_ufo_idle.anim
+2 kb                 assets/_resources/object/texture&material/material_train_default.mat
+1 kb                 assets/ui/sprites/ui_common_bg_gradation.png
+2 kb                 assets/_resources/map/materials/map_mat_ufo.mat
+2 kb                 assets/_resources/vfx/fx/fx_star_particle_material.mat
+49 kb                assets/ui/prefabs/ui_lobby.prefab
+35 kb                packages/zepeto.character.controller/runtime/_resources/inputactions/zepetoinputcontrol.inputactions
+1 kb                 assets/ui/sprites/ui_common_icon_skin.png
+2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_off.anim
+30 kb                assets/_resources/object/models/object_train_head.fbx
+2 kb                 assets/_resources/map/materials/map_mat_pink.mat
+87 kb                packages/com.unity.textmeshpro/editor resources/gizmos/tmp - text component icon.psd
+1 kb                 packages/zepeto.character.controller/runtime/_resources/prefabs/shadow/fxt_blobshadow.png
+1 kb                 assets/_resources/vfx/fx/fx_star_particle.png
+122 b                assets/ui/sprites/ui_common_bg_rectangle.png
+12 kb                assets/_resources/map/models/map_ufo_ray.fbx
+611 b                assets/ui/sprites/ui_common_icon_fold.png
+25 kb                assets/ui/sprites/ui_lobby_title.png
+2 kb                 assets/_resources/vfx/fx/fx_explode_material.mat
+2 kb                 assets/_resources/map/animations/map_ufo.controller
+30 kb                assets/_resources/map/models/map_tree.fbx
+3 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_ziggle.anim
+1 mb                 packages/zepeto.character.controller/runtime/_resources/animations/base/walk.anim
+2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_on.anim
+23 kb                assets/_resources/object/models/object_train_tail.fbx
+2 kb                 assets/_resources/map/materials/map_mat_ufo_ray.mat
+17 kb                assets/_resources/map/models/map_block_l.fbx
+657 b                assets/_resources/map/textures/texture_mapcolor_b.png
+2 kb                 assets/fonts/font_sdsamliphopangbasic_shadow.mat
+2 kb                 assets/_resources/map/materials/map_mat_gray.mat
+2 kb                 assets/_resources/map/materials/map_mat_floor.mat
+607 kb               assets/fonts/sdsamliphopangchebasic.otf
+17 kb                assets/_resources/map/models/map_structure.fbx
+125 kb               assets/_resources/prefabs/star.prefab
+12 kb                assets/ui/prefabs/rankinglistitem.prefab
+307 b                assets/ui/sprites/ui_ingame_img_gauge.png
+14 kb                assets/_resources/map/models/map_wallwithdoor_s.fbx
+101 kb               packages/com.unity.textmeshpro/editor resources/gizmos/tmp - font asset icon.psd
+826 b                assets/ui/sprites/ui_common_icon_questionmark.png
+1 kb                 assets/_resources/vfx/fx/fx_circle_particle.png
+11 kb                assets/_resources/map/models/map_outerwall.fbx
+16 kb                assets/_resources/map/models/map_block_m.fbx
+19 kb                assets/_resources/map/models/map_slope.fbx
+1 mb                 packages/zepeto.character.controller/runtime/_resources/animations/base/jump_move.anim
+1 mb                 packages/zepeto.character.controller/runtime/_resources/animations/base/jump_idle.anim
+2 kb                 assets/_resources/map/materials/map_mat_red.mat
+27 kb                packages/zepeto.character.controller/runtime/_resources/prefabs/uicontroller_touchpad_horizontal.prefab
+2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_origin_off.anim
+72 kb                assets/_resources/map/textures/texture_ufo_ray.png
+7 kb                 packages/zepeto.character.controller/runtime/_resources/animatorcontroller/uicontrollertouchpadhandleorigin.controller
+3 kb                 assets/ui/sprites/ui_lobby_bg_purplebutton.png
+128 kb               assets/_resources/prefabs/bomb.prefab
+16 kb                assets/ui/sprites/ui_howtoplay_title.png
+2 kb                 assets/_resources/map/materials/map_mat_allcolor_b.mat
+6 kb                 assets/test/sample_projector_outline.png
+1 kb                 assets/shader/2side.shader
+4 kb                 assets/test/sample_projector_fill.png
+14 kb                assets/_resources/map/models/map_wallwithdoor_m.fbx
+3 kb                 assets/ui/sprites/ui_lobby_bg_bluebutton.png
+56 kb                assets/_resources/map/models/map_dino.fbx
+27 kb                packages/zepeto.character.controller/runtime/_resources/prefabs/uicontroller_touchpad_vertical.prefab
+14 kb                assets/_resources/map/models/map_wallwithdoor_l.fbx
+17 kb                assets/_resources/[scriptsshader]/dynamicstarrysky/shaders/starrysky.shader
+12 kb                assets/_resources/map/models/map_wall_s.fbx
+5 kb                 packages/zepeto.character.controller/runtime/_resources/images/touchpad_handle_icon.png
+3 kb                 assets/ui/sprites/ui_ingame_bg_scoreboard.png
+2 kb                 assets/ui/sprites/ui_lobby_bg_darkbutton.png
+17 kb                assets/ui/prefabs/ui_howtoplay.prefab
+1 kb                 packages/com.unity.inputsystem/inputsystem/editor/icons/inputsystemuiinputmodule@64.png
+4 kb                 assets/ui/sprites/ui_common_bg_graybutton.png
+3 kb                 assets/ui/sprites/ui_common_bg_popup.png
+5 kb                 packages/zepeto.character.controller/runtime/_resources/images/touchpad_jump_icon.png
+2 kb                 assets/_resources/map/textures/texture_mapcolor.png
+2 kb                 assets/_resources/map/materials/map_mat_blue.mat
+7 kb                 packages/zepeto.character.controller/runtime/_resources/animatorcontroller/uicontrollertouchpadhandle.controller
+4 kb                 assets/_resources/object/texture&material/texture_train_mask.png
+2 kb                 assets/_resources/map/materials/map_mat_flag.mat
+174 b                assets/_resources/vfx/fx/fx_rectangle.png
+2 kb                 assets/_resources/map/materials/map_mat_purple.mat
+11 kb                assets/_resources/map/models/map_floor.fbx
+2 kb                 assets/test/projectormat_outline_test.mat
+3 kb                 assets/_resources/map/textures/texture_ufo_ray_fx.png
+11 kb                assets/_resources/map/textures/texture_ufo.png
+129 kb               assets/_resources/prefabs/train.prefab
+2 kb                 assets/_resources/map/materials/map_mat_allcolor.mat
+12 kb                assets/_resources/map/models/map_wall_xs.fbx
+1 kb                 packages/zepeto.character.controller/runtime/_resources/camera/zepetocamera.prefab
+4 kb                 assets/ui/sprites/ui_common_img_xbutton.png
+3 kb                 packages/zepeto.character.controller/runtime/_resources/prefabs/shadow/charactershadow.prefab
+15 kb                assets/_resources/map/models/map_flag.fbx
+940 kb               packages/zepeto.character.controller/runtime/_resources/animations/base/run.anim
+57 kb                assets/_resources/vfx/fx/fx_explode_spritesheet.png
+18 kb                assets/_resources/object/models/object_bomb.fbx
+12 kb                packages/zepeto.character.controller/runtime/_resources/images/touchpad_jump_base.png
+1 mb                 assets/_resources/[skybox]/test_map_dayskygradient.mat
+15 kb                assets/_resources/map/models/map_cylinder.fbx
+2 kb                 assets/_resources/map/materials/map_mat_dino.mat
+7 kb                 assets/_resources/prefabs/prefab_ufo.prefab
+57 kb                assets/ui/prefabs/ui_gameover.prefab
+19 kb                assets/_resources/map/textures/texture_dino.png
+62 kb                packages/zepeto.character.controller/runtime/_resources/animations/base/gesture.anim
+1 kb                 assets/ui/sprites/ui_common_icon_lock.png
+2 kb                 assets/ui/sprites/ui_lobby_bg_gamestartbutton.png
+2 kb                 assets/fonts/font_sdsamliphopangbasic_outline.mat
+2 kb                 assets/shader/shader_train.shader
+18 kb                packages/zepeto.character.controller/runtime/_resources/animatorcontroller/zepetoanimator.controller
+69 kb                assets/ui/prefabs/ui_ingame.prefab
+2 kb                 packages/zepeto.character.controller/runtime/_resources/prefabs/shadow/fxt_blobshadow.mat
+2 kb                 packages/zepeto.character.controller/runtime/_resources/prefabs/eventsystem.prefab
+1 kb                 assets/shader/projectorlight.shader
+4 kb                 assets/ui/sprites/ui_common_bg_disabledkbutton.png
+2 kb                 assets/_resources/vfx/fx/fx_circle_particle_material.mat
+1 kb                 assets/_resources/prefabs/cube.prefab
+1 kb                 assets/ui/sprites/ui_common_icon_home.png
+21 kb                assets/_resources/map/models/map_ufo.fbx
+4 kb                 assets/ui/sprites/ui_common_bg_yellowbutton.png
+2 kb                 assets/test/projectormat_fill_test.mat
+2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_origin_on.anim
+1 kb                 assets/ui/sprites/ui_icon_zem.png
+11 kb                assets/_resources/map/models/map_stair.fbx
+1 kb                 assets/shader/projector_modified.shader
+14 kb                assets/_resources/object/models/object_star.fbx
+428 kb               packages/zepeto.character.controller/runtime/_resources/animations/base/hand_idle_01.anim
+11 kb                assets/_resources/map/models/map_outerblock.fbx
+2 kb                 assets/ui/sprites/ui_ingame_bg_score.png
+12 kb                assets/_resources/map/models/map_box.fbx
+11 kb                assets/_resources/map/models/map_bridge.fbx
+15 kb                assets/_resources/map/models/map_block_s.fbx
+31 kb                packages/com.unity.inputsystem/inputsystem/plugins/playerinput/defaultinputactions.inputactions
+1 kb                 assets/shader/shader_ufo.shader
+3 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_origin_ziggle.anim
+[resources]
+0 b                  assets/textmesh pro/resources
+[streamingAssets]
