@@ -18,5 +18,38 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"","assetPath":"Assets/ZepetoScripts/Bomb.ts","manifest":{"properties":[],"name":"","description":""},"isCompiled":false}'
-  typescriptHash: accddfddc7ee235c5de5046c2c6ce2f6
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    UnityEngine = require(\"UnityEngine\");\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    EasingFunctions_1 = require(\"./EasingFunctions\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nclass Bomb extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.animationTime
+    = 2;\r\n        this.detectionAvailable = false;\r\n    }\r\n    set setTrigger(value)
+    { this.triggerEvent = value; }\r\n    ;\r\n    Init(event, returnObject, position)
+    {\r\n        this.triggerEvent = event;\r\n        this.returnEvent = returnObject;\r\n       
+    if (this.animation != null)\r\n            this.StopCoroutine(this.SetAnimation);\r\n       
+    this.objectBomb.transform.localPosition = new UnityEngine.Vector3(0, 20, 0);\r\n       
+    this.gameObject.transform.position = position;\r\n        this.objectBomb.gameObject.SetActive(true);\r\n       
+    this.animation = this.StartCoroutine(this.SetAnimation());\r\n    }\r\n    *SetAnimation()
+    {\r\n        let timer = 0;\r\n        const indicatorMax = 2.5;\r\n        const
+    startPosition = this.objectBomb.localPosition;\r\n        while (timer < this.animationTime)
+    {\r\n            timer += UnityEngine_1.Time.deltaTime;\r\n            let timeRatio
+    = timer / this.animationTime;\r\n            this.objectBomb.localPosition =
+    new UnityEngine.Vector3(EasingFunctions_1.easing.inOutBounce(startPosition.x,
+    0, timeRatio), EasingFunctions_1.easing.inOutBounce(startPosition.y, 0, timeRatio),
+    EasingFunctions_1.easing.inOutBounce(startPosition.z, 0, timeRatio));\r\n           
+    // this.objectBomb.localPosition = UnityEngine.Vector3.Lerp(startPosition, \r\n           
+    //     UnityEngine.Vector3.zero, timeRatio);\r\n            this.indicatorFill.orthographicSize
+    = indicatorMax * timeRatio;\r\n            yield null;\r\n        }\r\n       
+    this.objectBomb.gameObject.SetActive(false);\r\n        this.particleExplode.gameObject.SetActive(true);\r\n       
+    this.particleExplode.Play();\r\n        timer = 0;\r\n        this.detectionAvailable
+    = true;\r\n        yield new UnityEngine.WaitForSeconds(0.3);\r\n        this.detectionAvailable
+    = false;\r\n        yield new UnityEngine.WaitForSeconds(0.7);\r\n        this.particleExplode.gameObject.SetActive(false);\r\n       
+    this.returnEvent(this.gameObject);\r\n        yield null;\r\n    }\r\n    Start()
+    {\r\n    }\r\n    OnTriggerStay(coll) {\r\n        if (!this.detectionAvailable)\r\n           
+    return;\r\n        if (!coll.gameObject.GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter)))
+    {\r\n            return;\r\n        }\r\n        if (this.triggerEvent != null)
+    {\r\n            console.log(''detected'');\r\n            this.detectionAvailable
+    = false;\r\n            this.triggerEvent(coll.gameObject.GetInstanceID(), this.gameObject);\r\n       
+    }\r\n    }\r\n}\r\nexports.default = Bomb;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm9tYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkJvbWIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQsMkNBQTJDO0FBQzNDLDZDQUV1RTtBQUV2RSx1REFBd0M7QUFDeEMsNkVBQThEO0FBRTlELE1BQXFCLElBQUssU0FBUSxxQ0FBcUI7SUFBdkQ7O1FBU1ksa0JBQWEsR0FBVyxDQUFDLENBQUM7UUFFMUIsdUJBQWtCLEdBQVksS0FBSyxDQUFDO0lBNERoRCxDQUFDO0lBMURHLElBQVcsVUFBVSxDQUFDLEtBQWUsSUFBRyxJQUFJLENBQUMsWUFBWSxHQUFHLEtBQUssQ0FBQSxDQUFBLENBQUM7SUFBQSxDQUFDO0lBRzVELElBQUksQ0FBQyxLQUFlLEVBQUUsWUFBc0IsRUFBRSxRQUFzQjtRQUN2RSxJQUFJLENBQUMsWUFBWSxHQUFHLEtBQUssQ0FBQztRQUMxQixJQUFJLENBQUMsV0FBVyxHQUFHLFlBQVksQ0FBQztRQUNoQyxJQUFHLElBQUksQ0FBQyxTQUFTLElBQUksSUFBSTtZQUFFLElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDLFlBQVksQ0FBQyxDQUFDO1FBQ2pFLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLGFBQWEsR0FBRyxJQUFJLFdBQVcsQ0FBQyxPQUFPLENBQUMsQ0FBQyxFQUFFLEVBQUUsRUFBRSxDQUFDLENBQUMsQ0FBQztRQUM1RSxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsUUFBUSxDQUFDO1FBQzlDLElBQUksQ0FBQyxVQUFVLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUMzQyxJQUFJLENBQUMsU0FBUyxHQUFHLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDLENBQUM7SUFDOUQsQ0FBQztJQUVPLENBQUUsWUFBWTtRQUNsQixJQUFJLEtBQUssR0FBVSxDQUFDLENBQUM7UUFDckIsTUFBTSxZQUFZLEdBQVcsR0FBRyxDQUFDO1FBQ2pDLE1BQU0sYUFBYSxHQUF3QixJQUFJLENBQUMsVUFBVSxDQUFDLGFBQWEsQ0FBQztRQUV6RSxPQUFNLEtBQUssR0FBRyxJQUFJLENBQUMsYUFBYSxFQUFDO1lBQzdCLEtBQUssSUFBSSxrQkFBSSxDQUFDLFNBQVMsQ0FBQztZQUN4QixJQUFJLFNBQVMsR0FBVSxLQUFLLEdBQUcsSUFBSSxDQUFDLGFBQWEsQ0FBQztZQUNsRCxJQUFJLENBQUMsVUFBVSxDQUFDLGFBQWEsR0FBRyxJQUFJLFdBQVcsQ0FBQyxPQUFPLENBQUMsd0JBQU0sQ0FBQyxXQUFXLENBQUMsYUFBYSxDQUFDLENBQUMsRUFBRSxDQUFDLEVBQUUsU0FBUyxDQUFDLEVBQ3pHLHdCQUFNLENBQUMsV0FBVyxDQUFDLGFBQWEsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxFQUFFLFNBQVMsQ0FBQyxFQUNqRCx3QkFBTSxDQUFDLFdBQVcsQ0FBQyxhQUFhLENBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxTQUFTLENBQUMsQ0FBQyxDQUFDO1lBQ25ELDJFQUEyRTtZQUMzRSw0Q0FBNEM7WUFDNUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxnQkFBZ0IsR0FBRyxZQUFZLEdBQUcsU0FBUyxDQUFDO1lBQy9ELE1BQU0sSUFBSSxDQUFDO1NBQ2Q7UUFDRCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDNUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ2hELElBQUksQ0FBQyxlQUFlLENBQUMsSUFBSSxFQUFFLENBQUM7UUFDNUIsS0FBSyxHQUFHLENBQUMsQ0FBQztRQUNWLElBQUksQ0FBQyxrQkFBa0IsR0FBRyxJQUFJLENBQUM7UUFDL0IsTUFBTSxJQUFJLFdBQVcsQ0FBQyxjQUFjLENBQUMsR0FBRyxDQUFDLENBQUM7UUFDMUMsSUFBSSxDQUFDLGtCQUFrQixHQUFHLEtBQUssQ0FBQztRQUNoQyxNQUFNLElBQUksV0FBVyxDQUFDLGNBQWMsQ0FBQyxHQUFHLENBQUMsQ0FBQztRQUMxQyxJQUFJLENBQUMsZUFBZSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDakQsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUM7UUFDbEMsTUFBTSxJQUFJLENBQUM7SUFDZixDQUFDO0lBRUQsS0FBSztJQUNMLENBQUM7SUFFRCxhQUFhLENBQUMsSUFBYztRQUV4QixJQUFJLENBQUMsSUFBSSxDQUFDLGtCQUFrQjtZQUFFLE9BQU87UUFDckMsSUFBRyxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsWUFBWSxTQUFDLDZDQUFlLEVBQUcsRUFBQztZQUNoRCxPQUFPO1NBQ1Y7UUFDRCxJQUFJLElBQUksQ0FBQyxZQUFZLElBQUksSUFBSSxFQUFFO1lBQzNCLE9BQU8sQ0FBQyxHQUFHLENBQUMsVUFBVSxDQUFDLENBQUM7WUFDeEIsSUFBSSxDQUFDLGtCQUFrQixHQUFHLEtBQUssQ0FBQztZQUNoQyxJQUFJLENBQUMsWUFBWSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsYUFBYSxFQUFFLEVBQUUsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1NBQ3ZFO0lBQ0wsQ0FBQztDQUVKO0FBdkVELHVCQXVFQyJ9","assetPath":"Assets/ZepetoScripts/Bomb.ts","manifest":{"properties":[{"assembly":"","name":"triggerEvent","type":"Function","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"returnEvent","type":"Function","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"indicatorFill","type":"UnityEngine.Projector","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"objectBomb","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.ParticleSystemModule","name":"particleExplode","type":"UnityEngine.ParticleSystem","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"Bomb","description":""},"isCompiled":true}'
+  typescriptHash: b92d7093c0880b2f1a59a701d3e1c344
