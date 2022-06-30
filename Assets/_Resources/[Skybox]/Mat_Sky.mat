@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TEST_MAP_DaySkyGradient
+  m_Name: Mat_Sky
   m_Shader: {fileID: 4800000, guid: 274541675e6514140807034ecef69715, type: 3}
   m_ShaderKeywords: GRADIENT_BACKGROUND
   m_LightmapFlags: 4
