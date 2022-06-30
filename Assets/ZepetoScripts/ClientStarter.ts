@@ -128,6 +128,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     public lobbyUI: GameObject;
     public gameOverUI: GameObject;
     public ingameUI: GameObject;
+    public lobbyCamera: GameObject;
     
     private initCoroutine: Coroutine;
 
