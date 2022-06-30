@@ -108,6 +108,7 @@ export default class extends Sandbox {
 
     this.onMessage("onGameRestart", (client, message) => {
       const player = this.state.players.get(client.sessionId);
+      player.exp = 0;
       player.spawnState = 1;
       console.log("restart");
     });

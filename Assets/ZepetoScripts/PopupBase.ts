@@ -1,16 +1,16 @@
-import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import {Slider, Button} from "UnityEngine.UI";
+import { ZepetoScriptBehaviour } from "ZEPETO.Script";
+import { Slider, Button } from "UnityEngine.UI";
 
 export default class PopupBase extends ZepetoScriptBehaviour {
-    
-    public CloseButton: Button;
+  public CloseButton: Button;
 
-    Start() {    
+  Start() {
+    this.CloseButton.onClick.AddListener(() => {
+      this.Close();
+    });
+  }
 
-    }
-
-    public Close(){
-        this.gameObject.SetActive(false);
-    }
-
+  public Close() {
+    this.gameObject.SetActive(false);
+  }
 }

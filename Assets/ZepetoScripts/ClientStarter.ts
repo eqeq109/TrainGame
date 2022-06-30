@@ -251,7 +251,9 @@ export default class Starter extends ZepetoScriptBehaviour {
   public GameStart() {
     this.SendGameStart();
   }
-  public Restart() {}
+  public Restart() {
+    this.SendRestart();
+  }
   public OnOffRanking() {}
 
   private AddAvailableTimeCheck(sessionId: string, availableTime: Date) {
@@ -835,6 +837,12 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     data.Add("gameStart", 1);
     this.room.Send("onGameStart", data.GetObject());
+  }
+  private SendRestart() {
+    const data = new RoomData();
+
+    data.Add("restart", 1);
+    this.room.Send("onGameRestart", data.GetObject());
   }
 
   private SendState(state: CharacterState) {
