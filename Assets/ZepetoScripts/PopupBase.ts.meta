@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 53cd23d64184ac34bb955c8486a36038
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
+    PopupBase extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n   
+    }\r\n    Close() {\r\n        this.gameObject.SetActive(false);\r\n    }\r\n}\r\nexports.default
+    = PopupBase;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUG9wdXBCYXNlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiUG9wdXBCYXNlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsaURBQXFEO0FBR3JELE1BQXFCLFNBQVUsU0FBUSxxQ0FBcUI7SUFJeEQsS0FBSztJQUVMLENBQUM7SUFFTSxLQUFLO1FBQ1IsSUFBSSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDckMsQ0FBQztDQUVKO0FBWkQsNEJBWUMifQ==","assetPath":"Assets/ZepetoScripts/PopupBase.ts","manifest":{"properties":[{"assembly":"UnityEngine.UI","name":"CloseButton","type":"UnityEngine.UI.Button","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"PopupBase","description":""},"isCompiled":true}'
+  typescriptHash: 149b1b9c4f25c3102a67ae8b5198fc39
