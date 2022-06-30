@@ -50,12 +50,12 @@ export default class Tail extends ZepetoScriptBehaviour {
             if(partProcessTime <= this.partTime){
                 partProcessTime += Time.deltaTime;
 
-                material.SetFloat('_Alpha', easing.inCirc2(1, 0, partProcessTime / this.partTime));
+                material.SetFloat('_Alpha', easing.inCirc2(1, 0.25, partProcessTime / this.partTime));
             }
             else if (partProcessTime <= 1){
                 partProcessTime += Time.deltaTime;
 
-                material.SetFloat('_Alpha', easing.inCirc2(0, 1, (partProcessTime - 0.5) / this.partTime));
+                material.SetFloat('_Alpha', easing.inCirc2(0.25, 1, (partProcessTime - 0.5) / this.partTime));
             }else{
                 partProcessTime = 0;
             }
