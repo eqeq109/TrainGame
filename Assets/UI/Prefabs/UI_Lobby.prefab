@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 75936957174636372}
   - component: {fileID: 75936957174636375}
   - component: {fileID: 75936957174636374}
+  - component: {fileID: 1507306998775423248}
   m_Layer: 5
   m_Name: UI_Lobby
   m_TagString: Untagged
@@ -182,6 +183,32 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1507306998775423248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75936957174636377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1673316429, guid: 921f0445823004a16a499d629dd566a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  script:
+    keys:
+    - btnSkin
+    - toast
+    unityValues:
+    - {fileID: 4280822030404554186}
+    - {fileID: 4557478726490122182}
+    values:
+    - 
+    - 
+    unityArrayValues: []
+    arrayValues: []
+    script: {fileID: 4458252877524076426, guid: df19412e556220947979d6014dbcc924, type: 3}
+    isExpaned: 0
 --- !u!1 &742205436326557810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,8 +1879,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5541908394236497281, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}
+--- !u!1 &4557478726490122182 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4096255976152467544, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}
+  m_PrefabInstance: {fileID: 569628224585494430}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3143584455495576 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 570992644331593734, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}

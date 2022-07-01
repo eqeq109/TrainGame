@@ -36,6 +36,7 @@ export default class Test_Toast extends ZepetoScriptBehaviour {
     {
         this.time = 0;
         this.toast.SetActive(true);
+        this.toast.GetComponent<Animator>().Play("Base Layer.UI_Anim_Toast", -1, 0);
         this.check = true;
     }
 
