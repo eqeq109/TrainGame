@@ -38,6 +38,7 @@ import { Slider, Button } from "UnityEngine.UI";
 import { Action$1 } from "System";
 import { FunctionLikeDeclaration } from "typescript";
 import { TextMeshProUGUI } from "TMPro";
+import SoundManager from "./SoundManager";
 
 class TransformData {
   position: VectorData = new VectorData();
@@ -171,6 +172,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
   private initCoroutine: Coroutine;
   private gameState: number;
+  public soundManager: GameObject;
 
   private Start() {
     //오브젝트 풀 초기화
@@ -374,6 +376,8 @@ export default class Starter extends ZepetoScriptBehaviour {
           );
           if (myPlayer.character.CurrentState != CharacterState.Idle) {
             this.SendTransform(myPlayer.character.transform);
+            this.soundManager.transform.position =
+              myPlayer.character.transform.position;
           }
           this.checkPositionMap.set(
             this.room.SessionId,
@@ -575,7 +579,9 @@ export default class Starter extends ZepetoScriptBehaviour {
           if (isLocal) {
             this.lobbyUI.SetActive(false);
             //this.lobbyCamera.SetActive(false);
+
             ZepetoPlayers.instance.ZepetoCamera.camera.enabled = true;
+            ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(true);
             this.lobbyCamera.GetComponent<UnityEngine.Camera>().enabled = false;
             this.ingameUI.SetActive(true);
             this.gameOverUI.SetActive(false);
@@ -584,19 +590,21 @@ export default class Starter extends ZepetoScriptBehaviour {
           player.spawnState == 0 &&
           ZepetoPlayers.instance.HasPlayer(sessionId)
         ) {
-          const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(
-            this.room.SessionId
-          );
-          //   zepetoPlayer.character.characterController.gameObject.SetActive(
-          //     false
-          //   );
-          this.OnLeavePlayer(sessionId, player);
-
           if (isLocal) {
+            const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(
+              this.room.SessionId
+            );
+            // zepetoPlayer.character.characterController.gameObject.SetActive(
+            //   false
+            // );
             this.ingameUI.SetActive(false);
             this.gameOverUI.SetActive(true);
+
             this.lobbyCamera.GetComponent<UnityEngine.Camera>().enabled = true;
-            //ZepetoPlayers.instance.ZepetoCamera.camera.enabled = false;
+            this.OnLeavePlayer(sessionId, player);
+            ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(false);
+          } else {
+            this.OnLeavePlayer(sessionId, player);
           }
         }
       }
@@ -721,6 +729,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
       const minusTailCount = tails.tails.length - changedTailCount;
       if (minusTailCount > 0) {
+        this.soundManager.GetComponent<SoundManager>().PlaySound("LevelDown");
         for (let i = 0; i < minusTailCount; i++) {
           const tailObject: GameObject = tails.tails.pop();
           //tails.tailTransforms.pop();
@@ -734,6 +743,7 @@ export default class Starter extends ZepetoScriptBehaviour {
 
       const addTailCount = changedTailCount - tails.tails.length;
       if (addTailCount > 0) {
+        this.soundManager.GetComponent<SoundManager>().PlaySound("GetPoint");
         for (let i = 0; i < addTailCount; i++) {
           //console.log(player.exp);
           const currentlast: Tail =
