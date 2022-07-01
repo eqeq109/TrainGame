@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 75936957174636372}
   - component: {fileID: 75936957174636375}
   - component: {fileID: 75936957174636374}
-  - component: {fileID: 1507306998775423248}
+  - component: {fileID: 1174856588408973272}
   m_Layer: 5
   m_Name: UI_Lobby
   m_TagString: Untagged
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1507306998775423248
+--- !u!114 &1174856588408973272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,10 +199,13 @@ MonoBehaviour:
     keys:
     - btnSkin
     - toast
+    - toastAnimator
     unityValues:
     - {fileID: 4280822030404554186}
     - {fileID: 4557478726490122182}
+    - {fileID: 552627855819155005}
     values:
+    - 
     - 
     - 
     unityArrayValues: []
@@ -1893,5 +1896,10 @@ GameObject:
 --- !u!224 &3143584455495576 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 570992644331593734, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}
+  m_PrefabInstance: {fileID: 569628224585494430}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &552627855819155005 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 21653513350302115, guid: eb2325c8e6cb4d84ca9dfaf95d95b8de, type: 3}
   m_PrefabInstance: {fileID: 569628224585494430}
   m_PrefabAsset: {fileID: 0}
