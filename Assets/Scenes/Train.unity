@@ -7713,6 +7713,17 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaDirect: 0.5
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
+--- !u!114 &2003781245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1957637282821415255, guid: b44084638fabbc94d96ce3947d21daeb, type: 3}
+  m_PrefabInstance: {fileID: 1957637283600733393}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2007898413
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7894,7 +7905,7 @@ MonoBehaviour:
     - howToPlayButton
     - restartButton
     - rankingButton
-    - uiCanvas
+    - homeButton
     unityValues:
     - {fileID: 582525452}
     - {fileID: 8904675105967348148, guid: 1597ff370104f6f4f991baed6efe4874, type: 3}
@@ -7909,12 +7920,12 @@ MonoBehaviour:
     - {fileID: 1957637283600733394}
     - {fileID: 1132045759}
     - {fileID: 1018018085}
-    - {fileID: 0}
+    - {fileID: 215085219}
     - {fileID: 1606469821}
     - {fileID: 506733048}
     - {fileID: 106034674}
     - {fileID: 633862705}
-    - {fileID: 4820810888131415373}
+    - {fileID: 2003781245}
     values:
     - 
     - 
@@ -8425,10 +8436,5 @@ PrefabInstance:
 --- !u!1 &4820810888131415370 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 75936957174636377, guid: d9b9686efe2a6e94c8c20e279e41bef6, type: 3}
-  m_PrefabInstance: {fileID: 4820810888131415369}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &4820810888131415373 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 75936957174636372, guid: d9b9686efe2a6e94c8c20e279e41bef6, type: 3}
   m_PrefabInstance: {fileID: 4820810888131415369}
   m_PrefabAsset: {fileID: 0}

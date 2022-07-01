@@ -1,7 +1,7 @@
 import { Sandbox, SandboxOptions, SandboxPlayer } from "ZEPETO.Multiplay";
 import { DataStorage } from "ZEPETO.Multiplay.DataStorage";
 import { Player, Transform, Vector, DateObject } from "ZEPETO.Multiplay.Schema";
-const maxExp: number = 5;
+const maxExp: number = 7;
 
 // interface AvailableTimeObject{
 //     sessionId: string,

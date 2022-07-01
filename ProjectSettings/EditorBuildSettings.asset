@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Train.unity
+    guid: f8f1e84ed3a734aa5bde075808ad0ab8
   m_configObjects: {}

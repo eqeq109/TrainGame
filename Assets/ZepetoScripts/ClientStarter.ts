@@ -37,6 +37,7 @@ import { MarkManager, PlayerTails } from "./SnakeLogics";
 import { Slider, Button } from "UnityEngine.UI";
 import { Action$1 } from "System";
 import { FunctionLikeDeclaration } from "typescript";
+import { TextMeshProUGUI } from "TMPro";
 
 class TransformData {
   position: VectorData = new VectorData();
@@ -153,8 +154,8 @@ export default class Starter extends ZepetoScriptBehaviour {
   private starObjectPool: ObjectPool<Star>;
 
   //UI
-  public textLevel: Text;
-  public textExp: Text;
+  public textLevel: TextMeshProUGUI;
+  public textExp: TextMeshProUGUI;
   public imageGauge: Image;
 
   public lobbyUI: GameObject;
@@ -188,7 +189,6 @@ export default class Starter extends ZepetoScriptBehaviour {
 
       //별 스폰 리스너
       room.AddMessageHandler("SpawnStar", (message: PacketTransform) => {
-        console.log(message.position);
         const position: UnityEngine.Vector3 = this.ParseVector3(
           message.position
         );
@@ -196,24 +196,21 @@ export default class Starter extends ZepetoScriptBehaviour {
       });
       //폭탄 스폰 리스너
       room.AddMessageHandler("SpawnBomb", (message: PacketTransform) => {
-        console.log(message.position);
         const position: UnityEngine.Vector3 = this.ParseVector3(
           message.position
         );
         this.SpawnBomb(position);
       });
     };
-    ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(false);
+    ZepetoPlayers.instance.ZepetoCamera.camera.enabled = false;
 
     this.gameStartButton.onClick.AddListener(() => {
       // add button click event
-      console.log("click");
       this.GameStart();
     });
 
     this.restartButton.onClick.AddListener(() => {
       // add button click event
-      console.log("click");
       this.Restart();
     });
 
@@ -226,7 +223,6 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     this.howToPlayButton.onClick.AddListener(() => {
       // add button click event
-      console.log("click");
       this.howToPlayUI.SetActive(true);
     });
 
@@ -320,12 +316,6 @@ export default class Starter extends ZepetoScriptBehaviour {
 
     let tails: PlayerTails = new PlayerTails();
     const exp = this.currentPlayers.get(sessionId).exp;
-    console.log(
-      `user ID and EXP :  ${
-        this.currentPlayers.get(sessionId).zepetoUserId
-      } : ${this.currentPlayers.get(sessionId).exp}.`
-    );
-    console.log(`EXP : ${this.currentPlayers.get(sessionId).exp}.`);
 
     const length = exp + 1;
     //head
@@ -365,11 +355,6 @@ export default class Starter extends ZepetoScriptBehaviour {
           sessionId
         );
 
-        console.log(
-          `instance ID:  ${ZepetoPlayers.instance
-            .GetPlayer(sessionId)
-            .character.gameObject.GetInstanceID()}.`
-        );
         this.InitPlayer(sessionId, position, rotation);
         break;
       }
@@ -589,21 +574,29 @@ export default class Starter extends ZepetoScriptBehaviour {
           this.OnSpawnPlayer(sessionId, player);
           if (isLocal) {
             this.lobbyUI.SetActive(false);
-            this.lobbyCamera.SetActive(false);
+            //this.lobbyCamera.SetActive(false);
+            ZepetoPlayers.instance.ZepetoCamera.camera.enabled = true;
+            this.lobbyCamera.GetComponent<UnityEngine.Camera>().enabled = false;
             this.ingameUI.SetActive(true);
             this.gameOverUI.SetActive(false);
-            ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(true);
           }
         } else if (
           player.spawnState == 0 &&
           ZepetoPlayers.instance.HasPlayer(sessionId)
         ) {
+          const zepetoPlayer = ZepetoPlayers.instance.GetPlayer(
+            this.room.SessionId
+          );
+          //   zepetoPlayer.character.characterController.gameObject.SetActive(
+          //     false
+          //   );
           this.OnLeavePlayer(sessionId, player);
 
           if (isLocal) {
             this.ingameUI.SetActive(false);
             this.gameOverUI.SetActive(true);
-            ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(false);
+            this.lobbyCamera.GetComponent<UnityEngine.Camera>().enabled = true;
+            //ZepetoPlayers.instance.ZepetoCamera.camera.enabled = false;
           }
         }
       }
@@ -682,7 +675,7 @@ export default class Starter extends ZepetoScriptBehaviour {
   private UpdateUI(player: Player) {
     this.textLevel.text = (player.exp + 1).toString();
     //this.textExp.text = '0/1';
-    this.imageGauge.fillAmount = 0;
+    this.imageGauge.fillAmount = (player.exp + 1) / 8;
   }
 
   private OnLeavePlayer(sessionId: string, player: Player) {
@@ -844,13 +837,13 @@ export default class Starter extends ZepetoScriptBehaviour {
   private SendGameStart() {
     const data = new RoomData();
 
-    data.Add("gameStart", 1);
+    //data.Add("gameStart", 1);
     this.room.Send("onGameStart", data.GetObject());
   }
   private SendRestart() {
     const data = new RoomData();
 
-    data.Add("restart", 1);
+    //data.Add("restart", 1);
     this.room.Send("onGameRestart", data.GetObject());
   }
 
