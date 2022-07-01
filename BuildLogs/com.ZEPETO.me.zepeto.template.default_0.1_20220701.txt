@@ -9,7 +9,7 @@ disable private room false
 
 [Build Manifest]
 [scenes]
-320 kb               assets/scenes/train.unity
+312 kb               assets/scenes/train.unity
 [assets]
 13 kb                packages/zepeto.character.controller/runtime/_resources/images/touchpad_handle_base.png
 2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_off.anim
@@ -112,7 +112,7 @@ disable private room false
 4 kb                 assets/ui/animation/anim_lobbycamera_1.anim
 2 kb                 assets/_resources/object/texture&material/material_train_default.mat
 1 kb                 assets/ui/sprites/ui_common_bg_gradation.png
-56 kb                assets/ui/prefabs/ui_lobby.prefab
+57 kb                assets/ui/prefabs/ui_lobby.prefab
 1 kb                 assets/ui/sprites/ui_common_icon_skin.png
 30 kb                assets/_resources/object/models/object_train_head.fbx
 1 kb                 packages/zepeto.character.controller/runtime/_resources/prefabs/shadow/fxt_blobshadow.png
@@ -139,10 +139,10 @@ disable private room false
 2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_origin_off.anim
 3 kb                 assets/ui/sprites/ui_lobby_bg_purplebutton.png
 2 kb                 assets/_resources/map/materials/map_mat_allcolor_b.mat
-19 kb                assets/ui/animation/ui_anim_btn_commonbutton.controller
+19 kb                assets/ui/animation/ui_anim_btn_common.controller
 12 kb                assets/_resources/map/models/map_wall_s.fbx
 5 kb                 packages/zepeto.character.controller/runtime/_resources/images/touchpad_handle_icon.png
-17 kb                assets/ui/prefabs/ui_howtoplay.prefab
+18 kb                assets/ui/prefabs/ui_howtoplay.prefab
 3 kb                 assets/ui/sprites/ui_common_bg_popup.png
 5 kb                 packages/zepeto.character.controller/runtime/_resources/images/touchpad_jump_icon.png
 2 kb                 assets/_resources/map/textures/texture_mapcolor.png

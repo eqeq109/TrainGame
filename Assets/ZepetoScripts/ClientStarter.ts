@@ -743,7 +743,6 @@ export default class Starter extends ZepetoScriptBehaviour {
 
       const addTailCount = changedTailCount - tails.tails.length;
       if (addTailCount > 0) {
-        this.soundManager.GetComponent<SoundManager>().PlaySound("GetPoint");
         for (let i = 0; i < addTailCount; i++) {
           //console.log(player.exp);
           const currentlast: Tail =
@@ -787,6 +786,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     const sessionId: string = this.characterSessionIdMap.get(instanceId);
 
     if (sessionId === this.room.SessionId) {
+      this.soundManager.GetComponent<SoundManager>().PlaySound("GetPoint");
       this.room.Send("onCatchStar", "");
       star.GetComponent<Star>().PlayBlowAnimation();
     }
@@ -816,7 +816,7 @@ export default class Starter extends ZepetoScriptBehaviour {
     let addTime = new Date();
     addTime.setSeconds(addTime.getSeconds() + 1);
     this.attackAvailableMap.set(ownerId, addTime);
-
+    this.soundManager.GetComponent<SoundManager>().PlaySound("GetPoint");
     this.SendAttack(ownerId);
   }
 
