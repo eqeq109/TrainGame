@@ -4989,6 +4989,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8733429697405204941, guid: 8c538e3363b83484f827337f4fcbd832, type: 3}
+--- !u!1 &1296751129 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8723253643010476011, guid: 65713e107e57cf94fa6e289b553cb06f, type: 3}
+  m_PrefabInstance: {fileID: 8723253642534243941}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1303541375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7943,6 +7948,7 @@ MonoBehaviour:
     - restartButton
     - rankingButton
     - homeButton
+    - soundManager
     unityValues:
     - {fileID: 582525452}
     - {fileID: 8904675105967348148, guid: 1597ff370104f6f4f991baed6efe4874, type: 3}
@@ -7963,7 +7969,9 @@ MonoBehaviour:
     - {fileID: 106034674}
     - {fileID: 633862705}
     - {fileID: 2003781245}
+    - {fileID: 1296751129}
     values:
+    - 
     - 
     - 
     - 
