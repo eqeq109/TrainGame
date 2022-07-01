@@ -9,7 +9,7 @@ disable private room false
 
 [Build Manifest]
 [scenes]
-309 kb               assets/scenes/train.unity
+310 kb               assets/scenes/train.unity
 [assets]
 13 kb                packages/zepeto.character.controller/runtime/_resources/images/touchpad_handle_base.png
 2 kb                 packages/zepeto.character.controller/runtime/_resources/animations/ui/controller/touchpad_handle_off.anim

@@ -4371,6 +4371,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7078698946429162001, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7722167251318911260, guid: c564dd4441ec0784980d02335c16757c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -4723,6 +4727,17 @@ MonoBehaviour:
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: da55f4c0d4fc372479d2056d6fbba597, type: 3}
     isExpaned: 0
+--- !u!114 &1245351065 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3828293405012139404, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+  m_PrefabInstance: {fileID: 1132045758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1271017342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7856,6 +7871,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8814b1934beeaf468855a303b4d79a5, type: 3}
   m_PrefabInstance: {fileID: 2041455487}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2049940086 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8095627419008416703, guid: c564dd4441ec0784980d02335c16757c, type: 3}
+  m_PrefabInstance: {fileID: 1132045758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2114229515
 GameObject:
   m_ObjectHideFlags: 0
@@ -7911,11 +7937,11 @@ MonoBehaviour:
     - {fileID: 8904675105967348148, guid: 1597ff370104f6f4f991baed6efe4874, type: 3}
     - {fileID: 3733625825251654350, guid: 25ec7c5299e32b7469c9a266882f4469, type: 3}
     - {fileID: 225605142}
-    - {fileID: 0}
+    - {fileID: 2049940086}
     - {fileID: 3733625825251654350, guid: 25ec7c5299e32b7469c9a266882f4469, type: 3}
     - {fileID: 7658499013950243626, guid: 8bbc73dead5a1e045bca054fbc14d20e, type: 3}
     - {fileID: 5473864049186481962, guid: 5173d1ffc13f8184cac369f23f62d34f, type: 3}
-    - {fileID: 0}
+    - {fileID: 1245351065}
     - {fileID: 4820810888131415370}
     - {fileID: 1957637283600733394}
     - {fileID: 1132045759}
