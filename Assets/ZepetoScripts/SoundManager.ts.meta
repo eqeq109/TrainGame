@@ -1,0 +1,32 @@
+fileFormatVersion: 2
+guid: c70dfbbbcef2aa84284db03ada9cdaa0
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
+    SoundManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    PlaySound(action)
+    {\r\n        switch (action) {\r\n            case \"LevelUp\":\r\n               
+    this.soundPlayer.clip = this.sfxLevelUp;\r\n                break;\r\n           
+    case \"LevelDown\":\r\n                this.soundPlayer.clip = this.sfxLevelDown;\r\n               
+    break;\r\n            case \"GetPoint\":\r\n                this.soundPlayer.clip
+    = this.sfxGameOver;\r\n                break;\r\n            case \"GameOver\":\r\n               
+    this.soundPlayer.clip = this.sfxGameOver;\r\n                break;\r\n       
+    }\r\n        this.soundPlayer.Play();\r\n    }\r\n}\r\nexports.default = SoundManager;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU291bmRNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiU291bmRNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQ0EsaURBQXFEO0FBRXJELE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFTcEQsU0FBUyxDQUFDLE1BQWE7UUFFMUIsUUFBTyxNQUFNLEVBQ2I7WUFDSSxLQUFLLFNBQVM7Z0JBQ1YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDLFVBQVUsQ0FBQztnQkFDeEMsTUFBTTtZQUNWLEtBQUssV0FBVztnQkFDWixJQUFJLENBQUMsV0FBVyxDQUFDLElBQUksR0FBRyxJQUFJLENBQUMsWUFBWSxDQUFDO2dCQUMxQyxNQUFNO1lBQ1YsS0FBSyxVQUFVO2dCQUNYLElBQUksQ0FBQyxXQUFXLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQyxXQUFXLENBQUM7Z0JBQ3pDLE1BQU07WUFDVixLQUFLLFVBQVU7Z0JBQ1gsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQztnQkFDekMsTUFBTTtTQUNiO1FBRUQsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUM1QixDQUFDO0NBQ0o7QUE3QkQsK0JBNkJDIn0=","assetPath":"Assets/ZepetoScripts/SoundManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.AudioModule","name":"soundPlayer","type":"UnityEngine.AudioSource","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.AudioModule","name":"sfxLevelUp","type":"UnityEngine.AudioClip","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.AudioModule","name":"sfxLevelDown","type":"UnityEngine.AudioClip","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.AudioModule","name":"sfxGetPoint","type":"UnityEngine.AudioClip","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.AudioModule","name":"sfxGameOver","type":"UnityEngine.AudioClip","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"SoundManager","description":""},"isCompiled":true}'
+  typescriptHash: faecdcf34c92a54cbd6362aff743c29b
