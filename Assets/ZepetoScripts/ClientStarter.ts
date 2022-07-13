@@ -694,6 +694,9 @@ export default class Starter extends ZepetoScriptBehaviour {
       this.tailObjectPool.ReturnObject(object);
     });
 
+    this.checkPositionMap.delete(sessionId);
+    this.attackAvailableMap.delete(sessionId);
+
     //데이터 제거
     this.playerTailsDatas.delete(sessionId);
 
